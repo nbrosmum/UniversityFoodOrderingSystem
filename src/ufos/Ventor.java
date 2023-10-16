@@ -9,5 +9,6 @@ package ufos;
  * @author leech
  */
 public class Ventor {
-    
+    int password;
+    String name;
 }
