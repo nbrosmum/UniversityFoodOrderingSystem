@@ -4,17 +4,22 @@
  */
 package ufos;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author leech
  */
 public class FoodMenu extends javax.swing.JFrame {
-
-    /**
-     * Creates new form FoodMenu
-     */
+    private DefaultTableModel model;
+    
+    
     public FoodMenu() {
         initComponents();
     }
@@ -49,13 +54,13 @@ public class FoodMenu extends javax.swing.JFrame {
 
         FoodMenu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Food Name", "Description", "Prices"
             }
         ));
         jScrollPane1.setViewportView(FoodMenu);
@@ -207,12 +212,40 @@ public class FoodMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_OrderHistoryActionPerformed
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
-        // TODO add your handling code here:
+        
+        String foodName =  NameText.getText();
+        double price = PriceText.getDouble();
+        String Description = DescriptionText.getText();
+        
+        
+        try (PrintWriter writer = new PrintWriter(new FileWriter("FoodMenu.txt", true))) {
+            writer.printf("%s,%s,%s,%n", foodName , price, Description );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+                        
+        
+        
     }//GEN-LAST:event_addItemActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    public void load(){
+             // Create a table model with 25 rows (24 hours plus a header row) and 8 columns (7 days plus a header column)
+        model = new DefaultTableModel(24,0);
+        FoodMenu.setModel(model);
+
+        // Set the headers for the first column and first row
+        model.addColumn("Food Name");
+        model.addColumn("Description");
+        model.addColumn("Price");
+
+        jTable1.setModel(model);
+    
+    
+}
+    
+    
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -243,6 +276,8 @@ public class FoodMenu extends javax.swing.JFrame {
                 new FoodMenu().setVisible(true);
             }
         });
+        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
