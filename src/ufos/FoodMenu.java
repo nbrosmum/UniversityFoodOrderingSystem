@@ -5,11 +5,13 @@
 package ufos;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,11 +19,15 @@ import javax.swing.table.DefaultTableModel;
  * @author leech
  */
 public class FoodMenu extends javax.swing.JFrame {
-    private DefaultTableModel model;
+    private DefaultTableModel model = new DefaultTableModel();
+    private String[] columnName = {"Food Name", "Description", "Price"};
+    private int row;
+    
     
     
     public FoodMenu() {
         initComponents();
+        model.setColumnIdentifiers(columnName);
     }
 
     /**
@@ -52,17 +58,7 @@ public class FoodMenu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        FoodMenu.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Food Name", "Description", "Prices"
-            }
-        ));
+        FoodMenu.setModel(model);
         jScrollPane1.setViewportView(FoodMenu);
 
         OrderPage.setText("Order Page");
@@ -213,11 +209,20 @@ public class FoodMenu extends javax.swing.JFrame {
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
         
+//       Add in Model
         String foodName =  NameText.getText();
-        double price = PriceText.getDouble();
+        double price = Double.parseDouble(PriceText.getText());
         String Description = DescriptionText.getText();
+       
         
+        model.addRow(new Object[]{foodName, Description, price});
         
+//        Add in Text
+        
+
+
+
+
         try (PrintWriter writer = new PrintWriter(new FileWriter("FoodMenu.txt", true))) {
             writer.printf("%s,%s,%s,%n", foodName , price, Description );
 
@@ -225,24 +230,48 @@ public class FoodMenu extends javax.swing.JFrame {
             e.printStackTrace();
         }
                         
-        
+        clearTextField();
         
     }//GEN-LAST:event_addItemActionPerformed
 
-    public void load(){
-             // Create a table model with 25 rows (24 hours plus a header row) and 8 columns (7 days plus a header column)
-        model = new DefaultTableModel(24,0);
-        FoodMenu.setModel(model);
-
-        // Set the headers for the first column and first row
-        model.addColumn("Food Name");
-        model.addColumn("Description");
-        model.addColumn("Price");
-
-        jTable1.setModel(model);
+    public void clearTextField(){
+        NameText.setText("");
+        PriceText.setText("");
+        DescriptionText.setText("");
+    }
     
+//    public void readFile(){
+//        try{
+//            fr = new FileReader(f);
+//            br = new BufferedReader(fr);
+//        } catch (FileNotFoundException ex){
+//            JOptionPane.showMessageDialog(null,"File not found!");
+//        }
+//    }
+//    
+//    public void writeFile(){
+//        try{
+//            fw = new FileWriter(f,true);
+//            bw = new BufferedWriter(fw);
+//        } catch (FileNotFoundException ex){
+//            JOptionPane.showMessageDialog(null,"File not found!");
+//        }
+//    }
     
-}
+//    public void load(){
+//             // Create a table model with 25 rows (24 hours plus a header row) and 8 columns (7 days plus a header column)
+//        model = new DefaultTableModel(24,0);
+//        FoodMenu.setModel(model);
+//
+//        // Set the headers for the first column and first row
+//        model.addColumn("Food Name");
+//        model.addColumn("Description");
+//        model.addColumn("Price");
+//
+//        jTable1.setModel(model);
+//    
+//    
+//}
     
     
     
