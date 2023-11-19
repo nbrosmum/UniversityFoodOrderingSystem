@@ -5,11 +5,11 @@
 package ufos;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -218,16 +218,16 @@ public class FoodMenu extends javax.swing.JFrame {
         model.addRow(new Object[]{foodName, Description, price});
         
 //        Add in Text
-        
+        -
 
 
 
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter("FoodMenu.txt", true))) {
-            writer.printf("%s,%s,%s,%n", foodName , price, Description );
-
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("FoodMenu.txt", true))) {
+           writer.write(foodName + "," + price + "," + Description + "%n");
+           writer.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+           e.printStackTrace();
         }
                         
         clearTextField();
