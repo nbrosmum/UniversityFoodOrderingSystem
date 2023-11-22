@@ -22,8 +22,7 @@ public class FoodMenu extends javax.swing.JFrame {
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"Food Name", "Description", "Price"};
     private int row;
-    
-    
+       DB db = new DB("Menu");
     
     public FoodMenu() {
         initComponents();
@@ -218,17 +217,22 @@ public class FoodMenu extends javax.swing.JFrame {
         model.addRow(new Object[]{foodName, Description, price});
         
 //        Add in Text
-        -
+
+        String menu = foodName + "," + price + "," + Description + "/n";
+    
+        db.writeFile(menu);
+        db.closeResources();
 
 
 
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("FoodMenu.txt", true))) {
-           writer.write(foodName + "," + price + "," + Description + "%n");
-           writer.flush();
-        } catch (IOException e) {
-           e.printStackTrace();
-        }
+
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter("FoodMenu.txt", true))) {
+//           writer.write(foodName + "," + price + "," + Description + "%n");
+//           writer.flush();
+//        } catch (IOException e) {
+//           e.printStackTrace();
+//        }
                         
         clearTextField();
         
