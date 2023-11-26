@@ -6,40 +6,55 @@ package ufos;
 import java.io.*;
 import javax.swing.*;
 import java.nio.file.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DB {
     File f;
-    File folder;
     FileWriter fw;
     BufferedWriter bw;
     FileReader fr;
     BufferedReader br;
+    String prefixID;
+    private static final AtomicInteger count = new AtomicInteger(0);
+
     
     public DB(String type){
         closeResources();
         
-                String directoryPath = "";
+         String directoryPath = "";
         if (type.equals("Admin")) {
             directoryPath = "DB\\Account\\";
             f = new File(directoryPath + "Admin.txt");
+            prefixID = "A";
         } else if (type.equals("Customer")) {
             directoryPath = "DB\\Account\\";
             f = new File(directoryPath + "Customer.txt");
+            prefixID = "C";
         } else if (type.equals("Vendor")) {
             directoryPath = "DB\\Account\\";
             f = new File(directoryPath + "Vendor.txt");
+            prefixID = "V";
         } else if (type.equals("Runner")) {
             directoryPath = "DB\\Account\\";
             f = new File(directoryPath + "Runner.txt");
+            prefixID = "R";
         } else if (type.equals("Menu")) {
             directoryPath = "DB\\Service\\";
             f = new File(directoryPath + "Menu.txt");
+            prefixID = "F";
         } else if (type.equals("Order")) {
             directoryPath = "DB\\Service\\";
             f = new File(directoryPath + "Order.txt");
+            prefixID = "O";
         } else if (type.equals("Payment")) {
             directoryPath = "DB\\Service\\";
+            f = new File(directoryPath + "Payment.txt");
+            prefixID = "P";
+        }else if(type.equals("Transaction")){
+            directoryPath = "DB\\Service\\";
             f = new File(directoryPath + "Transaction.txt");
+            prefixID = "T";
         }
 
         createDirectory(directoryPath);
@@ -59,48 +74,58 @@ public class DB {
     }
     
     private void CreateFile(File FilePath){
-        try{
-                fw = new FileWriter(FilePath);
-                bw = new BufferedWriter(fw);
-        }catch(IOException e){
-            JOptionPane.showMessageDialog(null, "error");
+        try {
+            if (!FilePath.exists()) {
+                FilePath.createNewFile();
+            }
+            bw = new BufferedWriter(new FileWriter(f, true));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error creating file");
             e.printStackTrace();
         }
     }
     
-    public void writeFile(String Content){
-        try{
-            fw = new FileWriter(f,true);
-            bw = new BufferedWriter(fw);
+    public static String generateID(String prefix) {
+       return prefix + String.format("%03d", count.incrementAndGet());
+   }
+    
+    
+    public void writeFile(List<String> contentList) {
+        try {
             
-            bw.write(Content);
-        }catch(IOException e){
-            JOptionPane.showMessageDialog(null, "Invalid File !");
+            for (String content : contentList) {
+                String id = generateID(prefixID);
+                bw.write(id + "," + content + System.lineSeparator());
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error writing to file");
             e.printStackTrace();
         }
     }
-    public void readFile(){
+        
+    public List<String> readFile() {
+        List<String> data = new ArrayList<>();
         try {
-            fr = new FileReader(f);
-            br = new BufferedReader(fr);
-        } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null,"Invalid File !");
-            ex.printStackTrace();
+            br = new BufferedReader(new FileReader(f));
+            String line;
+            while ((line = br.readLine()) != null) {
+                data.add(line);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error reading from file");
+            e.printStackTrace();
         }
-    }    
+        return data;
+    }
     
     public void closeResources() {
        try {
            if (bw != null) bw.close();
            if (fw != null) fw.close();
-           if (br != null) br.close();
-           if (fr != null) fr.close();
        } catch (IOException e) {
            JOptionPane.showMessageDialog(null,"error!");
            e.printStackTrace();
        }
    }
-    
-
-    
+ 
 }
