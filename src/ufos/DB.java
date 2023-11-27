@@ -10,60 +10,54 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DB {
-    File f;
-    FileWriter fw;
-    BufferedWriter bw;
-    FileReader fr;
-    BufferedReader br;
-    String prefixID;
+    private File f;
+    private FileWriter fw;
+    private BufferedWriter bw;
+    private FileReader fr;
+    private BufferedReader br;
+    private String prefixID;
     private static final AtomicInteger count = new AtomicInteger(0);
 
     
     public DB(String type){
-        closeResources();
-        
-         String directoryPath = "";
+        setFilePath(type);
+        createDirectory();
+        CreateFile();
+    }
+    
+    private void setFilePath(String type){
+                
+        String directoryPath = "";
         if (type.equals("Admin")) {
             directoryPath = "DB\\Account\\";
-            f = new File(directoryPath + "Admin.txt");
             prefixID = "A";
         } else if (type.equals("Customer")) {
             directoryPath = "DB\\Account\\";
-            f = new File(directoryPath + "Customer.txt");
             prefixID = "C";
         } else if (type.equals("Vendor")) {
             directoryPath = "DB\\Account\\";
-            f = new File(directoryPath + "Vendor.txt");
             prefixID = "V";
         } else if (type.equals("Runner")) {
             directoryPath = "DB\\Account\\";
-            f = new File(directoryPath + "Runner.txt");
             prefixID = "R";
         } else if (type.equals("Menu")) {
             directoryPath = "DB\\Service\\";
-            f = new File(directoryPath + "Menu.txt");
             prefixID = "F";
         } else if (type.equals("Order")) {
             directoryPath = "DB\\Service\\";
-            f = new File(directoryPath + "Order.txt");
             prefixID = "O";
         } else if (type.equals("Payment")) {
             directoryPath = "DB\\Service\\";
-            f = new File(directoryPath + "Payment.txt");
             prefixID = "P";
         }else if(type.equals("Transaction")){
             directoryPath = "DB\\Service\\";
-            f = new File(directoryPath + "Transaction.txt");
             prefixID = "T";
         }
-
-        createDirectory(directoryPath);
-        CreateFile(f);
-    }
-                 
-    private void createDirectory(String directoryPath) {
+        f = new File(directoryPath + type + ".txt");
+    }            
+    private void createDirectory() {
         try {
-            Path path = Paths.get(directoryPath);
+            Path path = Paths.get(f.getParent());
             if (!Files.exists(path)) {
                 Files.createDirectories(path);
             }
@@ -73,10 +67,10 @@ public class DB {
         }
     }
     
-    private void CreateFile(File FilePath){
+    private void CreateFile(){
         try {
-            if (!FilePath.exists()) {
-                FilePath.createNewFile();
+            if (!f.exists()) {
+                f.createNewFile();
             }
             bw = new BufferedWriter(new FileWriter(f, true));
         } catch (IOException e) {
@@ -84,10 +78,6 @@ public class DB {
             e.printStackTrace();
         }
     }
-    
-    public static String generateID(String prefix) {
-       return prefix + String.format("%03d", count.incrementAndGet());
-   }
     
     
     public void writeFile(List<String> contentList) {
@@ -126,6 +116,9 @@ public class DB {
            JOptionPane.showMessageDialog(null,"error!");
            e.printStackTrace();
        }
-   }
- 
+    } 
+   
+    public static String generateID(String prefix) {
+       return prefix + String.format("%03d", count.incrementAndGet());
+    }
 }
