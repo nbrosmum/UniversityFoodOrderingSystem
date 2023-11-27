@@ -4,6 +4,8 @@
  */
 package ufos;
 
+import java.util.*;
+
 /**
  *
  * @author User
@@ -14,8 +16,6 @@ public class UFOS {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        DB db = new DB("Customer");
-        db.writeFile("Testing");
-        db.closeResources();    
+        
     }
 }
