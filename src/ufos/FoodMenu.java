@@ -4,8 +4,15 @@
  */
 package ufos;
 
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -13,9 +20,11 @@ import javax.swing.JFrame;
  */
 public class FoodMenu extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FoodMenu
-     */
+    private DefaultTableModel model = new DefaultTableModel();
+    private String[] columnName = {"Food Name", "Description", "Price"};
+    private int row;
+       DB db = new DB("Menu");
+       
     public FoodMenu() {
         initComponents();
     }
