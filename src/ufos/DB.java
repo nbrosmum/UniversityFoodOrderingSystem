@@ -86,6 +86,7 @@ public class DB {
             for (String content : contentList) {
                 String id = generateID(prefixID);
                 bw.write(id + "," + content + System.lineSeparator());
+                
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error writing to file");

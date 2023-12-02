@@ -4,15 +4,10 @@
  */
 package ufos;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.*;
 
 /**
  *
@@ -27,6 +22,7 @@ public class FoodMenu extends javax.swing.JFrame {
     public FoodMenu() {
         initComponents();
         model.setColumnIdentifiers(columnName);
+        load();
     }
 
     /**
@@ -208,31 +204,21 @@ public class FoodMenu extends javax.swing.JFrame {
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
         
-//       Add in Model
+        // variables      
         String foodName =  NameText.getText();
         double price = Double.parseDouble(PriceText.getText());
         String Description = DescriptionText.getText();
        
-        
+        // Add in Model
         model.addRow(new Object[]{foodName, Description, price});
         
-//        Add in Text
-
-        String menu = foodName + "," + price + "," + Description + "/n";
-    
-        db.writeFile(menu);
+        //Add in Text       
+        ArrayList<String> Data = new ArrayList<String>();
+        String priceString = String.valueOf(price);
+        String FoodItem = foodName + "," +  priceString + "," + Description;
+        Data.add(FoodItem);
+        db.writeFile(Data);
         db.closeResources();
-
-
-
-
-
-//        try (BufferedWriter writer = new BufferedWriter(new FileWriter("FoodMenu.txt", true))) {
-//           writer.write(foodName + "," + price + "," + Description + "%n");
-//           writer.flush();
-//        } catch (IOException e) {
-//           e.printStackTrace();
-//        }
                         
         clearTextField();
         
@@ -244,38 +230,23 @@ public class FoodMenu extends javax.swing.JFrame {
         DescriptionText.setText("");
     }
     
-//    public void readFile(){
-//        try{
-//            fr = new FileReader(f);
-//            br = new BufferedReader(fr);
-//        } catch (FileNotFoundException ex){
-//            JOptionPane.showMessageDialog(null,"File not found!");
-//        }
-//    }
-//    
-//    public void writeFile(){
-//        try{
-//            fw = new FileWriter(f,true);
-//            bw = new BufferedWriter(fw);
-//        } catch (FileNotFoundException ex){
-//            JOptionPane.showMessageDialog(null,"File not found!");
-//        }
-//    }
     
-//    public void load(){
-//             // Create a table model with 25 rows (24 hours plus a header row) and 8 columns (7 days plus a header column)
-//        model = new DefaultTableModel(24,0);
-//        FoodMenu.setModel(model);
-//
-//        // Set the headers for the first column and first row
-//        model.addColumn("Food Name");
-//        model.addColumn("Description");
-//        model.addColumn("Price");
-//
-//        jTable1.setModel(model);
-//    
-//    
-//}
+    private void load() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Menu.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String foodName = parts[1];
+                double price = Double.parseDouble(parts[2]);
+                String description = parts[3];
+                model.addRow(new Object[]{foodName, description, price});
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     
     
     
