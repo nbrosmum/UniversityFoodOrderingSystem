@@ -22,7 +22,7 @@ public class DB {
     public DB(String type){
         setFilePath(type);
         createDirectory();
-        CreateFile();
+        UpdateFile();
     }
     
     private void setFilePath(String type){
@@ -73,6 +73,18 @@ public class DB {
                 f.createNewFile();
             }
             bw = new BufferedWriter(new FileWriter(f, true));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error creating file");
+            e.printStackTrace();
+        }
+    }
+    
+    private void UpdateFile(){
+        try {
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+            bw = new BufferedWriter(new FileWriter(f));
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error creating file");
             e.printStackTrace();

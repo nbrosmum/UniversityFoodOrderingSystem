@@ -16,8 +16,7 @@ import javax.swing.table.*;
 public class FoodMenu extends javax.swing.JFrame {
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"Food Name", "Description", "Price"};
-    private int row;
-       DB db = new DB("Menu");
+    DB db = new DB("Menu");
     
     public FoodMenu() {
         initComponents();
@@ -93,6 +92,11 @@ public class FoodMenu extends javax.swing.JFrame {
         jScrollPane2.setViewportView(DescriptionText);
 
         deleteItem.setText("Delete");
+        deleteItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteItemActionPerformed(evt);
+            }
+        });
 
         addItem.setText("Add");
         addItem.addActionListener(new java.awt.event.ActionListener() {
@@ -223,6 +227,58 @@ public class FoodMenu extends javax.swing.JFrame {
         clearTextField();
         
     }//GEN-LAST:event_addItemActionPerformed
+
+    private void deleteItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteItemActionPerformed
+//
+//        // get the selected row from the model table
+//        int selectedRow = FoodMenu.getSelectedRow();
+//        System.out.println("Check0");
+//        // get the information of each column in the selected row
+//        String foodName = (String) model.getValueAt(selectedRow, 0);
+//        String description = (String) model.getValueAt(selectedRow, 1);
+//        double price = (double) model.getValueAt(selectedRow, 2);
+//
+//        // read the contents of the file into a list of strings
+//        System.out.println("Check1");
+//        List<String> fileContents = db.readFile();
+//
+//        // find the line in the file that matches the information of the selected row and remove it
+//        System.out.println("Check2");
+//        fileContents.removeIf(line -> line.contains(foodName) && line.contains(description) && line.contains(String.valueOf(price)));
+//        System.out.println(fileContents);
+//        // write the updated contents back to the file
+//        db.writeFile(fileContents);
+//        System.out.println("Check4");
+//        db.closeResources();
+//
+        int selectedRow = FoodMenu.getSelectedRow();
+        if (selectedRow != -1) {
+            TableModel model = FoodMenu.getModel();
+            String foodName = (String) model.getValueAt(selectedRow, 0);
+            String description = (String) model.getValueAt(selectedRow, 1);
+            double price = (Double) model.getValueAt(selectedRow, 2);
+            String temp = "";
+
+
+            List<String> data = db.readFile();
+            String id = "";
+            for (String line : data) {
+                String[] parts = line.split(",");
+                if (parts[1].equals(foodName) && parts[2].equals(Double.toString(price)) && parts[3].equals(description)) {
+                    temp = line;
+                    id = parts[0];
+
+                }
+            } 
+        data.remove(temp);
+        System.out.println(data);
+        db.writeFile(data);
+        db.closeResources();
+        }
+   
+
+        
+    }//GEN-LAST:event_deleteItemActionPerformed
 
     public void clearTextField(){
         NameText.setText("");
