@@ -19,11 +19,19 @@ import javax.swing.table.DefaultTableModel;
  * @author leech
  */
 public class FoodMenu extends javax.swing.JFrame {
+
+
+
+
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"Food Name", "Description", "Price"};
     private int row;
        DB db = new DB("Menu");
+
+       
+
     
+
     public FoodMenu() {
         initComponents();
         model.setColumnIdentifiers(columnName);
@@ -208,6 +216,7 @@ public class FoodMenu extends javax.swing.JFrame {
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
         
+
 //       Add in Model
         String foodName =  NameText.getText();
         double price = Double.parseDouble(PriceText.getText());
@@ -236,6 +245,7 @@ public class FoodMenu extends javax.swing.JFrame {
                         
         clearTextField();
         
+
     }//GEN-LAST:event_addItemActionPerformed
 
     public void clearTextField(){
