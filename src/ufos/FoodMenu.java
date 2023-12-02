@@ -20,13 +20,21 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FoodMenu extends javax.swing.JFrame {
 
+
+
+
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"Food Name", "Description", "Price"};
     private int row;
        DB db = new DB("Menu");
+
        
+
+    
+
     public FoodMenu() {
         initComponents();
+        model.setColumnIdentifiers(columnName);
     }
 
     /**
@@ -57,17 +65,7 @@ public class FoodMenu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        FoodMenu.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        FoodMenu.setModel(model);
         jScrollPane1.setViewportView(FoodMenu);
 
         OrderPage.setText("Order Page");
@@ -218,11 +216,79 @@ public class FoodMenu extends javax.swing.JFrame {
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
         
+
+//       Add in Model
+        String foodName =  NameText.getText();
+        double price = Double.parseDouble(PriceText.getText());
+        String Description = DescriptionText.getText();
+       
+        
+        model.addRow(new Object[]{foodName, Description, price});
+        
+//        Add in Text
+
+        String menu = foodName + "," + price + "," + Description + "/n";
+    
+        db.writeFile(menu);
+        db.closeResources();
+
+
+
+
+
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter("FoodMenu.txt", true))) {
+//           writer.write(foodName + "," + price + "," + Description + "%n");
+//           writer.flush();
+//        } catch (IOException e) {
+//           e.printStackTrace();
+//        }
+                        
+        clearTextField();
+        
+
     }//GEN-LAST:event_addItemActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    public void clearTextField(){
+        NameText.setText("");
+        PriceText.setText("");
+        DescriptionText.setText("");
+    }
+    
+//    public void readFile(){
+//        try{
+//            fr = new FileReader(f);
+//            br = new BufferedReader(fr);
+//        } catch (FileNotFoundException ex){
+//            JOptionPane.showMessageDialog(null,"File not found!");
+//        }
+//    }
+//    
+//    public void writeFile(){
+//        try{
+//            fw = new FileWriter(f,true);
+//            bw = new BufferedWriter(fw);
+//        } catch (FileNotFoundException ex){
+//            JOptionPane.showMessageDialog(null,"File not found!");
+//        }
+//    }
+    
+//    public void load(){
+//             // Create a table model with 25 rows (24 hours plus a header row) and 8 columns (7 days plus a header column)
+//        model = new DefaultTableModel(24,0);
+//        FoodMenu.setModel(model);
+//
+//        // Set the headers for the first column and first row
+//        model.addColumn("Food Name");
+//        model.addColumn("Description");
+//        model.addColumn("Price");
+//
+//        jTable1.setModel(model);
+//    
+//    
+//}
+    
+    
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -253,6 +319,8 @@ public class FoodMenu extends javax.swing.JFrame {
                 new FoodMenu().setVisible(true);
             }
         });
+        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
