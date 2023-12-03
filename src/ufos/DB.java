@@ -7,17 +7,13 @@ import java.io.*;
 import javax.swing.*;
 import java.nio.file.*;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class DB {
     private File f;
-    private FileWriter fw;
-    private BufferedWriter bw;
-    private FileReader fr;
-    private BufferedReader br;
+    public BufferedWriter bw;
+    public BufferedReader br;
     private String prefixID;
-    private static final AtomicInteger count = new AtomicInteger(0);
-
+    public String id;
     
     public DB(String type){
         setFilePath(type);
@@ -54,7 +50,18 @@ public class DB {
             prefixID = "T";
         }
         f = new File(directoryPath + type + ".txt");
-    }            
+        createDirectory();
+        try{
+           if(!f.exists()){
+             f.createNewFile();   
+           }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        
+        
+    }
+               
     private void createDirectory() {
         try {
             Path path = Paths.get(f.getParent());
@@ -67,71 +74,82 @@ public class DB {
         }
     }
     
-    private void CreateFile(){
-        try {
-            if (!f.exists()) {
-                f.createNewFile();
-            }
-            bw = new BufferedWriter(new FileWriter(f, true));
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error creating file");
-            e.printStackTrace();
-        }
-    }
-    
-    private void UpdateFile(){
-        try {
-            if (!f.exists()) {
-                f.createNewFile();
-            }
+    public void overWriteFile(){
+        try{
             bw = new BufferedWriter(new FileWriter(f));
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error creating file");
+        }catch(IOException e){
+            JOptionPane.showMessageDialog(null, "Error OverWrite file");
+            e.printStackTrace();
+        }
+    
+    }
+    public void writeFile(){
+        try{
+            getID(generateId());
+            bw = new BufferedWriter(new FileWriter(f,true));
+        }catch(IOException e){
+            JOptionPane.showMessageDialog(null, "Error Write file");
             e.printStackTrace();
         }
     }
     
-    
-    public void writeFile(List<String> contentList) {
-        try {
-            
-            for (String content : contentList) {
-                String id = generateID(prefixID);
-                bw.write(id + "," + content + System.lineSeparator());
-                
-            }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error writing to file");
-            e.printStackTrace();
-        }
-    }
-        
-    public List<String> readFile() {
-        List<String> data = new ArrayList<>();
+    public ArrayList<String> readFile() {
+        ArrayList<String> data = new ArrayList<>();
         try {
             br = new BufferedReader(new FileReader(f));
             String line;
             while ((line = br.readLine()) != null) {
                 data.add(line);
             }
+            br.close();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error reading from file");
             e.printStackTrace();
+            
         }
+        
         return data;
     }
+    
+    public int readLastId() {
+        try {
+            br = new BufferedReader(new FileReader(f));
+            String line;
+            List<String> ids = new ArrayList<>();
+            while ((line = br.readLine()) != null) {
+                String idStr = line.split(" ")[0];
+                ids.add(idStr.substring(1));
+            }
+            Collections.sort(ids);
+            if (!ids.isEmpty()) {
+                return Integer.parseInt(ids.get(ids.size() - 1));
+            } else {
+                return 0;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            
+        }
+        return 0;
+    }
+   
+   public String generateId() {
+       int newId = readLastId() + 1;
+       String id = String.format("%s%03d", prefixID, newId);
+       return id;
+   }
+   
+   public void getID(String id){
+       this.id = id;
+   }
     
     public void closeResources() {
        try {
            if (bw != null) bw.close();
-           if (fw != null) fw.close();
        } catch (IOException e) {
            JOptionPane.showMessageDialog(null,"error!");
            e.printStackTrace();
        }
-    } 
-   
-    public static String generateID(String prefix) {
-       return prefix + String.format("%03d", count.incrementAndGet());
     }
+
 }
