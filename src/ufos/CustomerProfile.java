@@ -9,7 +9,7 @@ package ufos;
  * @author User
  */
 public class CustomerProfile extends javax.swing.JFrame {
-
+    GUI ui = new GUI();
     /**
      * Creates new form CustomerProfile
      */
@@ -29,9 +29,9 @@ public class CustomerProfile extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        Backbtn = new javax.swing.JButton();
+        EditProfilebtn = new javax.swing.JButton();
+        ChangePasswordbtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -42,11 +42,26 @@ public class CustomerProfile extends javax.swing.JFrame {
 
         jLabel3.setText("Email :");
 
-        jButton1.setText("Back");
+        Backbtn.setText("Back");
+        Backbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BackbtnActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Edit Profile");
+        EditProfilebtn.setText("Edit Profile");
+        EditProfilebtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditProfilebtnActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Change Password");
+        ChangePasswordbtn.setText("Change Password");
+        ChangePasswordbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChangePasswordbtnActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel4.setText("Profile Page");
@@ -62,8 +77,8 @@ public class CustomerProfile extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(ChangePasswordbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(EditProfilebtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel2)
                         .addComponent(jLabel1)
@@ -71,7 +86,7 @@ public class CustomerProfile extends javax.swing.JFrame {
                 .addContainerGap(214, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(Backbtn)
                 .addGap(32, 32, 32))
         );
         layout.setVerticalGroup(
@@ -86,16 +101,29 @@ public class CustomerProfile extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(EditProfilebtn)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(ChangePasswordbtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(Backbtn)
                 .addGap(15, 15, 15))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void EditProfilebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditProfilebtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EditProfilebtnActionPerformed
+
+    private void ChangePasswordbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangePasswordbtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ChangePasswordbtnActionPerformed
+
+    private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackbtnActionPerformed
+       ui.callPage("CustomerProfilePage");
+       this.dispose();
+    }//GEN-LAST:event_BackbtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -133,9 +161,9 @@ public class CustomerProfile extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton Backbtn;
+    private javax.swing.JButton ChangePasswordbtn;
+    private javax.swing.JButton EditProfilebtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

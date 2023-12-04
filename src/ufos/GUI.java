@@ -35,6 +35,18 @@ public class GUI {
             case "CustomerProfilePage":
                 page = new CustomerProfilePage();
                 break;
+            case "CustomerTransactionHistory":
+                page = new CustomerTransactionHistory();
+                break;
+            case "CustomerOrderHistory":
+                page = new CustomerOrderHistory();
+                break;
+            case "CustomerOrderStatus":
+                page = new CustomerOrderStatus();
+                break;
+            case "CustomerFoodReview":
+                page = new CustomerFoodReview();
+                break;
             default:
                 throw new IllegalArgumentException("Invalid page: " + pageName);
         }
