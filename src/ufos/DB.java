@@ -9,10 +9,10 @@ import java.nio.file.*;
 import java.util.*;
 
 public class DB {
-    private File f;
+    public File f;
     public BufferedWriter bw;
     public BufferedReader br;
-    private String prefixID;
+    public String prefixID;
     public String id;
     
     public DB(String type){
@@ -110,7 +110,7 @@ public class DB {
             String line;
             List<String> ids = new ArrayList<>();
             while ((line = br.readLine()) != null) {
-                String idStr = line.split(" ")[0];
+                String idStr = line.split(",")[0];
                 ids.add(idStr.substring(1));
             }
             Collections.sort(ids);
@@ -126,15 +126,15 @@ public class DB {
         return 0;
     }
    
-   public String generateId() {
-       int newId = readLastId() + 1;
-       String id = String.format("%s%03d", prefixID, newId);
-       return id;
-   }
+    public String generateId() {
+        int newId = readLastId() + 1;
+        String id = String.format("%s%03d", prefixID, newId);
+        return id;
+    }
    
-   public void getID(String id){
-       this.id = id;
-   }
+    public void getID(String id){
+        this.id = id;
+    }
     
     public void closeResources() {
        try {
