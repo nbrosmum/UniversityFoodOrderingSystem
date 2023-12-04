@@ -16,13 +16,6 @@ public class DB {
     public String id;
     
     public DB(String type){
-        setFilePath(type);
-        createDirectory();
-        UpdateFile();
-    }
-    
-    private void setFilePath(String type){
-                
         String directoryPath = "";
         if (type.equals("Admin")) {
             directoryPath = "DB\\Account\\";
@@ -57,8 +50,7 @@ public class DB {
            }
         }catch(IOException e){
             e.printStackTrace();
-        }
-        
+        }  
         
     }
                
@@ -117,15 +109,17 @@ public class DB {
             String line;
             List<String> ids = new ArrayList<>();
             while ((line = br.readLine()) != null) {
-                String idStr = line.split(" ")[0];
+                String idStr = line.split(",")[0];
                 ids.add(idStr.substring(1));
             }
+            br.close();
             Collections.sort(ids);
             if (!ids.isEmpty()) {
                 return Integer.parseInt(ids.get(ids.size() - 1));
             } else {
                 return 0;
             }
+            
         } catch (IOException e) {
             e.printStackTrace();
             
@@ -133,15 +127,15 @@ public class DB {
         return 0;
     }
    
-   public String generateId() {
-       int newId = readLastId() + 1;
-       String id = String.format("%s%03d", prefixID, newId);
-       return id;
-   }
+    public String generateId() {
+        int newId = readLastId() + 1;
+        String id = String.format("%s%03d", prefixID, newId);
+        return id;
+    }
    
-   public void getID(String id){
-       this.id = id;
-   }
+    public void getID(String id){
+        this.id = id;
+    }
     
     public void closeResources() {
        try {

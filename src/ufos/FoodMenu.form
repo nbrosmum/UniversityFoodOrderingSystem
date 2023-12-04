@@ -128,6 +128,9 @@
               <Connection code="model" type="code"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FoodMenuMouseReleased"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -223,6 +226,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Update"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateItemActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
