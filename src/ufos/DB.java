@@ -50,8 +50,7 @@ public class DB {
            }
         }catch(IOException e){
             e.printStackTrace();
-        }
-        
+        }  
         
     }
                
@@ -113,12 +112,14 @@ public class DB {
                 String idStr = line.split(",")[0];
                 ids.add(idStr.substring(1));
             }
+            br.close();
             Collections.sort(ids);
             if (!ids.isEmpty()) {
                 return Integer.parseInt(ids.get(ids.size() - 1));
             } else {
                 return 0;
             }
+            
         } catch (IOException e) {
             e.printStackTrace();
             
