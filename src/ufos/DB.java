@@ -9,10 +9,10 @@ import java.nio.file.*;
 import java.util.*;
 
 public class DB {
-    private File f;
+    public File f;
     public BufferedWriter bw;
     public BufferedReader br;
-    private String prefixID;
+    public String prefixID;
     public String id;
     
     public DB(String type){
