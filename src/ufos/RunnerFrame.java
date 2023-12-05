@@ -10,12 +10,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author ginger
  */
-public class Runner extends javax.swing.JFrame {
+public class RunnerFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form Runner
      */
-    public Runner() {
+    public RunnerFrame() {
         initComponents();
     }
 
@@ -156,20 +156,21 @@ public class Runner extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Runner.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RunnerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Runner.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RunnerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Runner.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RunnerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Runner.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RunnerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Runner().setVisible(true);
+                new RunnerFrame().setVisible(true);
             }
         });
     }
@@ -182,21 +183,5 @@ public class Runner extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package ufos;
 
-/**
- *
- * @author Walter
- */
-public class Runner extends User{
-
-   
-    
-    public Runner(String username, String password, String email){
-        super(username, password,email);
-        
-    }
-      
 }
