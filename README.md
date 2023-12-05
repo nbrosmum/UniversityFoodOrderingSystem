@@ -20,8 +20,9 @@ ALL User
    - receive Order(VIEW)
    - order Status(Approve/reject)
  - Order History
+    - revenue dashboard 
  - Customer review(view)
- - revenue dashboard
+ 
   
   Delivary runner
   - job Order page(task)
