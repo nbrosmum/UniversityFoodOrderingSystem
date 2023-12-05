@@ -1,5 +1,4 @@
-F004,qweqweqwe,10.0,eqewqweqwe
-F005,dasdasd,96.0,dsadasdad
-F009,qwueoqoi,12.0,sdasdf
-F010,askdhk,12.0,sfadsaa
-F001,qwer,5.0,ewqeqwe
+F001,qwe,1.0,ewqeqwe
+F004,qweqweqwe,4.0,eqewqweqwe
+F003,ewqeqwe,9.0,eqweqwe
+F002,qweqew,7.0,weqewq
