@@ -53,4 +53,15 @@ public class Ventor {
     
 
       
+/**
+ *
+ * @author leech
+ */
+public class Vendor extends User {
+  
+    
+    public Vendor(String username, String password, String email){
+        super(username, password, email);
+            
+    }
 }
