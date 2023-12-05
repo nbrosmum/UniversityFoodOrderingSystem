@@ -1,5 +1,134 @@
-F004,qweqweqwe,10.0,eqewqweqwe
 F005,dasdasd,96.0,dsadasdad
-F009,qwueoqoi,12.0,sdasdf
 F010,askdhk,12.0,sfadsaa
-F001,qwer,5.0,ewqeqwe
+F009,qwueoqoi,19.0,sdasdf
+F004,qweqweqwe,65.0,eqewqweqwe
+F011,uiiukhj,879.0,uigkhj
+
+
+int row = OrderList.getSelectedRow();
+        String orderId = String.valueOf(model.getValueAt(row,0));
+        String dt = String.valueOf(model.getValueAt(row,1));
+        String status = String.valueOf(model.getValueAt(row,2));
+        String totalprice = String.valueOf(model.getValueAt(row,3));
+        
+                
+        List<String> data = db.readFile();
+            String temp = "";;
+            for (String line : data) {
+                String[] parts = line.split(",");
+                if (parts[0].equals(orderId)) {
+                    
+                    
+                    
+                    parts[2] = "preparing";
+                    System.out.print("hi1");
+                }
+                System.out.print(line + "\n");
+            } 
+            System.out.print("hi3");
+            data.remove(temp);
+            System.out.print("hi4");
+            db.overWriteFile();
+            try {
+                for (String line : data) {
+                    db.bw.write(line);
+                    db.bw.newLine();
+                }
+            } catch (IOException ex) {
+                System.out.println("Something went wrong.");
+            }
+            db.closeResources();
+        
+        
+        db.readFile();
+        db.writeFile();
+
+
+       int row = OrderList.getSelectedRow();
+        String orderId = String.valueOf(model.getValueAt(row,0));
+        String dt = String.valueOf(model.getValueAt(row,1));
+        String status = String.valueOf(model.getValueAt(row,2));
+        String totalprice = String.valueOf(model.getValueAt(row,3));
+        
+        
+        
+        
+        db.readFile();
+        db.writeFile();
+       
+    String line;
+        try {
+            while ((line = db.br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts[0].equals(orderId)) {
+                    parts[2] = "preparing";
+                    db.bw.write(String.join(",", parts));
+                    db.bw.write("\n");
+                } else {
+                    db.bw.write(line);
+                    db.bw.write("\n");
+                }
+            }
+            System.out.println(line);
+        } catch (IOException ex) {
+            Logger.getLogger(OrderPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        db.closeResources();
+     
+           int row = OrderList.getSelectedRow();
+    String orderId = String.valueOf(OrderList.getValueAt(row, 0));
+    List<String> sameOrderIds = new ArrayList<>();
+    db.readFile();
+    
+    
+    
+    try {
+        BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
+        String line;
+        String temp = "";
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(",");
+            String currentOrderId = parts[0];
+            String status = parts[4];
+            if (currentOrderId.equals(orderId)) {
+                sameOrderIds.add(line);
+                 
+            }
+        }
+
+        reader.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    try {
+        BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
+        String line;
+        List<String> updatedLines = new ArrayList<>();
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(",");
+            String currentOrderId = parts[0];
+            String status = parts[4];
+            System.out.println(sameOrderIds);
+            if (sameOrderIds.contains(currentOrderId) && status.equals("pending")) {
+                parts[4] = "preparing";
+                
+            }
+            updatedLines.add(String.join(",", parts));
+            
+        }
+        System.out.println(updatedLines);
+        reader.close();
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter("DB/Service/Order.txt"));
+        for (String updatedLine : updatedLines) {
+            writer.write(updatedLine);
+            writer.newLine();
+            System.out.println("test7");
+        }
+        System.out.println("test8");
+        writer.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+

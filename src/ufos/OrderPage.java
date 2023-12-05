@@ -2,6 +2,8 @@ package ufos;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -12,6 +14,7 @@ public class OrderPage extends javax.swing.JFrame {
     private String[] columnName = {"OrderID", "Date", "Status", "TotalPrice"};
     private String[] columnName2 = {"FoodName", "Portion", "Price"};
     DB db = new DB("Order");
+    GUI ui = new GUI();
     
     public OrderPage() {
         initComponents();
@@ -71,6 +74,11 @@ public class OrderPage extends javax.swing.JFrame {
         jScrollPane4.setViewportView(OrderList);
 
         Accept.setText("Accept");
+        Accept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AcceptActionPerformed(evt);
+            }
+        });
 
         Cancel.setText("Cancel");
         Cancel.addActionListener(new java.awt.event.ActionListener() {
@@ -129,25 +137,17 @@ public class OrderPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void FoodMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoodMenuActionPerformed
-        FoodMenu fm = new FoodMenu();
-        fm.setVisible(true);
-        fm.pack();
-        fm.setLocationRelativeTo(null);
-        fm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ui.callPage("FoodMenu");
         this.dispose();
     }//GEN-LAST:event_FoodMenuActionPerformed
 
     private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistoryActionPerformed
-        OrderHistory oh = new OrderHistory();
-        oh.setVisible(true);
-        oh.pack();
-        oh.setLocationRelativeTo(null);
-        oh.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.dispose();
+        ui.callPage("OrderHistory");
+        this.dispose();;
     }//GEN-LAST:event_OrderHistoryActionPerformed
 
     private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
-        // TODO add your handling code here:
+ 
     }//GEN-LAST:event_CancelActionPerformed
 
     private void OrderListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderListMouseReleased
@@ -180,6 +180,121 @@ public class OrderPage extends javax.swing.JFrame {
         };
     }//GEN-LAST:event_OrderListMouseReleased
 
+    private void AcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptActionPerformed
+        // find all the rows in Order.txt that have the same orderId as the chosen row in the model with pending status
+        // delete those rows
+        // rewrite those rows with a preparing status into the order.txt.
+
+   // Get the orderId of the chosen row in the model
+        int row = OrderList.getSelectedRow();
+        String orderId = String.valueOf(model.getValueAt(row, 0));
+//        String dt = String.valueOf(model.getValueAt(row, 1));
+//        String status = String.valueOf(model.getValueAt(row, 2));
+//        String totalprice = String.valueOf(model.getValueAt(row, 3));
+
+   // Read the Order.txt file line by line
+        List<String> data = db.readFile();
+        List<String> temp = new ArrayList<>();
+        for (String line : data) {
+            String[] parts = line.split(",");
+            String currentOrderId = parts[0];
+
+    // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
+            if (currentOrderId.equals(orderId)) {
+                temp.add(line);
+            }
+        }
+        
+        db.overWriteFile();
+        for (String line : temp) {
+            System.out.println(line);
+            String[] parts = line.split(",");
+            String status = parts[4];
+//            System.out.println(status);
+            if (status.equals("Pending")) {
+                String[] updatedParts = Arrays.copyOf(parts, parts.length);
+                updatedParts[4] = "preparing";
+                line = String.join(",", updatedParts);
+                
+            }
+            System.out.println(line);
+            
+            
+//            try {
+//                db.bw.write(line);
+//                db.bw.newLine();
+//            } catch (IOException ex) {
+//                Logger.getLogger(OrderPage.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+        db.closeResources();
+            
+            
+        }
+   
+//   
+//   try (BufferedReader br = new BufferedReader(new FileReader("DB/Service/Order.txt"))) {
+//       String line;
+//       while ((line = br.readLine()) != null) {
+//           // Split the line into parts
+//           String[] parts = line.split(",");
+//           String currentOrderId = parts[0];
+//           String status = parts[4];
+//
+//           // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
+//           if (currentOrderId.equals(orderId) && status.equals("pending")) {
+////               lines.add(line);
+//           }
+//       }
+//   } catch (IOException e) {
+//       e.printStackTrace();
+//   }
+//
+//   // Delete the rows in the Order.txt file that match the orderId of the chosen row in the model with a pending status
+//   try (BufferedWriter bw = new BufferedWriter(new FileWriter("DB/Service/Order.txt"))) {
+//       for (String line : lines) {
+//           String[] parts = line.split(",");
+//           String currentOrderId = parts[0];
+//           String status = parts[4];
+//
+//           // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, skip this line
+//           if (currentOrderId.equals(orderId) && status.equals("pending")) {
+//               continue;
+//           }
+//
+//           // Write the line to the Order.txt file
+//           bw.write(line);
+//           bw.newLine();
+//       }
+//   } catch (IOException e) {
+//       e.printStackTrace();
+//   }
+//
+//   // Rewrite the rows in the Order.txt file with a preparing status
+//   try (BufferedWriter bw = new BufferedWriter(new FileWriter("DB/Service/Order.txt", true))) {
+//       for (String line : lines) {
+//           String[] parts = line.split(",");
+//           String currentOrderId = parts[0];
+//           String status = parts[4];
+//
+//           // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, change the status to preparing
+//           if (currentOrderId.equals(orderId) && status.equals("pending")) {
+//               parts[4] = "preparing";
+//               line = String.join(",", parts);
+//           }
+//
+//           // Write the line to the Order.txt file
+//           bw.write(line);
+//           bw.newLine();
+//       }
+//   } catch (IOException e) {
+//       e.printStackTrace();
+//   }
+
+
+ 
+       
+    }//GEN-LAST:event_AcceptActionPerformed
+
     private void load() {
        try {
            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
@@ -207,6 +322,8 @@ public class OrderPage extends javax.swing.JFrame {
            e.printStackTrace();
        }
     }
+    
+
 
     
 

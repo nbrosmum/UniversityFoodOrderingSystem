@@ -7,12 +7,13 @@ import java.io.*;
 import javax.swing.*;
 import java.nio.file.*;
 import java.util.*;
+import javax.swing.table.DefaultTableModel;
 
 public class DB {
-    private File f;
+    public File f;
     public BufferedWriter bw;
     public BufferedReader br;
-    private String prefixID;
+    public String prefixID;
     public String id;
     
     public DB(String type){
@@ -146,6 +147,26 @@ public class DB {
    
     public void getID(String id){
         this.id = id;
+    }
+    
+    public interface RowMapper {
+        Object[] mapRow(String line);
+    }
+    
+    public void loadData(DefaultTableModel model, RowMapper mapper) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(f));
+            String line;
+            model.setRowCount(0);
+            while ((line = reader.readLine()) != null) {
+                Object[] rowData = mapper.mapRow(line);
+                model.addRow(rowData);
+            }
+            reader.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error reading from file");
+            e.printStackTrace();
+        }
     }
     
     public void closeResources() {

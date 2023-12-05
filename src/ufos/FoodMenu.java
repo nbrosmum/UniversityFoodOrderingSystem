@@ -11,6 +11,7 @@ public class FoodMenu extends javax.swing.JFrame {
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"Food Name", "Description", "Price"};
     Ventor vt = new Ventor();
+    GUI ui = new GUI();
     DB db = new DB("Menu");
     
 
@@ -186,11 +187,7 @@ public class FoodMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void OrderPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderPageActionPerformed
-        OrderPage op = new OrderPage();
-        op.setVisible(true);
-        op.pack();
-        op.setLocationRelativeTo(null);
-        op.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ui.callPage("OrderPage");
         this.dispose();
     }//GEN-LAST:event_OrderPageActionPerformed
 
@@ -199,11 +196,7 @@ public class FoodMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_NameTextActionPerformed
 
     private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistoryActionPerformed
-        OrderHistory oh = new OrderHistory();
-        oh.setVisible(true);
-        oh.pack();
-        oh.setLocationRelativeTo(null);
-        oh.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ui.callPage("OrderHistory");
         this.dispose();
     }//GEN-LAST:event_OrderHistoryActionPerformed
 
@@ -310,22 +303,34 @@ public class FoodMenu extends javax.swing.JFrame {
         DescriptionText.setText("");
     }
     
-    private void load() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Menu.txt"));
-            String line;
-            model.setRowCount(0);
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                String foodName = parts[1];
-                double price = Double.parseDouble(parts[2]);
-                String description = parts[3];
-                model.addRow(new Object[]{foodName, description, price});
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//    private void load() {
+//        try {
+//            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Menu.txt"));
+//            String line;
+//            model.setRowCount(0);
+//            while ((line = reader.readLine()) != null) {
+//                String[] parts = line.split(",");
+//                String foodName = parts[1];
+//                double price = Double.parseDouble(parts[2]);
+//                String description = parts[3];
+//                model.addRow(new Object[]{foodName, description, price});
+//            }
+//            reader.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+    
+    
+    private void load(){
+        db.loadData(model, line -> {
+            String[] parts = line.split(",");
+            String foodName = parts[1];
+            double price = Double.parseDouble(parts[2]);
+            String description = parts[3];
+            return new Object[]{foodName, description, price};
+        });
+        
     }
     
     
