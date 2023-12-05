@@ -147,7 +147,64 @@ public class OrderPage extends javax.swing.JFrame {
     }//GEN-LAST:event_OrderHistoryActionPerformed
 
     private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
+           // Get the orderId of the chosen row in the model
+        int row = OrderList.getSelectedRow();
+        String orderId = String.valueOf(model.getValueAt(row, 0));
+
+   // Read the Order.txt file line by line
+        List<String> data = db.readFile();
+        List<String> sameIDd = new ArrayList<>();
+        for (String line : data) {
+            String[] parts = line.split(",");
+            String currentOrderId = parts[0];
+
+    // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
+            if (currentOrderId.equals(orderId)) {
+                sameIDd.add(line);
+            }
+        }
+        
+        data.removeIf(line -> {
+            String[] parts = line.split(",");
+            String currentOrderId = parts[0];
+            return currentOrderId.equals(orderId);
+         });     
  
+        db.overWriteFile();
+        try {
+            for (String line : data) {
+                db.bw.write(line);
+                db.bw.newLine();
+            }
+        } catch (IOException ex) {
+            System.out.println("Something went wrong.");
+        }
+        db.closeResources();
+        
+       
+        
+        db.writeFile();
+        for (String line : sameIDd) {
+            String[] parts = line.split(",");
+            String status = parts[4];
+            if (status.equals("Pending")) {
+                String[] updatedParts = Arrays.copyOf(parts, parts.length);
+                updatedParts[4] = "Canceled";
+                line = String.join(",", updatedParts);                            
+
+                
+            }
+            try {
+                db.bw.write(line);
+                db.bw.newLine();
+            } catch (IOException ex) {
+                 System.out.println("Something went wrong.");
+            }           
+                       
+        }
+       
+        db.closeResources();
+        load();
     }//GEN-LAST:event_CancelActionPerformed
 
     private void OrderListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderListMouseReleased
@@ -181,118 +238,65 @@ public class OrderPage extends javax.swing.JFrame {
     }//GEN-LAST:event_OrderListMouseReleased
 
     private void AcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptActionPerformed
-        // find all the rows in Order.txt that have the same orderId as the chosen row in the model with pending status
-        // delete those rows
-        // rewrite those rows with a preparing status into the order.txt.
-
    // Get the orderId of the chosen row in the model
         int row = OrderList.getSelectedRow();
         String orderId = String.valueOf(model.getValueAt(row, 0));
-//        String dt = String.valueOf(model.getValueAt(row, 1));
-//        String status = String.valueOf(model.getValueAt(row, 2));
-//        String totalprice = String.valueOf(model.getValueAt(row, 3));
 
    // Read the Order.txt file line by line
         List<String> data = db.readFile();
-        List<String> temp = new ArrayList<>();
+        List<String> sameIDd = new ArrayList<>();
         for (String line : data) {
             String[] parts = line.split(",");
             String currentOrderId = parts[0];
 
     // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
             if (currentOrderId.equals(orderId)) {
-                temp.add(line);
+                sameIDd.add(line);
             }
         }
         
+        data.removeIf(line -> {
+            String[] parts = line.split(",");
+            String currentOrderId = parts[0];
+            return currentOrderId.equals(orderId);
+         });     
+ 
         db.overWriteFile();
-        for (String line : temp) {
-            System.out.println(line);
+        try {
+            for (String line : data) {
+                db.bw.write(line);
+                db.bw.newLine();
+            }
+        } catch (IOException ex) {
+            System.out.println("Something went wrong.");
+        }
+        db.closeResources();
+        
+       
+        
+        db.writeFile();
+        for (String line : sameIDd) {
             String[] parts = line.split(",");
             String status = parts[4];
-//            System.out.println(status);
             if (status.equals("Pending")) {
                 String[] updatedParts = Arrays.copyOf(parts, parts.length);
-                updatedParts[4] = "preparing";
-                line = String.join(",", updatedParts);
+                updatedParts[4] = "Accepted";
+                line = String.join(",", updatedParts);                            
+
                 
             }
-            System.out.println(line);
-            
-            
-//            try {
-//                db.bw.write(line);
-//                db.bw.newLine();
-//            } catch (IOException ex) {
-//                Logger.getLogger(OrderPage.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-        db.closeResources();
-            
-            
+            try {
+                db.bw.write(line);
+                db.bw.newLine();
+            } catch (IOException ex) {
+                 System.out.println("Something went wrong.");
+            }           
+                       
         }
-   
-//   
-//   try (BufferedReader br = new BufferedReader(new FileReader("DB/Service/Order.txt"))) {
-//       String line;
-//       while ((line = br.readLine()) != null) {
-//           // Split the line into parts
-//           String[] parts = line.split(",");
-//           String currentOrderId = parts[0];
-//           String status = parts[4];
-//
-//           // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
-//           if (currentOrderId.equals(orderId) && status.equals("pending")) {
-////               lines.add(line);
-//           }
-//       }
-//   } catch (IOException e) {
-//       e.printStackTrace();
-//   }
-//
-//   // Delete the rows in the Order.txt file that match the orderId of the chosen row in the model with a pending status
-//   try (BufferedWriter bw = new BufferedWriter(new FileWriter("DB/Service/Order.txt"))) {
-//       for (String line : lines) {
-//           String[] parts = line.split(",");
-//           String currentOrderId = parts[0];
-//           String status = parts[4];
-//
-//           // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, skip this line
-//           if (currentOrderId.equals(orderId) && status.equals("pending")) {
-//               continue;
-//           }
-//
-//           // Write the line to the Order.txt file
-//           bw.write(line);
-//           bw.newLine();
-//       }
-//   } catch (IOException e) {
-//       e.printStackTrace();
-//   }
-//
-//   // Rewrite the rows in the Order.txt file with a preparing status
-//   try (BufferedWriter bw = new BufferedWriter(new FileWriter("DB/Service/Order.txt", true))) {
-//       for (String line : lines) {
-//           String[] parts = line.split(",");
-//           String currentOrderId = parts[0];
-//           String status = parts[4];
-//
-//           // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, change the status to preparing
-//           if (currentOrderId.equals(orderId) && status.equals("pending")) {
-//               parts[4] = "preparing";
-//               line = String.join(",", parts);
-//           }
-//
-//           // Write the line to the Order.txt file
-//           bw.write(line);
-//           bw.newLine();
-//       }
-//   } catch (IOException e) {
-//       e.printStackTrace();
-//   }
-
-
- 
        
+        db.closeResources();
+        load();
+   
     }//GEN-LAST:event_AcceptActionPerformed
 
     private void load() {
