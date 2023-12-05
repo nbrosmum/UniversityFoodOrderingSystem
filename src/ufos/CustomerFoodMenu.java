@@ -4,17 +4,23 @@
  */
 package ufos;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
  */
 public class CustomerFoodMenu extends javax.swing.JFrame {
     GUI ui = new GUI();
+    DB db = new DB("Menu");
+    private DefaultTableModel model = new DefaultTableModel();
     /**
      * Creates new form CustomerFoodMenu
      */
     public CustomerFoodMenu() {
         initComponents();
+        load();
+        
     }
 
     /**
@@ -50,15 +56,20 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
 
         FoodMenuTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Food Name", "Price", "Description"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Double.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(FoodMenuTable);
 
         CartTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -258,7 +269,15 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
         ui.callPage("CustomerProfilePage");
         this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
-
+    public void load(){
+        db.loadData(model, line -> {
+            String[] parts = line.split(",");
+            String foodName = parts[1];
+            double price = Double.parseDouble(parts[2]);
+            String description = parts[3];
+            return new Object[]{foodName,price,description};
+        });    
+    }
     /**
      * @param args the command line arguments
      */
