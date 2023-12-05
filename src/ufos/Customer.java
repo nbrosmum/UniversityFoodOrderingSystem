@@ -10,13 +10,13 @@ package ufos;
  *
  * @author User
  */
-public class Customer {
+public class Customer extends User {
    private String customerID;
    private String name;
    private double credit;
    
-    public Customer() {
-        
+    public Customer(String username, String password, String email          ) {
+        super(username, password, email);   
     }
 
     public String getCustomerID() {
@@ -43,6 +43,6 @@ public class Customer {
         this.credit = credit;
     }
    
-   
+       
        
 }

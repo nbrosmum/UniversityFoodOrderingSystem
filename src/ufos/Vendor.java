@@ -8,7 +8,11 @@ package ufos;
  *
  * @author leech
  */
-public class Ventor {
-    int password;
-    String name;
+public class Vendor extends User {
+  
+    
+    public Vendor(String username, String password, String email){
+        super(username, password, email);
+            
+    }
 }
