@@ -2,8 +2,6 @@ package ufos;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -12,6 +10,8 @@ public class FoodMenu extends javax.swing.JFrame {
 
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"Food Name", "Description", "Price"};
+    Ventor vt = new Ventor();
+    GUI ui = new GUI();
     DB db = new DB("Menu");
     
 
@@ -187,11 +187,7 @@ public class FoodMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void OrderPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderPageActionPerformed
-        OrderPage op = new OrderPage();
-        op.setVisible(true);
-        op.pack();
-        op.setLocationRelativeTo(null);
-        op.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ui.callPage("OrderPage");
         this.dispose();
     }//GEN-LAST:event_OrderPageActionPerformed
 
@@ -200,11 +196,7 @@ public class FoodMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_NameTextActionPerformed
 
     private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistoryActionPerformed
-        OrderHistory oh = new OrderHistory();
-        oh.setVisible(true);
-        oh.pack();
-        oh.setLocationRelativeTo(null);
-        oh.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ui.callPage("OrderHistory");
         this.dispose();
     }//GEN-LAST:event_OrderHistoryActionPerformed
 
@@ -215,17 +207,10 @@ public class FoodMenu extends javax.swing.JFrame {
         double price = Double.parseDouble(PriceText.getText());
         String Description = DescriptionText.getText();
         
-        //Add in Text       
-        db.writeFile();
-        String priceString = String.valueOf(price);
-        String FoodItem = db.id + "," + foodName + "," +  priceString + "," + Description;
-        try {
-            db.bw.write(FoodItem + "\n");
-        } catch (IOException ex) {
-            System.out.println("Something went wrong.");
-        }
-        db.closeResources();
-        load();                
+        //Add in Text  
+        vt.add(foodName,price,Description);
+
+        load();               
         clearTextField();     
 
     }//GEN-LAST:event_addItemActionPerformed
@@ -238,34 +223,14 @@ public class FoodMenu extends javax.swing.JFrame {
             String foodName = (String) model.getValueAt(selectedRow, 0);
             String description = (String) model.getValueAt(selectedRow, 1);
             double price = (Double) model.getValueAt(selectedRow, 2);
-            String temp = "";
-
-
-            List<String> data = db.readFile();
-            String id = "";
-            for (String line : data) {
-                String[] parts = line.split(",");
-                if (parts[1].equals(foodName) && parts[2].equals(Double.toString(price)) && parts[3].equals(description)) {
-                    temp = line;
-                    id = parts[0];
-
-                }
-            } 
-        data.remove(temp);
-        System.out.println(data);
-        db.overWriteFile();
-        try {
-            for (String line : data) {
-                db.bw.write(line);
-                db.bw.newLine();
-            }
-        } catch (IOException ex) {
-            System.out.println("Something went wrong.");
-        }
-        db.closeResources();
+            
+            
+            vt.delete(foodName, price, description);
+            
         }
         
         load();
+        clearTextField();
 
         
     }//GEN-LAST:event_deleteItemActionPerformed
@@ -327,35 +292,45 @@ public class FoodMenu extends javax.swing.JFrame {
             db.closeResources();
         }
         load();
-
+        clearTextField();
 
 
 
     }//GEN-LAST:event_updateItemActionPerformed
-
-    public void clearTextField(){
+    private void clearTextField(){
         NameText.setText("");
         PriceText.setText("");
         DescriptionText.setText("");
     }
     
+//    private void load() {
+//        try {
+//            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Menu.txt"));
+//            String line;
+//            model.setRowCount(0);
+//            while ((line = reader.readLine()) != null) {
+//                String[] parts = line.split(",");
+//                String foodName = parts[1];
+//                double price = Double.parseDouble(parts[2]);
+//                String description = parts[3];
+//                model.addRow(new Object[]{foodName, description, price});
+//            }
+//            reader.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
     
-    private void load() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Menu.txt"));
-            String line;
-            model.setRowCount(0);
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                String foodName = parts[1];
-                double price = Double.parseDouble(parts[2]);
-                String description = parts[3];
-                model.addRow(new Object[]{foodName, description, price});
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    
+    private void load(){
+        db.loadData(model, line -> {
+            String[] parts = line.split(",");
+            String foodName = parts[1];
+            double price = Double.parseDouble(parts[2]);
+            String description = parts[3];
+            return new Object[]{foodName, description, price};
+        });
+        
     }
     
     
