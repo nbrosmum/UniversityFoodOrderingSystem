@@ -13,6 +13,7 @@ package ufos;
 public class Customer extends User {
    private String customerID;
    private String name;
+   private String Email;
    private double credit;
    
     public Customer(String username, String password, String email          ) {
@@ -35,6 +36,14 @@ public class Customer extends User {
         this.name = name;
     }
 
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String Email) {
+        this.Email = Email;
+    }
+    
     public double getCredit() {
         return credit;
     }

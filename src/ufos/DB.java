@@ -18,30 +18,53 @@ public class DB {
     
     public DB(String type){
         String directoryPath = "";
-        if (type.equals("Admin")) {
-            directoryPath = "DB\\Account\\";
-            prefixID = "A";
-        } else if (type.equals("Customer")) {
-            directoryPath = "DB\\Account\\";
-            prefixID = "C";
-        } else if (type.equals("Vendor")) {
-            directoryPath = "DB\\Account\\";
-            prefixID = "V";
-        } else if (type.equals("Runner")) {
-            directoryPath = "DB\\Account\\";
-            prefixID = "R";
-        } else if (type.equals("Menu")) {
-            directoryPath = "DB\\Service\\";
-            prefixID = "F";
-        } else if (type.equals("Order")) {
-            directoryPath = "DB\\Service\\";
-            prefixID = "O";
-        } else if (type.equals("Payment")) {
-            directoryPath = "DB\\Service\\";
-            prefixID = "P";
-        }else if(type.equals("Transaction")){
-            directoryPath = "DB\\Service\\";
-            prefixID = "T";
+        switch (type) {
+            case "Admin":
+                directoryPath = "DB\\Account\\";
+                prefixID = "A";
+                break;
+            case "Customer":
+                directoryPath = "DB\\Account\\";
+                prefixID = "C";
+                break;
+            case "Vendor":
+                directoryPath = "DB\\Account\\";
+                prefixID = "V";
+                break;
+            case "Runner":
+                directoryPath = "DB\\Account\\";
+                prefixID = "R";
+                break;
+            case "Menu":
+                directoryPath = "DB\\Service\\";
+                prefixID = "F";
+                break;
+            case "Order":
+                directoryPath = "DB\\Service\\";
+                prefixID = "O";
+                break;
+            case "Payment":
+                directoryPath = "DB\\Service\\";
+                prefixID = "P";
+                break;
+            case "Transaction":
+                directoryPath = "DB\\Service\\";
+                prefixID = "T";
+                break;
+            case "Notification":
+                directoryPath = "DB\\Service\\";
+                prefixID = "N";
+                break;
+            case "FoodReview":
+                directoryPath = "DB\\Service\\";
+                prefixID = "FR";
+                break;
+            case "DeliveryReview":
+                directoryPath = "DB\\Service\\";
+                prefixID = "DR";
+                break;
+            default:
+                break;
         }
         f = new File(directoryPath + type + ".txt");
         createDirectory();
@@ -144,14 +167,14 @@ public class DB {
     
     public void loadData(DefaultTableModel model, RowMapper mapper) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(f));
+            br = new BufferedReader(new FileReader(f));
             String line;
             model.setRowCount(0);
-            while ((line = reader.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 Object[] rowData = mapper.mapRow(line);
                 model.addRow(rowData);
             }
-            reader.close();
+            br.close();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error reading from file");
             e.printStackTrace();
