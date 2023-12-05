@@ -20,7 +20,7 @@ public class OrderPage extends javax.swing.JFrame {
         initComponents();
         model.setColumnIdentifiers(columnName);
         model2.setColumnIdentifiers(columnName2);
-        Ventor vt = new Ventor();
+        Vendor vt = new Vendor();
         load();
     }
 

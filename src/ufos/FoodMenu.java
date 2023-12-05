@@ -10,7 +10,7 @@ public class FoodMenu extends javax.swing.JFrame {
 
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"Food Name", "Description", "Price"};
-    Ventor vt = new Ventor();
+    Vendor vt = new Vendor();
     GUI ui = new GUI();
     DB db = new DB("Menu");
     

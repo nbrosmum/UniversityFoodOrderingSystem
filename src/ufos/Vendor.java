@@ -5,8 +5,12 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
-public class Ventor {
+public class Vendor extends User{
     DB db = new DB("Menu");
+    
+    public Vendor(){
+      
+    }
     
     
     public void add (String foodName, double price, String description){
@@ -48,18 +52,8 @@ public class Ventor {
 
 
     }
+ 
 
-    
-    
-
-      
-/**
- *
- * @author leech
- */
-public class Vendor extends User {
-  
-    
     public Vendor(String username, String password, String email){
         super(username, password, email);
             
