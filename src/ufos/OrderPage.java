@@ -34,8 +34,8 @@ public class OrderPage extends javax.swing.JFrame {
         FoodList = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         OrderList = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        Accept = new javax.swing.JButton();
+        Cancel = new javax.swing.JButton();
 
         jTable1.setModel(model);
         jScrollPane1.setViewportView(jTable1);
@@ -63,14 +63,19 @@ public class OrderPage extends javax.swing.JFrame {
         jScrollPane3.setViewportView(FoodList);
 
         OrderList.setModel(model);
+        OrderList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                OrderListMouseReleased(evt);
+            }
+        });
         jScrollPane4.setViewportView(OrderList);
 
-        jButton1.setText("Accept");
+        Accept.setText("Accept");
 
-        jButton2.setText("Cancel");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        Cancel.setText("Cancel");
+        Cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                CancelActionPerformed(evt);
             }
         });
 
@@ -93,8 +98,8 @@ public class OrderPage extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(OrderHistory)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(Accept, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                .addComponent(Cancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -108,9 +113,9 @@ public class OrderPage extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(72, 72, 72)
-                        .addComponent(jButton1)
+                        .addComponent(Accept)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2))
+                        .addComponent(Cancel))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -141,27 +146,68 @@ public class OrderPage extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_OrderHistoryActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_CancelActionPerformed
 
-    private void load() {
+    private void OrderListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderListMouseReleased
+        model2.setRowCount(0);
+        int row = OrderList.getSelectedRow();
+        String orderId = String.valueOf(model.getValueAt(row,0));      
+        List<String> sameOrderIds = new ArrayList<>();
         try {
             BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
             String line;
-            model.setRowCount(0);
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
+                String currentOrderId = parts[0];
                 String foodName = parts[1];
-                double price = Double.parseDouble(parts[2]);
-                String description = parts[3];
-                model.addRow(new Object[]{foodName, description, price});
+                String portion = parts[2];
+                String price = parts[3];
+
+                // If currentOrderId is the same as model orderId, add it to the list
+                if (currentOrderId.equals(orderId)) {
+                    sameOrderIds.add(currentOrderId);
+                    model2.addRow(new Object[]{foodName,portion,price});
+                }
+                
+                // 
+                
             }
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        };
+    }//GEN-LAST:event_OrderListMouseReleased
+
+    private void load() {
+       try {
+           BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
+           String line;
+           model.setRowCount(0);
+           Set<String> orderIds = new HashSet<>(); // Set to store orderIds
+           while ((line = reader.readLine()) != null) {
+               String[] parts = line.split(",");
+               String orderId = parts[0];
+
+               // If orderId is already in the set, skip this line
+               if (!orderIds.add(orderId)) {
+                   continue;
+               }
+
+
+               String status = parts[4];
+               String dt = parts[5];
+               String totalprice = parts[6];
+
+               model.addRow(new Object[]{orderId,dt,status,totalprice});
+           }
+           reader.close();
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
     }
+
     
 
     public static void main(String args[]) {
@@ -197,12 +243,12 @@ public class OrderPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Accept;
+    private javax.swing.JButton Cancel;
     private javax.swing.JTable FoodList;
     private javax.swing.JButton FoodMenu;
     private javax.swing.JButton OrderHistory;
     private javax.swing.JTable OrderList;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
