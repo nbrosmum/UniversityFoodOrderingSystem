@@ -43,6 +43,10 @@ public class DB {
                 directoryPath = "DB\\Service\\";
                 prefixID = "O";
                 break;
+            case "Payment":
+                directoryPath = "DB\\Service\\";
+                prefixID = "P";
+                break;
             case "Transaction":
                 directoryPath = "DB\\Service\\";
                 prefixID = "T";

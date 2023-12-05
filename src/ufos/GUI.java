@@ -26,27 +26,38 @@ public class GUI {
             case "EWallet":
                 page = new EWallet();
                 break;
-            case "CustomerFoodMenu":
-                page = new CustomerFoodMenu();
-                break;
+//            case "CustomerFoodMenu":
+//                page = new CustomerFoodMenu();
+//                break;
             case "CustomerProfile":
                 page = new CustomerProfile();
                 break;
             case "CustomerProfilePage":
                 page = new CustomerProfilePage();
                 break;
-            case "CustomerTransactionHistory":
-                page = new CustomerTransactionHistory();
-                break;
-            case "CustomerOrderHistory":
-                page = new CustomerOrderHistory();
-                break;
+//            case "CustomerTransactionHistory":
+//                page = new CustomerTransactionHistory();
+//                break;
+//            case "CustomerOrderHistory":
+//                page = new CustomerOrderHistory();
+//                break;
             case "CustomerOrderStatus":
                 page = new CustomerOrderStatus();
                 break;
             case "CustomerFoodReview":
                 page = new CustomerFoodReview();
                 break;
+            case "OrderHistory":
+                page = new OrderHistory();
+                break;
+            case "OrderPage":
+                page = new OrderPage();
+                break;
+            case "FoodMenu":
+                page = new FoodMenu();
+                break;
+                
+            
             default:
                 throw new IllegalArgumentException("Invalid page: " + pageName);
         }
