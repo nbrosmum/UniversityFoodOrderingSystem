@@ -291,43 +291,47 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
 
     private void OrderbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderbtnActionPerformed
         String selectedValue = (String) DelivaryStatus.getSelectedItem();
-   String currentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-   String status = "pending";
-   String orderID = dbOrder.generateId();
-   boolean message = false;
-   
-   // Read the food file
-   ArrayList<String> foodData = db.readFile();
-   
-   for(int i = 0; i < Cartmodel.getRowCount(); i++) {
-       // Get the values of each column in the current row
-       String foodName = Cartmodel.getValueAt(i, 0).toString();
-       int quantity = Integer.parseInt(Cartmodel.getValueAt(i, 1).toString());
-       double price = Double.parseDouble(Cartmodel.getValueAt(i, 2).toString());
-       String foodID = "";
-       
-       // Find the foodID for the given foodName
-       for (String line : foodData) {
-           String[] parts = line.split(",");
-           if (parts[1].equals(foodName)) {
-               foodID = parts[0];
-               break;
-           }
-       }
-       
-            try {
-                c.OrderFood(orderID, foodID, foodName, quantity, price, status, currentDateTime, totalPrice, selectedValue);
-                message = true;
-            } catch (IOException ex) {
-                Logger.getLogger(CustomerFoodMenu.class.getName()).log(Level.SEVERE, null, ex);
+        String currentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        String status = "Pending";
+        String orderID = dbOrder.generateId();
+        boolean message = false;
+
+        // Read the food file
+        ArrayList<String> foodData = db.readFile();
+
+        for(int i = 0; i < Cartmodel.getRowCount(); i++) {
+            // Get the values of each column in the current row
+            String foodName = Cartmodel.getValueAt(i, 0).toString();
+            int quantity = Integer.parseInt(Cartmodel.getValueAt(i, 1).toString());
+            double price = Double.parseDouble(Cartmodel.getValueAt(i, 2).toString());
+            String foodID = "";
+
+
+            // Find the foodID for the given foodName
+            for (String line : foodData) {
+                String[] parts = line.split(",");
+                if (parts[1].equals(foodName)) {
+                    foodID = parts[0];
+                    break;
+                }
             }
-      
-   }
-   
-   if(message == true){
-      JOptionPane.showMessageDialog(null, "Order Susscessfull! please wait for Vendor to approve");
-   }
-   Cartmodel.setRowCount(0);
+
+                try {
+
+                    c.OrderFood(orderID, foodID, foodName, quantity, price, status, currentDateTime, totalPrice, selectedValue);
+
+                    message = true;
+                } catch (IOException ex) {
+                    Logger.getLogger(CustomerFoodMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+        }
+
+        if(message == true){
+           JOptionPane.showMessageDialog(null, "Order Susscessfull! please wait for Vendor to approve");
+        }
+        Cartmodel.setRowCount(0);
+        items.clear();
         
     }//GEN-LAST:event_OrderbtnActionPerformed
 

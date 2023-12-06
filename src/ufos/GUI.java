@@ -48,13 +48,13 @@ public class GUI {
                 page = new CustomerFoodReview();
                 break;
             case "OrderHistory":
-                page = new OrderHistory();
+                page = new VendorOrderHistory();
                 break;
             case "OrderPage":
-                page = new OrderPage();
+                page = new VendorOrderPage();
                 break;
             case "FoodMenu":
-                page = new FoodMenu();
+                page = new VendorFoodMenu();
                 break;
                 
             
