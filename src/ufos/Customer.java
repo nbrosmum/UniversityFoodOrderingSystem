@@ -67,5 +67,5 @@ public class Customer extends User {
         db.bw.newLine();
         db.closeResources();
     }
-       
+  
 }
