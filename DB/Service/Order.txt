@@ -1,5 +1,0 @@
-O001,F004,dadsadsda,1,4.0,2023-12-06 16:47:54,12.0,Delivery,null
-O001,F002,sdasdasd,1,5.0,2023-12-06 16:47:54,12.0,Delivery,null
-O001,F003,dsadasdasd,1,3.0,2023-12-06 16:47:54,12.0,Delivery,null
-O002,F003,dsadasdasd,1,3.0,2023-12-06 20:20:25,8.0,Dine-in,null
-O002,F002,sdasdasd,1,5.0,2023-12-06 20:20:25,8.0,Dine-in,null
