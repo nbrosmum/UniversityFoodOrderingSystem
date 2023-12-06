@@ -4,7 +4,11 @@
  */
 package ufos;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.*;
@@ -16,6 +20,8 @@ import javax.swing.table.*;
 public class CustomerFoodMenu extends javax.swing.JFrame {
     GUI ui = new GUI();
     DB db = new DB("Menu");
+    DB dbOrder = new DB("Order");
+    Customer c = new Customer();
     Order o;
     SpinnerNumberModel spinnerModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
     private DefaultTableModel model = new DefaultTableModel();
@@ -24,6 +30,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
     private String[] cartColumnName = {"Food Name", "Portion","Price"};
     List<String[]> items = new ArrayList<>();
     private String selectedPrice = "";
+    private double totalPrice;
     /**
      * Creates new form CustomerFoodMenu
      */
@@ -277,13 +284,50 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
 
             }
             o = new Order(items);
-            double totalPrice = o.calculateTotalPrice();
+            totalPrice = o.calculateTotalPrice();
             TotalPrice.setText(String.valueOf(totalPrice));   
         }
     }//GEN-LAST:event_AddCartbtnActionPerformed
 
     private void OrderbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderbtnActionPerformed
         String selectedValue = (String) DelivaryStatus.getSelectedItem();
+   String currentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+   String status = "pending";
+   String orderID = dbOrder.generateId();
+   boolean message = false;
+   
+   // Read the food file
+   ArrayList<String> foodData = db.readFile();
+   
+   for(int i = 0; i < Cartmodel.getRowCount(); i++) {
+       // Get the values of each column in the current row
+       String foodName = Cartmodel.getValueAt(i, 0).toString();
+       int quantity = Integer.parseInt(Cartmodel.getValueAt(i, 1).toString());
+       double price = Double.parseDouble(Cartmodel.getValueAt(i, 2).toString());
+       String foodID = "";
+       
+       // Find the foodID for the given foodName
+       for (String line : foodData) {
+           String[] parts = line.split(",");
+           if (parts[1].equals(foodName)) {
+               foodID = parts[0];
+               break;
+           }
+       }
+       
+            try {
+                c.OrderFood(orderID, foodID, foodName, quantity, price, status, currentDateTime, totalPrice, selectedValue);
+                message = true;
+            } catch (IOException ex) {
+                Logger.getLogger(CustomerFoodMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+      
+   }
+   
+   if(message == true){
+      JOptionPane.showMessageDialog(null, "Order Susscessfull! please wait for Vendor to approve");
+   }
+   Cartmodel.setRowCount(0);
         
     }//GEN-LAST:event_OrderbtnActionPerformed
 
@@ -349,7 +393,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
 
        // Update the total price
        o = new Order(items);
-       double totalPrice = o.calculateTotalPrice();
+       totalPrice = o.calculateTotalPrice();
        TotalPrice.setText(String.valueOf(totalPrice));
    }
     }//GEN-LAST:event_DeletebtnActionPerformed

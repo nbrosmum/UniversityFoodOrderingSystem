@@ -4,6 +4,7 @@
  */
 package ufos;
 
+import java.io.IOException;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -17,7 +18,7 @@ public class Customer extends User {
    private String name;
    private String Email;
    private double credit;
-   
+   DB db = new DB("Order");
     public Customer( ) {
          
     }
@@ -56,6 +57,15 @@ public class Customer extends User {
     public void setCredit(double credit) {
         this.credit = credit;
     }
-   
+    public void OrderFood(String orderID, String foodID, String foodName, int portion, double price, String status, String date, double totalPrice, String deliveryMethod ) throws IOException{
+        db.writeFile();
+        String quantity = String.valueOf(portion);
+        String priceString = String.valueOf(price);
+        String TotalPriceString = String.valueOf(totalPrice);
+        String orderDetails = orderID + "," + foodID+ "," + foodName+ "," + quantity+ "," + priceString+ "," + date+ "," + TotalPriceString+ "," + deliveryMethod+ "," + this.customerID;//vendorID
+        db.bw.write(orderDetails);
+        db.bw.newLine();
+        db.closeResources();
+    }
        
 }
