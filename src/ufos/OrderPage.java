@@ -24,6 +24,7 @@ public class OrderPage extends javax.swing.JFrame {
         load();
     }
 
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
@@ -63,9 +64,11 @@ public class OrderPage extends javax.swing.JFrame {
         jLabel1.setText("Order Page");
 
         FoodList.setModel(model2);
+        FoodList.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(FoodList);
 
         OrderList.setModel(model);
+        OrderList.getTableHeader().setReorderingAllowed(false);
         OrderList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 OrderListMouseReleased(evt);
@@ -189,7 +192,7 @@ public class OrderPage extends javax.swing.JFrame {
             String status = parts[4];
             if (status.equals("Pending")) {
                 String[] updatedParts = Arrays.copyOf(parts, parts.length);
-                updatedParts[4] = "Canceled";
+                updatedParts[4] = "Cancelled";
                 line = String.join(",", updatedParts);                            
 
                 
@@ -299,32 +302,28 @@ public class OrderPage extends javax.swing.JFrame {
    
     }                                      
 
-    private void load() {
-       try {
-           BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
-           String line;
-           model.setRowCount(0);
-           Set<String> orderIds = new HashSet<>(); // Set to store orderIds
-           while ((line = reader.readLine()) != null) {
-               String[] parts = line.split(",");
-               String orderId = parts[0];
-
-               // If orderId is already in the set, skip this line
-               if (!orderIds.add(orderId)) {
-                   continue;
-               }
-
-
-               String status = parts[4];
-               String dt = parts[5];
-               String totalprice = parts[6];
-
-               model.addRow(new Object[]{orderId,dt,status,totalprice});
-           }
-           reader.close();
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
+    private void load() {        
+        ArrayList<String> lines = db.readFile();
+        model.setRowCount(0);
+        Set<String> orderIds = new HashSet<>(); // Set to store orderIds
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            String orderId = parts[0];
+            String status = parts[4];
+            String dt = parts[5];
+            String totalprice = parts[6];
+            
+            // If orderId is already in the set, skip this line
+            if (!orderIds.add(orderId)) {
+                continue;
+            }
+            if (status.equals("Cancelled")) {
+                continue;
+            }
+            
+            model.addRow(new Object[]{orderId,dt,status,totalprice});
+        }
+        db.closeResources();
     }
     
 
