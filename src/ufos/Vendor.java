@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 public class Vendor extends User{
+    private String vendorId;
     DB db = new DB("Menu");
     
     public Vendor(){
@@ -14,15 +15,15 @@ public class Vendor extends User{
     
     
     public void add (String foodName, double price, String description){
-        db.writeFile();
-        String priceString = String.valueOf(price);
-        String FoodItem = db.id + "," + foodName + "," +  priceString + "," + description;
-        try {
-            db.bw.write(FoodItem + "\n");
-        } catch (IOException ex) {
-            System.out.println("Something went wrong.");
-        }
-        db.closeResources();
+//        db.writeFile();
+//        String priceString = String.valueOf(price);
+//        String FoodItem = db.id + "," + foodName + "," +  priceString + "," + description;
+//        try {
+//            db.bw.write(FoodItem + "\n");
+//        } catch (IOException ex) {
+//            System.out.println("Something went wrong.");
+//        }
+//        db.closeResources();
     }
     
     public void delete (String foodName, double price, String description){
@@ -51,6 +52,13 @@ public class Vendor extends User{
             db.closeResources();
 
 
+    }
+    public String getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(String vendorId) {
+        this.vendorId = vendorId;
     }
  
 

@@ -1,12 +1,24 @@
 package ufos;
 
-import javax.swing.JFrame;
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.*;
 
 public class OrderHistory extends javax.swing.JFrame {
+    private DefaultTableModel model = new DefaultTableModel();
+    private DefaultTableModel model2 = new DefaultTableModel();
+    private String[] columnName = {"OrderID", "Date", "Status", "TotalPrice"};
+    Vendor vt = new Vendor();
+    String vendorId = vt.getVendorId();
+    DB db = new DB("Order");
     GUI ui = new GUI();
     
     public OrderHistory() {
         initComponents();
+        model.setColumnIdentifiers(columnName);
+        Vendor vt = new Vendor();
+        load();
     }
 
 
@@ -14,26 +26,30 @@ public class OrderHistory extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        History1 = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        History = new javax.swing.JTable();
         FoodMenu = new javax.swing.JButton();
         OrderPage = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        ReviewText = new javax.swing.JTextArea();
+
+        History1.setModel(model);
+        History1.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(History1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        History.setModel(model);
+        History.getTableHeader().setReorderingAllowed(false);
+        History.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                HistoryMouseReleased(evt);
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        });
+        jScrollPane1.setViewportView(History);
 
         FoodMenu.setText("Food Menu");
         FoodMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -52,6 +68,12 @@ public class OrderHistory extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Order History");
 
+        ReviewText.setColumns(20);
+        ReviewText.setLineWrap(true);
+        ReviewText.setRows(5);
+        ReviewText.setWrapStyleWord(true);
+        jScrollPane3.setViewportView(ReviewText);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -65,8 +87,9 @@ public class OrderHistory extends javax.swing.JFrame {
                         .addGap(39, 39, 39)
                         .addComponent(jLabel1)
                         .addGap(39, 39, 39)
-                        .addComponent(OrderPage, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(129, Short.MAX_VALUE))
+                        .addComponent(OrderPage, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -78,7 +101,9 @@ public class OrderHistory extends javax.swing.JFrame {
                     .addComponent(OrderPage))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(206, 206, 206))
         );
 
         pack();
@@ -94,13 +119,41 @@ public class OrderHistory extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_OrderPageActionPerformed
 
+    private void HistoryMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HistoryMouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_HistoryMouseReleased
+
+    private void load() {
+        
+        ArrayList<String> lines = db.readFile();
+        ArrayList<Object[]> data = new ArrayList<>();
+        model.setRowCount(0);
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            String foodName = parts[1];
+            double price = Double.parseDouble(parts[2]);
+            String description = parts[3];
+            String vdId = parts[4];
+            
+            // If orderId is already in the set, skip this line
+            if (vdId.equals(vendorId)) {
+                data.add(new Object[]{foodName, description, price});
+            }
+//            model.addRow(new Object[]{foodName, description, price});
+        }
+   
+    //Set the model's data to the new list
+            for (Object[] row : data) {
+                model.addRow(row);
+            }
+            
+                    
+        db.closeResources();
+
+    }
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -117,7 +170,7 @@ public class OrderHistory extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(OrderHistory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
+
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -129,9 +182,13 @@ public class OrderHistory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton FoodMenu;
+    private javax.swing.JTable History;
+    private javax.swing.JTable History1;
     private javax.swing.JButton OrderPage;
+    private javax.swing.JTextArea ReviewText;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     // End of variables declaration//GEN-END:variables
 }

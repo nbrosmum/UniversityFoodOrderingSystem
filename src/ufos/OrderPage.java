@@ -1,4 +1,4 @@
-package ufos;
+package ufos;//GEN-LINE:variables
 
 import java.io.*;
 import java.util.*;
@@ -24,8 +24,9 @@ public class OrderPage extends javax.swing.JFrame {
         load();
     }
 
+
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -63,9 +64,11 @@ public class OrderPage extends javax.swing.JFrame {
         jLabel1.setText("Order Page");
 
         FoodList.setModel(model2);
+        FoodList.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(FoodList);
 
         OrderList.setModel(model);
+        OrderList.getTableHeader().setReorderingAllowed(false);
         OrderList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 OrderListMouseReleased(evt);
@@ -134,19 +137,19 @@ public class OrderPage extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void FoodMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoodMenuActionPerformed
+    private void FoodMenuActionPerformed(java.awt.event.ActionEvent evt) {                                         
         ui.callPage("FoodMenu");
         this.dispose();
-    }//GEN-LAST:event_FoodMenuActionPerformed
+    }                                        
 
-    private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistoryActionPerformed
+    private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {                                             
         ui.callPage("OrderHistory");
         this.dispose();;
-    }//GEN-LAST:event_OrderHistoryActionPerformed
+    }                                            
 
-    private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
+    private void CancelActionPerformed(java.awt.event.ActionEvent evt) {                                       
            // Get the orderId of the chosen row in the model
         int row = OrderList.getSelectedRow();
         String orderId = String.valueOf(model.getValueAt(row, 0));
@@ -189,7 +192,7 @@ public class OrderPage extends javax.swing.JFrame {
             String status = parts[4];
             if (status.equals("Pending")) {
                 String[] updatedParts = Arrays.copyOf(parts, parts.length);
-                updatedParts[4] = "Canceled";
+                updatedParts[4] = "Cancelled";
                 line = String.join(",", updatedParts);                            
 
                 
@@ -205,9 +208,9 @@ public class OrderPage extends javax.swing.JFrame {
        
         db.closeResources();
         load();
-    }//GEN-LAST:event_CancelActionPerformed
+    }                                      
 
-    private void OrderListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderListMouseReleased
+    private void OrderListMouseReleased(java.awt.event.MouseEvent evt) {                                        
         model2.setRowCount(0);
         int row = OrderList.getSelectedRow();
         String orderId = String.valueOf(model.getValueAt(row,0));      
@@ -235,9 +238,9 @@ public class OrderPage extends javax.swing.JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         };
-    }//GEN-LAST:event_OrderListMouseReleased
+    }                                       
 
-    private void AcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptActionPerformed
+    private void AcceptActionPerformed(java.awt.event.ActionEvent evt) {                                       
    // Get the orderId of the chosen row in the model
         int row = OrderList.getSelectedRow();
         String orderId = String.valueOf(model.getValueAt(row, 0));
@@ -297,34 +300,30 @@ public class OrderPage extends javax.swing.JFrame {
         db.closeResources();
         load();
    
-    }//GEN-LAST:event_AcceptActionPerformed
+    }                                      
 
-    private void load() {
-       try {
-           BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
-           String line;
-           model.setRowCount(0);
-           Set<String> orderIds = new HashSet<>(); // Set to store orderIds
-           while ((line = reader.readLine()) != null) {
-               String[] parts = line.split(",");
-               String orderId = parts[0];
-
-               // If orderId is already in the set, skip this line
-               if (!orderIds.add(orderId)) {
-                   continue;
-               }
-
-
-               String status = parts[4];
-               String dt = parts[5];
-               String totalprice = parts[6];
-
-               model.addRow(new Object[]{orderId,dt,status,totalprice});
-           }
-           reader.close();
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
+    private void load() {        
+        ArrayList<String> lines = db.readFile();
+        model.setRowCount(0);
+        Set<String> orderIds = new HashSet<>(); // Set to store orderIds
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            String orderId = parts[0];
+            String status = parts[4];
+            String dt = parts[5];
+            String totalprice = parts[6];
+            
+            // If orderId is already in the set, skip this line
+            if (!orderIds.add(orderId)) {
+                continue;
+            }
+            if (status.equals("Cancelled")) {
+                continue;
+            }
+            
+            model.addRow(new Object[]{orderId,dt,status,totalprice});
+        }
+        db.closeResources();
     }
     
 
@@ -363,7 +362,7 @@ public class OrderPage extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton Accept;
     private javax.swing.JButton Cancel;
     private javax.swing.JTable FoodList;
@@ -375,5 +374,5 @@ public class OrderPage extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 }

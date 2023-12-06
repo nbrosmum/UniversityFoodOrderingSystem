@@ -11,6 +11,7 @@ public class FoodMenu extends javax.swing.JFrame {
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"Food Name", "Description", "Price"};
     Vendor vt = new Vendor();
+    String vendorId = vt.getVendorId();
     GUI ui = new GUI();
     DB db = new DB("Menu");
     
@@ -19,6 +20,11 @@ public class FoodMenu extends javax.swing.JFrame {
         initComponents();
         model.setColumnIdentifiers(columnName);
         load();
+    }
+    
+    public FoodMenu(Vendor vendorId) {
+        initComponents();
+        vt = vendorId;
     }
 
     @SuppressWarnings("unchecked")
@@ -45,6 +51,7 @@ public class FoodMenu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         FoodMenu.setModel(model);
+        FoodMenu.getTableHeader().setReorderingAllowed(false);
         FoodMenu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 FoodMenuMouseReleased(evt);
@@ -207,8 +214,18 @@ public class FoodMenu extends javax.swing.JFrame {
         double price = Double.parseDouble(PriceText.getText());
         String Description = DescriptionText.getText();
         
+        
         //Add in Text  
-        vt.add(foodName,price,Description);
+        db.writeFile();
+        String priceString = String.valueOf(price);
+        String vendorIdString = String.valueOf(vendorId);
+        String FoodItem = db.id + "," + foodName + "," +  priceString + "," + Description + "," + vendorIdString;
+        try {
+            db.bw.write(FoodItem + "\n");
+        } catch (IOException ex) {
+            System.out.println("Something went wrong.");
+        }
+        db.closeResources();
 
         load();               
         clearTextField();     
@@ -276,8 +293,9 @@ public class FoodMenu extends javax.swing.JFrame {
             String foodText = NameText.getText();
             double priceText = Double.parseDouble(PriceText.getText());
             String descText = DescriptionText.getText();
+            String vendorIdString = String.valueOf(vendorId);
         // update the information but keep the original id
-            String updatedLine = id + "," + foodText + "," + String.valueOf(priceText) + "," + descText;
+            String updatedLine = id + "," + foodText + "," + String.valueOf(priceText) + "," + descText + "," + vendorIdString;
             data.add(updatedLine);
         // rewrite it into the file
             db.overWriteFile();
@@ -303,35 +321,46 @@ public class FoodMenu extends javax.swing.JFrame {
         DescriptionText.setText("");
     }
     
-//    private void load() {
-//        try {
-//            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Menu.txt"));
-//            String line;
-//            model.setRowCount(0);
-//            while ((line = reader.readLine()) != null) {
-//                String[] parts = line.split(",");
-//                String foodName = parts[1];
-//                double price = Double.parseDouble(parts[2]);
-//                String description = parts[3];
-//                model.addRow(new Object[]{foodName, description, price});
-//            }
-//            reader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-    
-    
-    private void load(){
-        db.loadData(model, line -> {
+    private void load() {
+        
+        ArrayList<String> lines = db.readFile();
+//        ArrayList<Object[]> data = new ArrayList<>();
+        model.setRowCount(0);
+        for (String line : lines) {
             String[] parts = line.split(",");
             String foodName = parts[1];
             double price = Double.parseDouble(parts[2]);
             String description = parts[3];
-            return new Object[]{foodName, description, price};
-        });
-        
+//            String vdId = parts[4];
+            
+            // If orderId is already in the set, skip this line
+//            if (vdId.equals(vendorId)) {
+//                data.add(new Object[]{foodName, description, price});
+//            }
+            model.addRow(new Object[]{foodName, description, price});
+        }
+   
+   // Set the model's data to the new list
+//            for (Object[] row : data) {
+//                model.addRow(row);
+//            }
+//            
+                    
+        db.closeResources();
+
     }
+    
+//    
+//    private void load(){
+//        db.loadData(model, line -> {
+//            String[] parts = line.split(",");
+//            String foodName = parts[1];
+//            double price = Double.parseDouble(parts[2]);
+//            String description = parts[3];
+//            return new Object[]{foodName, description, price};
+//        });
+//        
+//    }
     
     
     
