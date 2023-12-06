@@ -4,6 +4,8 @@
  */
 package ufos;
 
+import javax.swing.table.DefaultTableModel;
+
 
 
 /**
@@ -16,7 +18,10 @@ public class Customer extends User {
    private String Email;
    private double credit;
    
-    public Customer(String username, String password, String email          ) {
+    public Customer( ) {
+         
+    }
+    public Customer(String username, String password, String email) {
         super(username, password, email);   
     }
 
@@ -52,6 +57,5 @@ public class Customer extends User {
         this.credit = credit;
     }
    
-       
        
 }
