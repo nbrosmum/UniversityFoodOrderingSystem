@@ -1,4 +1,4 @@
-package ufos;
+package ufos;//GEN-LINE:variables
 
 import java.io.*;
 import java.util.*;
@@ -25,7 +25,7 @@ public class OrderPage extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -134,19 +134,19 @@ public class OrderPage extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void FoodMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoodMenuActionPerformed
+    private void FoodMenuActionPerformed(java.awt.event.ActionEvent evt) {                                         
         ui.callPage("FoodMenu");
         this.dispose();
-    }//GEN-LAST:event_FoodMenuActionPerformed
+    }                                        
 
-    private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistoryActionPerformed
+    private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {                                             
         ui.callPage("OrderHistory");
         this.dispose();;
-    }//GEN-LAST:event_OrderHistoryActionPerformed
+    }                                            
 
-    private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
+    private void CancelActionPerformed(java.awt.event.ActionEvent evt) {                                       
            // Get the orderId of the chosen row in the model
         int row = OrderList.getSelectedRow();
         String orderId = String.valueOf(model.getValueAt(row, 0));
@@ -205,9 +205,9 @@ public class OrderPage extends javax.swing.JFrame {
        
         db.closeResources();
         load();
-    }//GEN-LAST:event_CancelActionPerformed
+    }                                      
 
-    private void OrderListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderListMouseReleased
+    private void OrderListMouseReleased(java.awt.event.MouseEvent evt) {                                        
         model2.setRowCount(0);
         int row = OrderList.getSelectedRow();
         String orderId = String.valueOf(model.getValueAt(row,0));      
@@ -235,9 +235,9 @@ public class OrderPage extends javax.swing.JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         };
-    }//GEN-LAST:event_OrderListMouseReleased
+    }                                       
 
-    private void AcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptActionPerformed
+    private void AcceptActionPerformed(java.awt.event.ActionEvent evt) {                                       
    // Get the orderId of the chosen row in the model
         int row = OrderList.getSelectedRow();
         String orderId = String.valueOf(model.getValueAt(row, 0));
@@ -297,7 +297,7 @@ public class OrderPage extends javax.swing.JFrame {
         db.closeResources();
         load();
    
-    }//GEN-LAST:event_AcceptActionPerformed
+    }                                      
 
     private void load() {
        try {
@@ -363,7 +363,7 @@ public class OrderPage extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton Accept;
     private javax.swing.JButton Cancel;
     private javax.swing.JTable FoodList;
@@ -375,5 +375,5 @@ public class OrderPage extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 }
