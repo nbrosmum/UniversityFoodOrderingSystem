@@ -328,6 +328,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
       JOptionPane.showMessageDialog(null, "Order Susscessfull! please wait for Vendor to approve");
    }
    Cartmodel.setRowCount(0);
+   items.clear();
         
     }//GEN-LAST:event_OrderbtnActionPerformed
 
