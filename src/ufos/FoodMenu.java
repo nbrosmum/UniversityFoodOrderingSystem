@@ -45,6 +45,7 @@ public class FoodMenu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         FoodMenu.setModel(model);
+        FoodMenu.getTableHeader().setReorderingAllowed(false);
         FoodMenu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 FoodMenuMouseReleased(evt);
