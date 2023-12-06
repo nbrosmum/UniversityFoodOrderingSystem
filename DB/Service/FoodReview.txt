@@ -1,0 +1,4 @@
+FR001,O002,null,dasd,5,Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+FR002,O003,null,dasd,4,Ut aliquam diam consequat, auctor purus eu, finibus felis. 
+FR003,O004,null,dasd,3,Maecenas vitae enim non metus consequat rutrum. 
+FR004,O005,null,dasd,2,Maecenas velit velit, porta eget semper id, euismod non mauris. Maecenas ut nisi mauris.
