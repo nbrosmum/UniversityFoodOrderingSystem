@@ -1,9 +1,3 @@
-F003,dsad,3,54.0,Pending,4,95.0
-F003,dsad,4,54.0,Pending,4,95.0
-F003,dsad,8,54.0,Pending,4,95.0
-F001,dsad,1,54.0,Accepted,4,95.0
-F001,dsad,5,54.0,Accepted,4,95.0
-F001,dsad,9,54.0,Accepted,4,95.0
-F002,dsad,2,54.0,Cancelled,4,95.0
-F002,dsad,6,54.0,Cancelled,4,95.0
-F002,dsad,7,54.0,Cancelled,4,95.0
+O001,F004,dadsadsda,1,4.0,2023-12-06 16:47:54,12.0,Delivery,null
+O001,F002,sdasdasd,1,5.0,2023-12-06 16:47:54,12.0,Delivery,null
+O001,F003,dsadasdasd,1,3.0,2023-12-06 16:47:54,12.0,Delivery,null
