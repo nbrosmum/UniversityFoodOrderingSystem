@@ -62,7 +62,7 @@ public class Customer extends User {
         String quantity = String.valueOf(portion);
         String priceString = String.valueOf(price);
         String TotalPriceString = String.valueOf(totalPrice);
-        String orderDetails = orderID + "," + foodID+ "," + foodName+ "," + quantity+ "," + priceString+ "," +status+ "," + date+ "," + TotalPriceString+ "," + deliveryMethod+ "," + this.customerID;//vendorID
+        String orderDetails = orderID + "," + foodID+ "," + foodName+ "," + quantity+ "," + priceString + "," + status +"," + date+ "," + TotalPriceString+ "," + deliveryMethod+ "," + this.customerID;//vendorID
         db.bw.write(orderDetails);
         db.bw.newLine();
         db.closeResources();
