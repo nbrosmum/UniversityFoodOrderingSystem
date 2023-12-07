@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 public class CustomerOrderHistory extends javax.swing.JFrame {
     GUI ui = new GUI();
     DB Orderdb = new DB("Order");
-    
+    private String OrderID;
 
     public CustomerOrderHistory() {
         initComponents();
@@ -189,24 +189,6 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
     }//GEN-LAST:event_ReorderbtnActionPerformed
 
     public void load(){
-        DefaultTableModel model = (DefaultTableModel)OrderHistoryTable.getModel();
-        DefaultTableModel Foodlistmodel = (DefaultTableModel)FoodListMenu.getModel();
-        
-        Orderdb.loadData(model, line -> {
-            String[] parts = line.split(",");
-            String OrderID = parts[0];
-            String date = parts[6];
-            String TotalPrice = parts[7];
-            return new Object[]{OrderID,date,TotalPrice};
-        });
-        
-        Orderdb.loadData(Foodlistmodel, line -> {
-            String[] parts = line.split(",");
-            String foodName = parts[2];
-            int quantity = Integer.parseInt(parts[3]);
-            double price = Double.parseDouble(parts[4]);
-            return new Object[]{foodName,quantity,price};
-        }); 
         
     }
     /**
