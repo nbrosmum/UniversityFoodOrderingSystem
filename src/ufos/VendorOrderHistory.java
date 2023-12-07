@@ -92,7 +92,7 @@ public class VendorOrderHistory extends javax.swing.JFrame {
 
         RatingNo.setEditable(false);
 
-        Choices.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Daily", "Monthly", "Quarterly" }));
+        Choices.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Daily", "Monthly", "Quarterly" }));
         Choices.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ChoicesActionPerformed(evt);
@@ -207,51 +207,46 @@ public class VendorOrderHistory extends javax.swing.JFrame {
             RatingNo.setText(Rating);
         }
   
-        fr.closeResources();
-        
-        
-        
-        
-        
-        
-        
+        fr.closeResources();         
         
     }//GEN-LAST:event_OrderHistoryMouseReleased
 
     private void ChoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChoicesActionPerformed
+               
         String selectedOption = (String) Choices.getSelectedItem();
-        List<String> lines = od.readFile();
-
-        LocalDate today = LocalDate.now();
-        LocalDate startOfMonth = today.withDayOfMonth(1);
-        LocalDate startOfYear = today.withDayOfYear(1);
-
-        List<String> filteredLines = new ArrayList<>();
-        
+        model.setRowCount(0);
+        List<String> lines = od.readFile();       
+        LocalDate now = LocalDate.now();
+        Set<String> orderIds = new HashSet<>();
 
         for (String line : lines) {
-           String[] parts = line.split(",");
-           
-           
-           
-           
-           
-           System.out.println(parts);
-           LocalDate day = LocalDate.parse(parts[5], DateTimeFormatter.ISO_LOCAL_DATE);
-           
+            String[] parts = line.split(",");
+            LocalDate date = LocalDate.parse(parts[6], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String orderId = parts[0];
+            String totalprice = parts[7];
+            String DM = parts[8];
+            
+            if (!orderIds.add(orderId)) {
+                continue;
+            }
 
-           if (selectedOption.equals("daily") && day.isEqual(today)) {
-               filteredLines.add(line);
-           } else if (selectedOption.equals("monthly") && day.isAfter(startOfMonth) && day.isBefore(today)) {
-               filteredLines.add(line);
-           } else if (selectedOption.equals("yearly") && day.isAfter(startOfYear) && day.isBefore(today)) {
-               filteredLines.add(line);
-           }
+            if (selectedOption.equals("Daily")) {
+                if (date.isEqual(now)) {
+                    model.addRow(new Object[]{orderId, date, DM, totalprice});
+                }
+            } else if (selectedOption.equals("Monthly")) {
+                if (date.getMonth() == now.getMonth() && date.getYear() == now.getYear()) {
+                    model.addRow(new Object[]{orderId, date, DM, totalprice});
+                }
+            } else if (selectedOption.equals("Quarterly")) {
+                if (date.getMonthValue() >= now.getMonthValue() - 3 && date.getMonthValue() <= now.getMonthValue() && date.getYear() == now.getYear()) {
+                    model.addRow(new Object[]{orderId, date, DM, totalprice});
+                }
+            } else{
+                model.addRow(new Object[]{orderId, date, DM, totalprice});
+            }
         }
-
-        // Now filteredLines contains the rows that match the selected option
-
-
+        od.closeResources();
     }//GEN-LAST:event_ChoicesActionPerformed
 
     private void load() {  

@@ -291,7 +291,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
 
     private void OrderbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderbtnActionPerformed
         String selectedValue = (String) DelivaryStatus.getSelectedItem();
-        String currentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        String currentDateTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         String status = "Pending";
         String orderID = dbOrder.generateId();
         boolean message = false;
