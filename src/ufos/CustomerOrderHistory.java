@@ -6,16 +6,19 @@ package ufos;
 
 import javax.swing.table.DefaultTableModel;
 
+
 /**
  *
  * @author User
  */
 public class CustomerOrderHistory extends javax.swing.JFrame {
     GUI ui = new GUI();
+    DB Orderdb = new DB("Order");
     
 
     public CustomerOrderHistory() {
         initComponents();
+        load();
     }
 
     /**
@@ -32,14 +35,14 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        OrderHistoryTable = new javax.swing.JTable();
         Backbtn = new javax.swing.JButton();
         Reorderbtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        OrderIDTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        FoodListMenu = new javax.swing.JTable();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -69,8 +72,28 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(model);
-        jScrollPane1.setViewportView(jTable1);
+        OrderHistoryTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Order ID", "Date", "Total Price"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(OrderHistoryTable);
+        if (OrderHistoryTable.getColumnModel().getColumnCount() > 0) {
+            OrderHistoryTable.getColumnModel().getColumn(0).setResizable(false);
+            OrderHistoryTable.getColumnModel().getColumn(1).setResizable(false);
+            OrderHistoryTable.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         Backbtn.setText("Back");
         Backbtn.addActionListener(new java.awt.event.ActionListener() {
@@ -91,8 +114,28 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setText("Order History");
 
-        jTable4.setModel(CartModel);
-        jScrollPane4.setViewportView(jTable4);
+        FoodListMenu.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Food Name", "Portion", "Price"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(FoodListMenu);
+        if (FoodListMenu.getColumnModel().getColumnCount() > 0) {
+            FoodListMenu.getColumnModel().getColumn(0).setResizable(false);
+            FoodListMenu.getColumnModel().getColumn(1).setResizable(false);
+            FoodListMenu.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -107,7 +150,7 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel1)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(OrderIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(Reorderbtn))
                         .addComponent(jLabel2)
@@ -125,7 +168,7 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Reorderbtn)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(OrderIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -145,6 +188,27 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ReorderbtnActionPerformed
 
+    public void load(){
+        DefaultTableModel model = (DefaultTableModel)OrderHistoryTable.getModel();
+        DefaultTableModel Foodlistmodel = (DefaultTableModel)FoodListMenu.getModel();
+        
+        Orderdb.loadData(model, line -> {
+            String[] parts = line.split(",");
+            String OrderID = parts[0];
+            String date = parts[6];
+            String TotalPrice = parts[7];
+            return new Object[]{OrderID,date,TotalPrice};
+        });
+        
+        Orderdb.loadData(Foodlistmodel, line -> {
+            String[] parts = line.split(",");
+            String foodName = parts[2];
+            int quantity = Integer.parseInt(parts[3]);
+            double price = Double.parseDouble(parts[4]);
+            return new Object[]{foodName,quantity,price};
+        }); 
+        
+    }
     /**
      * @param args the command line arguments
      */
@@ -182,6 +246,9 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Backbtn;
+    private javax.swing.JTable FoodListMenu;
+    private javax.swing.JTable OrderHistoryTable;
+    private javax.swing.JTextField OrderIDTextField;
     private javax.swing.JButton Reorderbtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -189,10 +256,7 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

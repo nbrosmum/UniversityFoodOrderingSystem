@@ -181,6 +181,25 @@ public class DB {
         }
     }
     
+    public void loadData(DefaultTableModel model, RowMapper mapper, String id) {
+        try {
+            br = new BufferedReader(new FileReader(f));
+            String line;
+            model.setRowCount(0);
+            while ((line = br.readLine()) != null) {
+                Object[] rowData = mapper.mapRow(line);
+                if (rowData[0].toString().equals(id)) { // assuming the ID is the first element in rowData
+                    model.addRow(rowData);
+                    break;
+                }
+            }
+            br.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error reading from file");
+            e.printStackTrace();
+        }
+    }
+
     public void closeResources() {
        try {
            if (bw != null) bw.close();

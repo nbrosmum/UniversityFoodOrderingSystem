@@ -174,36 +174,36 @@ public class CustomerReview extends javax.swing.JFrame {
         
         //FoodreviewID | OrderID | ReviewContent | Date | vendorID
         //variables
-        int foodRate = (int) FoodRate.getSelectedItem();
-        int deliRate = (int) DeliRate.getSelectedItem();
-        String foodText = FoodCom.getText();
-        String deliText = DeliCom.getText();
-        Date dt = new Date();
-        
-        // add food review
-        fr.writeFile();
-        String fR = String.valueOf(foodRate);
-        String foodReview = fr.id + "," + orderId + "," + fR + "," + foodText + "," + dt + "," + vendorId;
-        try {
-            fr.bw.write(foodReview + "\n");
-        } catch (IOException ex) {
-            System.out.println("Something went wrong.");
-        }
-       
-        fr.closeResources();
-        
-        //add delivery review
-        dr.writeFile();
-        String dR = String.valueOf(deliRate);
-        String deliReview = dr.id + "," + orderId + "," + dR + "," + deliText + "," + dt + "," + vendorId;
-        
-        try {
-            dr.bw.write(deliReview + "\n");
-        } catch (IOException ex) {
-            System.out.println("Something went wrong.");
-        }
-       
-        dr.closeResources();
+//        int foodRate = (int) FoodRate.getSelectedItem();
+//        int deliRate = (int) DeliRate.getSelectedItem();
+//        String foodText = FoodCom.getText();
+//        String deliText = DeliCom.getText();
+//        Date dt = new Date();
+//        
+//        // add food review
+//        fr.writeFile();
+//        String fR = String.valueOf(foodRate);
+//        String foodReview = fr.id + "," + orderId + "," + fR + "," + foodText + "," + dt + "," + vendorId;
+//        try {
+//            fr.bw.write(foodReview + "\n");
+//        } catch (IOException ex) {
+//            System.out.println("Something went wrong.");
+//        }
+//       
+//        fr.closeResources();
+//        
+//        //add delivery review
+//        dr.writeFile();
+//        String dR = String.valueOf(deliRate);
+//        String deliReview = dr.id + "," + orderId + "," + dR + "," + deliText + "," + dt + "," + vendorId;
+//        
+//        try {
+//            dr.bw.write(deliReview + "\n");
+//        } catch (IOException ex) {
+//            System.out.println("Something went wrong.");
+//        }
+//       
+//        dr.closeResources();
         
          
         
