@@ -180,6 +180,36 @@ public class DB {
             e.printStackTrace();
         }
     }
+    
+    public void loadData(DefaultTableModel model,DefaultTableModel model2,int row,JTable table ){
+        model.setRowCount(0);
+        String orderId = String.valueOf(model2.getValueAt(row,0));      
+        List<String> sameOrderIds = new ArrayList<>();
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(f));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                String currentOrderId = parts[0];
+                String foodName = parts[2];
+                String portion = parts[3];
+                String price = parts[4];
+
+                // If currentOrderId is the same as model orderId, add it to the list
+                if (currentOrderId.equals(orderId)) {
+                    sameOrderIds.add(currentOrderId);
+                    model.addRow(new Object[]{foodName,portion,price});
+                }
+            }
+
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void closeResources() {
        try {
            if (bw != null) bw.close();

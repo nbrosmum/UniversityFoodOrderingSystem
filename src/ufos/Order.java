@@ -34,5 +34,5 @@ public class Order {
           total += price * quantity;
       }
       return total;
-    }
+    }   
 }

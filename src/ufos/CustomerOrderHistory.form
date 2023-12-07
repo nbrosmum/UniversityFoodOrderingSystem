@@ -150,6 +150,9 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="OrderHistoryTableMouseReleased"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -175,6 +178,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="OrderIDTextField">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>

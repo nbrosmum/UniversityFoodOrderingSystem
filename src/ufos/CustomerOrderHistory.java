@@ -4,6 +4,7 @@
  */
 package ufos;
 
+import java.util.*;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -14,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
 public class CustomerOrderHistory extends javax.swing.JFrame {
     GUI ui = new GUI();
     DB Orderdb = new DB("Order");
-    private String OrderID;
+    Customer c = new Customer();
 
     public CustomerOrderHistory() {
         initComponents();
@@ -88,6 +89,11 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        OrderHistoryTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                OrderHistoryTableMouseReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(OrderHistoryTable);
         if (OrderHistoryTable.getColumnModel().getColumnCount() > 0) {
             OrderHistoryTable.getColumnModel().getColumn(0).setResizable(false);
@@ -110,6 +116,8 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
         });
 
         jLabel1.setText("Order ID :");
+
+        OrderIDTextField.setEditable(false);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setText("Order History");
@@ -185,11 +193,39 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
     }//GEN-LAST:event_BackbtnActionPerformed
 
     private void ReorderbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReorderbtnActionPerformed
-        // TODO add your handling code here:
+       String selectedOrderId = OrderIDTextField.getText();
+       c.reorder(selectedOrderId);
+       load();
     }//GEN-LAST:event_ReorderbtnActionPerformed
 
+    private void OrderHistoryTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderHistoryTableMouseReleased
+        DefaultTableModel model = (DefaultTableModel)OrderHistoryTable.getModel();
+        DefaultTableModel model2 = (DefaultTableModel)FoodListMenu.getModel();
+        int row = OrderHistoryTable.getSelectedRow();
+        String selectedOrderId = String.valueOf(model.getValueAt(row, 0));
+        Orderdb.loadData(model2, model, row, FoodListMenu);
+        OrderIDTextField.setText(selectedOrderId);
+    }//GEN-LAST:event_OrderHistoryTableMouseReleased
+
     public void load(){
-        
+        DefaultTableModel model = (DefaultTableModel)OrderHistoryTable.getModel();
+        ArrayList<String> lines = Orderdb.readFile();
+        model.setRowCount(0);
+        Set<String> orderIds = new HashSet<>(); // Set to store orderIds
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            String OrderID = parts[0];
+            String date = parts[6];
+            String TotalPrice = parts[7];
+   
+            // If orderId is already in the set, skip this line
+            if (!orderIds.add(OrderID)) {
+                continue;
+            }
+
+            model.addRow(new Object[]{OrderID,date,TotalPrice});
+        }
+        Orderdb.closeResources();
     }
     /**
      * @param args the command line arguments

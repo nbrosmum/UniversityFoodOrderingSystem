@@ -150,33 +150,35 @@ public class VendorOrderPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void OrderListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderListMouseReleased
-        model2.setRowCount(0);
         int row = OrderList.getSelectedRow();
-        String orderId = String.valueOf(model.getValueAt(row,0));      
-        List<String> sameOrderIds = new ArrayList<>();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                String currentOrderId = parts[0];
-                String foodName = parts[2];
-                String portion = parts[3];
-                String price = parts[4];
-
-                // If currentOrderId is the same as model orderId, add it to the list
-                if (currentOrderId.equals(orderId)) {
-                    sameOrderIds.add(currentOrderId);
-                    model2.addRow(new Object[]{foodName,portion,price});
-                }
-                
-                // 
-                
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        };
+        db.loadData(model2, model, row, FoodList);
+//        model2.setRowCount(0);
+//        int row = OrderList.getSelectedRow();
+//        String orderId = String.valueOf(model.getValueAt(row,0));      
+//        List<String> sameOrderIds = new ArrayList<>();
+//        try {
+//            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                String[] parts = line.split(",");
+//                String currentOrderId = parts[0];
+//                String foodName = parts[2];
+//                String portion = parts[3];
+//                String price = parts[4];
+//
+//                // If currentOrderId is the same as model orderId, add it to the list
+//                if (currentOrderId.equals(orderId)) {
+//                    sameOrderIds.add(currentOrderId);
+//                    model2.addRow(new Object[]{foodName,portion,price});
+//                }
+//                
+//                // 
+//                
+//            }
+//            reader.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        };
     }//GEN-LAST:event_OrderListMouseReleased
 
     private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
