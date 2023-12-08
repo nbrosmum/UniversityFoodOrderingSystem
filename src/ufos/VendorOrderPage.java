@@ -151,35 +151,26 @@ public class VendorOrderPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void OrderListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderListMouseReleased
-        int row = OrderList.getSelectedRow();
-        db.loadData(model2, model, row, FoodList);
-//        model2.setRowCount(0);
-//        int row = OrderList.getSelectedRow();
-//        String orderId = String.valueOf(model.getValueAt(row,0));      
-//        List<String> sameOrderIds = new ArrayList<>();
-//        try {
-//            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                String[] parts = line.split(",");
-//                String currentOrderId = parts[0];
-//                String foodName = parts[2];
-//                String portion = parts[3];
-//                String price = parts[4];
-//
-//                // If currentOrderId is the same as model orderId, add it to the list
-//                if (currentOrderId.equals(orderId)) {
-//                    sameOrderIds.add(currentOrderId);
-//                    model2.addRow(new Object[]{foodName,portion,price});
-//                }
-//                
-//                // 
-//                
-//            }
-//            reader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        };
+        int row = OrderList.getSelectedRow();              
+        String orderId = String.valueOf(model.getValueAt(row,0));      
+        
+        List<Object[]> rows = db.readData(mapper);
+        model2.setRowCount(0);
+        
+        
+         for (Object[] rowData : rows) {
+            String currentOrderId = (String) rowData[0];
+            String foodName = (String) rowData[2];
+            String portion = (String) rowData[3];
+            String price = (String) rowData[4];
+
+            // If currentOrderId is the same as model orderId, add it to the list
+            if (currentOrderId.equals(orderId)) {
+                model2.addRow(new Object[]{foodName,portion,price});
+            }
+                
+        }
+        db.closeResources();
     }//GEN-LAST:event_OrderListMouseReleased
 
     private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
@@ -233,12 +224,13 @@ public class VendorOrderPage extends javax.swing.JFrame {
             try {
                 db.bw.write(line);
                 db.bw.newLine();
+                
             } catch (IOException ex) {
-                 System.out.println("Something went wrong.");
+                JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
             }           
                        
         }
-       
+        JOptionPane.showMessageDialog(null, "Cancelled", "Success", JOptionPane.INFORMATION_MESSAGE);
         db.closeResources();
         load();
     }//GEN-LAST:event_CancelActionPerformed
@@ -274,7 +266,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
                 db.bw.newLine();
             }
         } catch (IOException ex) {
-            System.out.println("Something went wrong.");
+            JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
         }
         db.closeResources();
         
@@ -294,12 +286,13 @@ public class VendorOrderPage extends javax.swing.JFrame {
             try {
                 db.bw.write(line);
                 db.bw.newLine();
+                
             } catch (IOException ex) {
-                 System.out.println("Something went wrong.");
+                JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
             }           
                        
         }
-       
+        JOptionPane.showMessageDialog(null, "Accepted", "Success", JOptionPane.INFORMATION_MESSAGE);
         db.closeResources();
         load();
     }//GEN-LAST:event_AcceptActionPerformed
@@ -345,7 +338,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
                 db.bw.newLine();
             }
         } catch (IOException ex) {
-            System.out.println("Something went wrong.");
+            JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
         }
         db.closeResources();
         
@@ -365,26 +358,27 @@ public class VendorOrderPage extends javax.swing.JFrame {
             try {
                 db.bw.write(line);
                 db.bw.newLine();
+                
             } catch (IOException ex) {
-                 System.out.println("Something went wrong.");
+                JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
             }           
                        
         }
-       
+        JOptionPane.showMessageDialog(null, "Done", "Success", JOptionPane.INFORMATION_MESSAGE);
         db.closeResources();
         load();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void load() {  
-// OrderID | Food Name | Portion | Price | Status | Date | TotalPrice | DeliMethod | vendorID | CustomerID
-       // Use DB class to read data
-       List<Object[]> rows = db.readData(mapper);
+        // read data from mapper
+        List<Object[]> rows = db.readData(mapper);
+        
+        model.setRowCount(0);// reset model
+        Set<String> orderIds = new HashSet<>(); // Set to store orderIds (it won't have dublicates
 
-       model.setRowCount(0);
-       Set<String> orderIds = new HashSet<>(); // Set to store orderIds
-
-       for (Object[] rowData : rows) {
-           String orderId = (String) rowData[0];
+        for (Object[] rowData : rows) { // run all the data in the mapper
+            // the number of rowData is depended on the number that was asssigned in the DB Override mapper
+            String orderId = (String) rowData[0]; 
             String status = (String) rowData[5];
             String dt = (String) rowData[6];
             String totalprice = (String) rowData[7];
@@ -394,13 +388,14 @@ public class VendorOrderPage extends javax.swing.JFrame {
            if (!orderIds.add(orderId)) {
                continue;
            }
+           // If status is Cancelled, skip this line
            if (status.equals("Cancelled")) {
                continue;
            }
 
-           model.addRow(new Object[]{orderId,dt,status,totalprice,DM});
+           model.addRow(new Object[]{orderId,dt,status,totalprice,DM}); // add into the model
        }
-       db.closeResources();
+       db.closeResources(); // close it
 
     }
 
