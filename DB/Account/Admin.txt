@@ -1,2 +1,1 @@
-A001,l,k,n,w
-A002,x,t,w,w
+A001,mumcj,mumcj,mumcj@gmail.com,0123456789

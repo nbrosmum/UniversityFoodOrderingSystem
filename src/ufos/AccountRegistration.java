@@ -7,34 +7,35 @@ package ufos;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+
+
 /**
  *
  * @author Walter
  */
 public class AccountRegistration extends javax.swing.JFrame {
-   GUI ui = new GUI();
-   DB adminDB = new DB ("Admin");
-   DB vendorDB = new DB ("Vendor");
-   DB runnerDB = new DB ("Runner");
-   DB customerDB = new DB ("Customer");
-   
-   
-   private DefaultTableModel adminTableModel;
-   private DefaultTableModel vendorTableModel;
-   private DefaultTableModel runnerTableModel;
-   private DefaultTableModel customerTableModel;
+    GUI ui = new GUI();
+    User u = new User();
+    DB adminDB = new DB ("Admin");
+    DB vendorDB = new DB ("Vendor");
+    DB runnerDB = new DB ("Runner");
+    DB customerDB = new DB ("Customer");
+    private DefaultTableModel adminTableModel;
+    private DefaultTableModel vendorTableModel;
+    private DefaultTableModel runnerTableModel;
+    private DefaultTableModel customerTableModel;
     /**
      * Creates new form Account_Registration
      */
     public AccountRegistration() {
-        initComponents();
-        
+        initComponents();      
         adminTableModel = (DefaultTableModel) t_admin.getModel();
         vendorTableModel = (DefaultTableModel) t_vendor.getModel();
         runnerTableModel = (DefaultTableModel) t_runner.getModel();
@@ -44,101 +45,13 @@ public class AccountRegistration extends javax.swing.JFrame {
         vendorDB.loadData(vendorTableModel, this::mapRow);
         runnerDB.loadData(runnerTableModel, this::mapRow);
         customerDB.loadData(customerTableModel, this::mapRow);
-       
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+       public void actionPerformed(java.awt.event.ActionEvent evt) {
+           String selectedUserType = (String) jComboBox1.getSelectedItem();
+           handleTableMouseClicked(selectedUserType);
+       }
+   });
     }
-    
-    private Object[] mapRow(String line) {
-    // Exclude the first column (ID) from the mapping
-        String[] columns = line.split(",");
-        return Arrays.copyOfRange(columns, 1, columns.length);
-    }
-    private JTable getSelectedTable(String userType) {
-        switch (userType) {
-            case "Admin":
-                return t_admin;
-            case "Vendor":
-                return t_vendor;
-            case "Runner":
-                return t_runner;
-            case "Customer":
-                return t_customer;
-            default:
-                return null;
-        }
-    }
-    private int getSelectedRow(String userType) {
-        JTable selectedTable = getSelectedTable(userType);
-        return selectedTable.getSelectedRow();
-    }
-    
-    private void updateTable(String userType, int updatedRow) {
-        DefaultTableModel tableModel = getTableModel(userType);
-        DB db = getDB(userType);
-
-        if (tableModel != null && db != null) {
-            Object[] updatedData = db.loadDataForRow(updatedRow, this::mapRow);
-            for (int i = 0; i < tableModel.getColumnCount(); i++) {
-                tableModel.setValueAt(updatedData[i], updatedRow, i);
-            }
-        }
-    }
-    
-    private DefaultTableModel getTableModel(String userType) {
-        switch (userType) {
-            case "Admin":
-                return adminTableModel;
-            case "Vendor":
-                return vendorTableModel;
-            case "Runner":
-                return runnerTableModel;
-            case "Customer":
-                return customerTableModel;
-            default:
-                return null;
-        }
-    }
-    
-    private DB getDB(String userType) {
-        switch (userType) {
-            case "Admin":
-                return adminDB;
-            case "Vendor":
-                return vendorDB;
-            case "Runner":
-                return runnerDB;
-            case "Customer":
-                return customerDB;
-            default:
-                return null;
-        }
-    }
-    
-    private void clearFields() {
-        tf_usr.setText("");
-        tf_paswd.setText("");
-        tf_mail.setText("");
-        tf_pNumber.setText("");
-    }
-    
-    private void handleTableMouseClicked(String userType) {
-        int selectedRow = getSelectedRow(userType);
-
-        if (selectedRow != -1) {
-            // Set text fields with values from the selected row
-            tf_usr.setText(getTableModel(userType).getValueAt(selectedRow, 0).toString());
-            tf_paswd.setText(getTableModel(userType).getValueAt(selectedRow, 1).toString());
-            tf_mail.setText(getTableModel(userType).getValueAt(selectedRow, 2).toString());
-            tf_pNumber.setText(getTableModel(userType).getValueAt(selectedRow, 3).toString());
-        }
-    }
-    
-    
-    
-    
-    
-  
-    
-   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -284,15 +197,30 @@ public class AccountRegistration extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Username", "Password", "Email", "Phone Number"
+                "Username", "Password", "Email", "Phone Number", "Store Name"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         t_vendor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 t_vendorMouseClicked(evt);
             }
         });
         jScrollPane3.setViewportView(t_vendor);
+        if (t_vendor.getColumnModel().getColumnCount() > 0) {
+            t_vendor.getColumnModel().getColumn(0).setResizable(false);
+            t_vendor.getColumnModel().getColumn(1).setResizable(false);
+            t_vendor.getColumnModel().getColumn(2).setResizable(false);
+            t_vendor.getColumnModel().getColumn(3).setResizable(false);
+            t_vendor.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         tp_user.addTab("Vendor", jScrollPane3);
 
@@ -427,7 +355,78 @@ public class AccountRegistration extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+     private Object[] mapRow(String line) {
+    // Exclude the first column (ID) from the mapping
+        String[] columns = line.split(",");
+        return Arrays.copyOfRange(columns, 1, columns.length);
+    }
+    private JTable getSelectedTable(String userType) {
+        switch (userType) {
+            case "Admin":
+                return t_admin;
+            case "Vendor":
+                return t_vendor;
+            case "Runner":
+                return t_runner;
+            case "Customer":
+                return t_customer;
+            default:
+                return null;
+        }
+    }
+    private int getSelectedRow(String userType) {
+        JTable selectedTable = getSelectedTable(userType);
+        return selectedTable.getSelectedRow();
+    }
+    
 
+
+    private DefaultTableModel getTableModel(String userType) {
+        switch (userType) {
+            case "Admin":
+                return adminTableModel;
+            case "Vendor":
+                return vendorTableModel;
+            case "Runner":
+                return runnerTableModel;
+            case "Customer":
+                return customerTableModel;
+            default:
+                return null;
+        }
+    }
+    
+    private DB getDB(String userType) {
+        switch (userType) {
+            case "Admin":
+                return adminDB;
+            case "Vendor":
+                return vendorDB;
+            case "Runner":
+                return runnerDB;
+            case "Customer":
+                return customerDB;
+            default:
+                return null;
+        }
+    }
+    private void clearFields() {
+        tf_usr.setText("");
+        tf_paswd.setText("");
+        tf_mail.setText("");
+        tf_pNumber.setText("");
+    }
+    private void handleTableMouseClicked(String userType) {
+        int selectedRow = getSelectedRow(userType);
+
+        if (selectedRow != -1) {
+            // Set text fields with values from the selected row
+            tf_usr.setText(getTableModel(userType).getValueAt(selectedRow, 0).toString());
+            tf_paswd.setText(getTableModel(userType).getValueAt(selectedRow, 1).toString());
+            tf_mail.setText(getTableModel(userType).getValueAt(selectedRow, 2).toString());
+            tf_pNumber.setText(getTableModel(userType).getValueAt(selectedRow, 3).toString());
+        }
+    }
     private void tf_usrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_usrActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tf_usrActionPerformed
@@ -437,104 +436,55 @@ public class AccountRegistration extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
-        String userType = jComboBox1.getSelectedItem().toString();
         String username = tf_usr.getText();
         String password = tf_paswd.getText();
         String email = tf_mail.getText();
         String phoneNumber = tf_pNumber.getText();
-
+        String role = (String) jComboBox1.getSelectedItem();
         try {
-            
-            if (getDB(userType).emailExists(email)) {
+            if (getDB(role).emailExists(email)) {
                 JOptionPane.showMessageDialog(null, "Email already exists");
-                return; // Do not add the row if email already exists
+            }else if(username.equals("")&& password.equals("") && email.equals("") && phoneNumber.equals("")){
+                JOptionPane.showMessageDialog(null, "please fill in the detail");
+            }else{
+                u.register(username, password, email, phoneNumber, role);
+                DefaultTableModel tableModel = getTableModel(role);
+                tableModel.addRow(mapRow("," + username + "," + password + "," + email + "," + phoneNumber));
             }
-            switch (userType) {
-                case "Admin":
-                    Admin newAdmin = new Admin(username, password, email, phoneNumber);
-                    newAdmin.createUser(adminDB);
-                    break;
-                case "Vendor":
-                    Vendor newVendor = new Vendor(username, password, email, phoneNumber);
-                    newVendor.createUser(vendorDB);
-                    break;
-                case "Runner":
-                    Runner newRunner = new Runner(username, password, email, phoneNumber);
-                    newRunner.createUser(runnerDB);
-                    break;
-                case "Customer":
-                    Customer newCustomerAcc = new Customer(username, password, email, phoneNumber);
-                    newCustomerAcc.createUser(customerDB);
-                    break;
-            }
-
-            // Update the table after adding a new user
-            DefaultTableModel tableModel = getTableModel(userType);
-            tableModel.addRow(mapRow("," + username + "," + password + "," + email + "," + phoneNumber));
-
-
-            // Clear input fields
-            clearFields();
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            // Handle the exception - you might want to show an error dialog
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error registering user: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+        clearFields();
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
-        String userType = jComboBox1.getSelectedItem().toString();
-        int selectedRow = getSelectedRow(userType);
+        String role = (String) jComboBox1.getSelectedItem();
+        String username = tf_usr.getText();
+        String password = tf_paswd.getText();
+        String email = tf_mail.getText();
+        String phoneNumber = tf_pNumber.getText();
+        DB db = getDB(role);
+        List<String> data = db.readFile();
+           String id = "";
+           String temp = "";
+           for (String line : data) {
+               String[] parts = line.split(",");
+               if (parts[1].equals(username) && parts[2].equals(password) && parts[3].equals(email)&& parts[4].equals(phoneNumber)) {
+                   temp = line;
+                   id = parts[0];
+               }
+           }
+           // delete the row
+           data.remove(temp);
+           u.update(id,username, password, email, phoneNumber, role);
 
-        if (selectedRow != -1 && selectedRow < getTableModel(userType).getRowCount()) {
-            tf_usr.setText(getTableModel(userType).getValueAt(selectedRow, 0).toString());
-            tf_paswd.setText(getTableModel(userType).getValueAt(selectedRow, 1).toString());
-            tf_mail.setText(getTableModel(userType).getValueAt(selectedRow, 2).toString());
-            tf_pNumber.setText(getTableModel(userType).getValueAt(selectedRow, 3).toString());
+            DefaultTableModel tableModel = getTableModel(role);
+            tableModel.setRowCount(0);
 
-        } else {
-            // No row selected, show an error message or take appropriate action
-            JOptionPane.showMessageDialog(this, "Please select a row to update.", "No Row Selected", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+            db.loadData(tableModel, this::mapRow);
 
-        // ... Rest of the code for updating the user
-        try {
-            switch (userType) {
-                case "Admin":
-                    Admin adminToUpdate = new Admin(tf_usr.getText(), tf_paswd.getText(), tf_mail.getText(), tf_pNumber.getText());
-                    adminToUpdate.setId(getTableModel(userType).getValueAt(selectedRow, 0).toString());
-                    adminToUpdate.updateUser(adminDB);
-                    break;
-                case "Vendor":
-                    Vendor vendorToUpdate = new Vendor(tf_usr.getText(), tf_paswd.getText(), tf_mail.getText(), tf_pNumber.getText());
-                    vendorToUpdate.setId(getTableModel(userType).getValueAt(selectedRow, 0).toString());
-                    vendorToUpdate.updateUser(vendorDB);
-                    break;
-                case "Runner":
-                    Runner runnerToUpdate = new Runner(tf_usr.getText(), tf_paswd.getText(), tf_mail.getText(), tf_pNumber.getText());
-                    runnerToUpdate.setId(getTableModel(userType).getValueAt(selectedRow, 0).toString());
-                    runnerToUpdate.updateUser(runnerDB);
-                    break;
-                case "Customer":
-                    Customer customerToUpdate = new Customer(tf_usr.getText(), tf_paswd.getText(), tf_mail.getText(), tf_pNumber.getText());
-                    customerToUpdate.setId(getTableModel(userType).getValueAt(selectedRow, 0).toString());
-                    customerToUpdate.updateUser(customerDB);
-                    break;
-                // ... Add cases for other user types if needed
-            }
+            tableModel.fireTableDataChanged();
 
-            // Update the table after modifying a user
-            updateTable(userType, selectedRow);
-
-            // Clear input fields
-            clearFields();
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            // Handle the exception - you might want to show an error dialog
-        }
     }//GEN-LAST:event_btn_updateActionPerformed
 
     private void tf_paswdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_paswdActionPerformed
@@ -550,63 +500,34 @@ public class AccountRegistration extends javax.swing.JFrame {
     }//GEN-LAST:event_tf_pNumberActionPerformed
 
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
-        int selectedRow = getSelectedRow(jComboBox1.getSelectedItem().toString());
-
-        if (selectedRow != -1) {
-            String userType = jComboBox1.getSelectedItem().toString();
-
-            try {
-                // Get the ID of the user from the selected row
-                String userId = getTableModel(userType).getValueAt(selectedRow, 0).toString();
-
-                // Use the appropriate deleteUser method from the corresponding DB object
-                switch (userType) {
-                    case "Admin":
-                        Admin adminToDelete = new Admin();
-                        adminToDelete.setId(userId);
-                        adminToDelete.deleteUser(adminDB);
-                        break;
-                    case "Vendor":
-                        Vendor vendorToDelete = new Vendor();
-                        vendorToDelete.setId(userId);
-                        vendorToDelete.deleteUser(vendorDB);
-                        break;
-                    case "Runner":
-                        Runner runnerToDelete = new Runner();
-                        runnerToDelete.setId(userId);
-                        runnerToDelete.deleteUser(runnerDB);
-                        break;
-                    case "Customer":
-                        Customer customerToDelete = new Customer();
-                        customerToDelete.setId(userId);
-                        customerToDelete.deleteUser(customerDB);
-                        break;
-                    // ... Add cases for other user types if needed
-                }
-
-                // Remove the selected row from the table model
-                getTableModel(userType).removeRow(selectedRow);
-
-                // Remove the user from the text file
-                getDB(userType).deleteUserById(userId);
-
-                // Clear input fields
-                clearFields();
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                // Handle the exception - you might want to show an error dialog
-            }
-        } else {
-            // No row selected, show an error message or take appropriate action
-            JOptionPane.showMessageDialog(this, "Please select a row to delete.", "No Row Selected", JOptionPane.WARNING_MESSAGE);
+       String role = (String) jComboBox1.getSelectedItem();
+       String username = tf_usr.getText();
+        try {
+            deleteUser(role, username);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error deleting user: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    
-       
-    }//GEN-LAST:event_btn_deleteActionPerformed
+        clearFields();
 
+    }//GEN-LAST:event_btn_deleteActionPerformed
+    private void deleteUser(String role, String username) throws IOException {
+        DB db = getDB(role);
+        List<String> data = db.readFile();
+        String id = "";
+        String temp = "";
+        for (String line : data) {
+            String[] parts = line.split(",");
+            if (parts[1].equals(username)) {
+                temp = line;
+                id = parts[0];
+            }
+        }
+        // delete the row
+        data.remove(temp);
+        db.writeFile(data);
+        u.delete(id, role);
+    }
     private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
-       
         ui.callPage("AdminDashboard");
         this.dispose();
         
@@ -624,21 +545,25 @@ public class AccountRegistration extends javax.swing.JFrame {
     }//GEN-LAST:event_tp_userComponentAdded
 
     private void t_customerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_customerMouseClicked
-        handleTableMouseClicked("Customer");
+       handleTableMouseClicked("Customer");
+       jComboBox1.setSelectedItem("Customer");
     }//GEN-LAST:event_t_customerMouseClicked
 
     private void t_vendorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_vendorMouseClicked
-        handleTableMouseClicked("Vendor");
+      handleTableMouseClicked("Vendor"); 
+      jComboBox1.setSelectedItem("Vendor");
     }//GEN-LAST:event_t_vendorMouseClicked
 
     private void t_runnerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_runnerMouseClicked
-        handleTableMouseClicked("Runner");
+       handleTableMouseClicked("Runner"); 
+       jComboBox1.setSelectedItem("Runner");
     }//GEN-LAST:event_t_runnerMouseClicked
 
     private void t_adminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_adminMouseClicked
-        handleTableMouseClicked("Admin");
+       handleTableMouseClicked("Admin"); 
+       jComboBox1.setSelectedItem("Admin");
     }//GEN-LAST:event_t_adminMouseClicked
-
+    
     /**
      * @param args the command line arguments
      */

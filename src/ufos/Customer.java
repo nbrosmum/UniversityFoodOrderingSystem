@@ -19,27 +19,19 @@ import javax.swing.table.DefaultTableModel;
  * @author User
  */
 public class Customer extends User {
-   private String customerID;
    private double credit;
 
    DB db = new DB("Order");
     public Customer( ) {
          
     }
-    public Customer(String username, String password, String email,String phoneNumber) {
-        super(username, password, email,phoneNumber);   
-
-    }
+    public Customer( String id,String username, String password, String email,String phoneNumber) {
+         super( id,username, password, email,phoneNumber);
+     }
+    public Customer( String username, String password, String email,String phoneNumber) {
+         super( username, password, email,phoneNumber);
+     }
   
- 
-    public String getCustomerID() {
-        return customerID;
-    }
-
-    public void setCustomerID(String customerID) {
-        this.customerID = customerID;
-    }
-
     public double getCredit() {
         return credit;
     }
@@ -53,7 +45,7 @@ public class Customer extends User {
         String quantity = String.valueOf(portion);
         String priceString = String.valueOf(price);
         String TotalPriceString = String.valueOf(totalPrice);
-        String orderDetails = orderID + "," + foodID+ "," + foodName+ "," + quantity+ "," + priceString + "," + status +"," + date + "," + TotalPriceString+ "," + deliveryMethod+ ","+ VendorID+ "," + this.customerID + "," +RunnerID;//vendorID
+        String orderDetails = orderID + "," + foodID+ "," + foodName+ "," + quantity+ "," + priceString + "," + status +"," + date + "," + TotalPriceString+ "," + deliveryMethod+ ","+ VendorID+ "," + super.getId() + "," +RunnerID;//vendorID
         db.bw.write(orderDetails);
         db.bw.newLine();
         db.closeResources();
