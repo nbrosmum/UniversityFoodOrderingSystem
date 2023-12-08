@@ -463,7 +463,7 @@ public class AccountRegistration extends javax.swing.JFrame {
                     newRunner.createUser(runnerDB);
                     break;
                 case "Customer":
-                    CustomerAcc newCustomerAcc = new CustomerAcc(username, password, email, phoneNumber);
+                    Customer newCustomerAcc = new Customer(username, password, email, phoneNumber);
                     newCustomerAcc.createUser(customerDB);
                     break;
             }
@@ -518,7 +518,7 @@ public class AccountRegistration extends javax.swing.JFrame {
                     runnerToUpdate.updateUser(runnerDB);
                     break;
                 case "Customer":
-                    CustomerAcc customerToUpdate = new CustomerAcc(tf_usr.getText(), tf_paswd.getText(), tf_mail.getText(), tf_pNumber.getText());
+                    Customer customerToUpdate = new Customer(tf_usr.getText(), tf_paswd.getText(), tf_mail.getText(), tf_pNumber.getText());
                     customerToUpdate.setId(getTableModel(userType).getValueAt(selectedRow, 0).toString());
                     customerToUpdate.updateUser(customerDB);
                     break;
@@ -577,7 +577,7 @@ public class AccountRegistration extends javax.swing.JFrame {
                         runnerToDelete.deleteUser(runnerDB);
                         break;
                     case "Customer":
-                        CustomerAcc customerToDelete = new CustomerAcc();
+                        Customer customerToDelete = new Customer();
                         customerToDelete.setId(userId);
                         customerToDelete.deleteUser(customerDB);
                         break;
