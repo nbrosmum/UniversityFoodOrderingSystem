@@ -39,7 +39,6 @@ public class VendorOrderHistory extends javax.swing.JFrame {
         OrderHistory = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         ReviewText = new javax.swing.JTextArea();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -84,9 +83,6 @@ public class VendorOrderHistory extends javax.swing.JFrame {
         ReviewText.setWrapStyleWord(true);
         jScrollPane3.setViewportView(ReviewText);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel2.setText("Revenue");
-
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("Order History");
 
@@ -98,7 +94,7 @@ public class VendorOrderHistory extends javax.swing.JFrame {
 
         RatingNo.setEditable(false);
 
-        Choices.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Daily", "Monthly", "Quarterly" }));
+        Choices.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Daily", "Monthly", "Quarterly" }));
         Choices.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ChoicesActionPerformed(evt);
@@ -132,9 +128,7 @@ public class VendorOrderHistory extends javax.swing.JFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(155, 155, 155)
-                                .addComponent(jLabel3)
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabel2)))
+                                .addComponent(jLabel3)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -171,27 +165,21 @@ public class VendorOrderHistory extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel7)
                             .addComponent(Choices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(TotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addComponent(jLabel2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel6)
-                                    .addComponent(TotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(43, 43, 43)
-                                        .addComponent(jLabel5))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(RatingNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel4)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(43, 43, 43)
+                                .addComponent(jLabel5))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(RatingNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel4)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         pack();
@@ -230,7 +218,7 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     }//GEN-LAST:event_OrderHistoryMouseReleased
 
     private void ChoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChoicesActionPerformed
-               
+        TotalPrice.setText("");
         String selectedOption = (String) Choices.getSelectedItem();
         List<Object[]> rows = od.readData(mapper);
         model.setRowCount(0);      
@@ -276,30 +264,28 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     
     
     private void load() {
-
        // Use DB class to read data
        List<Object[]> rows = od.readData(mapper);
+       double totalRevenue = 0.0;
 
        model.setRowCount(0);
        Set<String> orderIds = new HashSet<>(); // Set to store orderIds
 
        for (Object[] rowData : rows) {
            String orderId = (String) rowData[0];
-           String status = (String) rowData[1];
            String dt = (String) rowData[6];
-           String totalprice = (String) rowData[7];
+           double totalprice = Double.parseDouble((String) rowData[7]);
            String DM = (String) rowData[8];
 
            // If orderId is already in the set, skip this line
            if (!orderIds.add(orderId)) {
                continue;
            }
-           if (status.equals("Cancelled")) {
-               continue;
-           }
 
-           model.addRow(rowData);
+           model.addRow(new Object[]{orderId,dt,DM,totalprice});
+           totalRevenue += totalprice;
        }
+       TotalPrice.setText(String.valueOf(totalRevenue));
        od.closeResources();
     }
 
@@ -346,7 +332,6 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     private javax.swing.JTextArea ReviewText;
     private javax.swing.JTextField TotalPrice;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
