@@ -29,7 +29,63 @@ public class Vendor extends User{
         this.vendorId = vendorId;
     }
  
+        public class OrderRowMapper implements DB.RowMapper {      
+        @Override
+        public Object[] mapRow(String line) {
+            String[] parts = line.split(",");
+            String orderId = parts[0];
+            String foodId = parts[1];
+            String foodName = parts[2];
+            String portion = parts[3];
+            String price = parts[4];            
+            String status = parts[5];
+            String dt = parts[6];
+            String totalprice = parts[7];
+            String DM = parts[8];
+            String vendorId = parts[9];
+            String customerId;
+            String runnerId;
+            if (parts.length > 10) {
+                customerId = parts[10];
+                runnerId = parts[11];
+            } else {
+                customerId = null; // or throw an exception
+                runnerId = null;
+            }
+
+            return new Object[]{orderId,foodId,foodName,portion,price,status,dt,totalprice,DM,vendorId,customerId,runnerId};
+        }
+    }
+
+    public class ReviewRowMapper implements DB.RowMapper {      
+        @Override
+        public Object[] mapRow(String line) {
+            String[] parts = line.split(",");
+            String foodReviewID  = parts[0];
+            String orderId  = parts[1];
+            String vendorId  = parts[2];
+            String dt  = parts[3];
+            String rating  = parts[4];            
+            String comment  = parts[5];
+
+            return new Object[]{foodReviewID,orderId,vendorId,dt,rating,comment};
+        }
+    }
     
+    public class MenuRowMapper implements DB.RowMapper {      
+        @Override
+        public Object[] mapRow(String line) {
+            String[] parts = line.split(",");
+            String foodID  = parts[0];
+            String foodName  = parts[1];
+            String price  = parts[2];
+            String description  = parts[3];
+            String vendorId  = parts[4];            
+
+            return new Object[]{foodID,foodName,price,description,vendorId};
+        }
+    }
+
     
     
     
