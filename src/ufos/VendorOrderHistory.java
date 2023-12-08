@@ -212,11 +212,9 @@ public class VendorOrderHistory extends javax.swing.JFrame {
         int row = OrderHistory.getSelectedRow();
         String orderId = String.valueOf(model.getValueAt(row, 0));
 
-// Read the Order.txt file line by line
+
         List<Object[]> rows = fr.readData(review);
-
-        
-
+// Read the Order.txt file line by line
         for (Object[] rowData : rows){
             String currentOrderId = (String) rowData[1];
             String sameIDdValue = (String) rowData[5];
