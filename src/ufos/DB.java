@@ -17,6 +17,7 @@ public class DB {
         switch (type) {
             case "Admin":
                 directoryPath = "DB\\Account\\";
+                prefixID = "A";
                 break;
             case "Customer":
                 directoryPath = "DB\\Account\\";
@@ -101,6 +102,14 @@ public class DB {
         }catch(IOException e){
             JOptionPane.showMessageDialog(null, "Error Write file");
             e.printStackTrace();
+        }
+    }
+    public void writeFile(List<String> lines) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine(); // Write a new line character after each line
+            }
         }
     }
     
@@ -254,33 +263,33 @@ public class DB {
         return null;
     }
     
-    public void deleteUser(String userId) throws IOException {
-        ArrayList<String> data = readFile();
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
-            for (String line : data) {
-                String[] userData = line.split(",");
-                if (!userData[0].equals(userId)) {
-                    writer.write(line);
-                    writer.newLine();
-                }
-            }
-        }
-    }
-    
-    public void deleteUserById(String userId) throws IOException {
-        ArrayList<String> data = readFile();
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
-            for (String line : data) {
-                String[] userData = line.split(",");
-                if (!userData[0].equals(userId)) {
-                    writer.write(line);
-                    writer.newLine();
-                }
-            }
-        }
-    }
+//    public void deleteUser(String userId) throws IOException {
+//        ArrayList<String> data = readFile();
+//
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
+//            for (String line : data) {
+//                String[] userData = line.split(",");
+//                if (!userData[0].equals(userId)) {
+//                    writer.write(line);
+//                    writer.newLine();
+//                }
+//            }
+//        }
+//    }
+//    
+//    public void deleteUserById(String userId) throws IOException {
+//        ArrayList<String> data = readFile();
+//
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
+//            for (String line : data) {
+//                String[] userData = line.split(",");
+//                if (!userData[0].equals(userId)) {
+//                    writer.write(line);
+//                    writer.newLine();
+//                }
+//            }
+//        }
+//    }
     public List<Object[]> readData(RowMapper mapper) {
         List<Object[]> rows = new ArrayList<>();
         try {

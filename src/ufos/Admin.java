@@ -11,12 +11,17 @@ package ufos;
  */
 public class Admin extends User{
     
-    public Admin(String username, String password, String email, String phoneNumber) {
-        super(username, password, email, phoneNumber);
-    }
+    
     
     public Admin(){
         
+    }
+  
+    public Admin(String id,String username, String password, String email, String phoneNumber) {
+        super(id,username, password, email, phoneNumber);
+    }
+    public Admin(String username, String password, String email, String phoneNumber) {
+        super(username, password, email, phoneNumber);
     }
     
 }
