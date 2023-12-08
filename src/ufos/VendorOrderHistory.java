@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.*;
+import javax.swing.tree.*;
 
 public class VendorOrderHistory extends javax.swing.JFrame {
     private DefaultTableModel model = new DefaultTableModel();
@@ -17,6 +18,8 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     DB od = new DB("Order");
     DB fr = new DB("FoodReview"); 
     GUI ui = new GUI();
+    DB.OrderRowMapper mapper = od.new OrderRowMapper();
+    DB.ReviewRowMapper review = fr.new ReviewRowMapper();
 
     public VendorOrderHistory() {
         initComponents();
@@ -210,26 +213,18 @@ public class VendorOrderHistory extends javax.swing.JFrame {
         String orderId = String.valueOf(model.getValueAt(row, 0));
 
 // Read the Order.txt file line by line
-//        List<String> order = od.readFile();
-        List<String> review = fr.readFile();
-        List<String> sameIDd = new ArrayList<>();
-        for (String line : review) {
-            String[] parts = line.split(",");
-            String currentOrderId = parts[1];
+        List<Object[]> rows = fr.readData(review);
 
-// If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
-            if (currentOrderId.equals(orderId)) {
-                sameIDd.add(line);
-            }
-            
-        }
         
-        for (String line : sameIDd) {
-            String[] parts = line.split(",");
-            String sameIDdValue = parts[5];
-            String Rating = parts[4];
-            ReviewText.setText(sameIDdValue);
-            RatingNo.setText(Rating);
+
+        for (Object[] rowData : rows){
+            String currentOrderId = (String) rowData[1];
+            String sameIDdValue = (String) rowData[5];
+            String Rating = (String) rowData[4];
+            if (currentOrderId.equals(orderId)) {
+                ReviewText.setText(sameIDdValue);
+                RatingNo.setText(Rating);
+            }    
         }
   
         fr.closeResources();         
@@ -239,41 +234,39 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     private void ChoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChoicesActionPerformed
                
         String selectedOption = (String) Choices.getSelectedItem();
-        model.setRowCount(0);
-        List<String> lines = od.readFile();       
+        List<Object[]> rows = od.readData(mapper);
+        model.setRowCount(0);      
         LocalDate now = LocalDate.now();
         Set<String> orderIds = new HashSet<>();
         double totalRevenue = 0.0; // Declare totalRevenue
-
-        for (String line : lines) {
-            String[] parts = line.split(",");
-            LocalDate date = LocalDate.parse(parts[6], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            String orderId = parts[0];
-            double totalprice = Double.parseDouble(parts[7]);
-            String DM = parts[8];
+        
+        for (Object[] rowData : rows){
+            String orderId = (String) rowData[0];
+            LocalDate dt = LocalDate.parse((String) rowData[6], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            double totalprice = Double.parseDouble((String) rowData[7]);
+            String DM = (String) rowData[8];
             
             if (!orderIds.add(orderId)) {
                 continue;
             }
-            
-            
+                        
             if (selectedOption.equals("Daily")) {
-                if (date.isEqual(now)) {
-                    model.addRow(new Object[]{orderId, date, DM, totalprice});
+                if (dt.isEqual(now)) {
+                    model.addRow(new Object[]{orderId, dt, DM, totalprice});
                     totalRevenue += totalprice;
                 }
             } else if (selectedOption.equals("Monthly")) {
-                if (date.getMonth() == now.getMonth() && date.getYear() == now.getYear()) {
-                    model.addRow(new Object[]{orderId, date, DM, totalprice});
+                if (dt.getMonth() == now.getMonth() && dt.getYear() == now.getYear()) {
+                    model.addRow(new Object[]{orderId, dt, DM, totalprice});
                     totalRevenue += totalprice;
                 }
             } else if (selectedOption.equals("Quarterly")) {
-                if (date.getMonthValue() >= now.getMonthValue() - 3 && date.getMonthValue() <= now.getMonthValue() && date.getYear() == now.getYear()) {
-                    model.addRow(new Object[]{orderId, date, DM, totalprice});
+                if (dt.getMonthValue() >= now.getMonthValue() - 3 && dt.getMonthValue() <= now.getMonthValue() && dt.getYear() == now.getYear()) {
+                    model.addRow(new Object[]{orderId, dt, DM, totalprice});
                     totalRevenue += totalprice;
                 }
             } else{
-                model.addRow(new Object[]{orderId, date, DM, totalprice});
+                model.addRow(new Object[]{orderId, dt, DM, totalprice});
                 totalRevenue += totalprice;
             }
         }
@@ -282,31 +275,36 @@ public class VendorOrderHistory extends javax.swing.JFrame {
         od.closeResources();
     }//GEN-LAST:event_ChoicesActionPerformed
 
-    private void load() {  
-// OrderID = 0 | FoodID = 1 | Food Name = 2 | Portion = 3 | Price = 4 | Status = 5 | Date = 5 | TotalPrice = 6 | DeliMethod = 7 | vendorID = 8 | CustomerID = 9 |
-        ArrayList<String> lines = od.readFile();
-        model.setRowCount(0);
-        Set<String> orderIds = new HashSet<>(); // Set to store orderIds
-        for (String line : lines) {
-            String[] parts = line.split(",");
-            String orderId = parts[0];
-            String status = parts[5];
-            String dt = parts[6];
-            String totalprice = parts[7];
-            String DM = parts[8];
-            
-            // If orderId is already in the set, skip this line
-            if (!orderIds.add(orderId)) {
-                continue;
-            }
-            if (status.equals("Cancelled")) {
-                continue;
-            }
-            
-            model.addRow(new Object[]{orderId,dt,DM,totalprice});
-        }
-        od.closeResources();
+    
+    
+    private void load() {
+
+       // Use DB class to read data
+       List<Object[]> rows = od.readData(mapper);
+
+       model.setRowCount(0);
+       Set<String> orderIds = new HashSet<>(); // Set to store orderIds
+
+       for (Object[] rowData : rows) {
+           String orderId = (String) rowData[0];
+           String status = (String) rowData[1];
+           String dt = (String) rowData[6];
+           String totalprice = (String) rowData[7];
+           String DM = (String) rowData[8];
+
+           // If orderId is already in the set, skip this line
+           if (!orderIds.add(orderId)) {
+               continue;
+           }
+           if (status.equals("Cancelled")) {
+               continue;
+           }
+
+           model.addRow(rowData);
+       }
+       od.closeResources();
     }
+
 
     
     public static void main(String args[]) {
