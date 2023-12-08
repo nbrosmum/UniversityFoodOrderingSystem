@@ -16,7 +16,7 @@ public class Order {
      private List<String[]> items;
      private double price;
      private int quantity;
-
+     DB db = new DB("Menu");
     public Order() {
        
     }
@@ -34,5 +34,20 @@ public class Order {
           total += price * quantity;
       }
       return total;
-    }   
+    } 
+    
+    public String getFoodID(String FoodName){
+        // Read the food file
+        ArrayList<String> foodData = db.readFile();
+        // Find the foodID for the given foodName
+        for (String line : foodData) {
+            String[] parts = line.split(",");
+            if (parts[1].equals(FoodName)) {
+                return parts[0];
+            }
+        }
+        return null;
+        
+    }
+    
 }
