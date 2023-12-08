@@ -26,8 +26,8 @@ public class Customer extends User {
     public Customer( ) {
          
     }
-    public Customer(String username, String password, String email) {
-        super(username, password, email);   
+    public Customer(String username, String password, String email,String phoneNumber) {
+        super(username, password, email,phoneNumber);   
 
     }
   
