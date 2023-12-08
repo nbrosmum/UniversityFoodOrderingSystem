@@ -224,22 +224,7 @@ public class DB {
     
     
     
-    public List<Object[]> readData(RowMapper mapper) {
-        List<Object[]> rows = new ArrayList<>();
-        try {
-            br = new BufferedReader(new FileReader(f));
-            String line;
-            while ((line = br.readLine()) != null) {
-                Object[] rowData = mapper.mapRow(line);
-                rows.add(rowData);
-            }
-            br.close();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error reading from file");
-            e.printStackTrace();
-        }
-        return rows;
-     }
+
 
     
     public class OrderRowMapper implements RowMapper {      
@@ -268,6 +253,22 @@ public class DB {
 
             return new Object[]{orderId,foodId,foodName,portion,price,status,dt,totalprice,DM,vendorId,customerId,runnerId};
         }
+    }
+    public List<Object[]> readData(RowMapper mapper) {
+        List<Object[]> rows = new ArrayList<>();
+        try {
+            br = new BufferedReader(new FileReader(f));
+            String line;
+            while ((line = br.readLine()) != null) {
+                Object[] rowData = mapper.mapRow(line);
+                rows.add(rowData);
+            }
+            br.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error reading from file");
+            e.printStackTrace();
+        }
+        return rows;
     }
     public class ReviewRowMapper implements RowMapper {      
         @Override
