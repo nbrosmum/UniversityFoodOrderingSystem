@@ -26,21 +26,21 @@ public class GUI {
             case "EWallet":
                 page = new EWallet();
                 break;
-//            case "CustomerFoodMenu":
-//                page = new CustomerFoodMenu();
-//                break;
+            case "CustomerFoodMenu":
+                page = new CustomerFoodMenu();
+                break;
             case "CustomerProfile":
                 page = new CustomerProfile();
                 break;
             case "CustomerProfilePage":
                 page = new CustomerProfilePage();
                 break;
-//            case "CustomerTransactionHistory":
-//                page = new CustomerTransactionHistory();
-//                break;
-//            case "CustomerOrderHistory":
-//                page = new CustomerOrderHistory();
-//                break;
+            case "CustomerTransactionHistory":
+                page = new CustomerTransactionHistory();
+                break;
+            case "CustomerOrderHistory":
+                page = new CustomerOrderHistory();
+                break;
             case "CustomerOrderStatus":
                 page = new CustomerOrderStatus();
                 break;
@@ -48,13 +48,13 @@ public class GUI {
                 page = new CustomerFoodReview();
                 break;
             case "OrderHistory":
-                page = new OrderHistory();
+                page = new VendorOrderHistory();
                 break;
             case "OrderPage":
-                page = new OrderPage();
+                page = new VendorOrderPage();
                 break;
             case "FoodMenu":
-                page = new FoodMenu();
+                page = new VendorFoodMenu();
                 break;
             case "AccountRegistration":
                 page = new AccountRegistration();

@@ -27,24 +27,38 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        OrderStatusTable = new javax.swing.JTable();
         Backbtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        Checkbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        OrderStatusTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "OrderID", "Date", "Status"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(OrderStatusTable);
+        if (OrderStatusTable.getColumnModel().getColumnCount() > 0) {
+            OrderStatusTable.getColumnModel().getColumn(0).setResizable(false);
+            OrderStatusTable.getColumnModel().getColumn(1).setResizable(false);
+            OrderStatusTable.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         Backbtn.setText("Back");
         Backbtn.addActionListener(new java.awt.event.ActionListener() {
@@ -56,6 +70,8 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Order Status ");
 
+        Checkbtn.setText("Check");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -65,7 +81,10 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(Backbtn)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(Checkbtn)
+                            .addGap(18, 18, 18)
+                            .addComponent(Backbtn))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
@@ -77,7 +96,9 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
-                .addComponent(Backbtn)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Backbtn)
+                    .addComponent(Checkbtn))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -127,8 +148,9 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Backbtn;
+    private javax.swing.JButton Checkbtn;
+    private javax.swing.JTable OrderStatusTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

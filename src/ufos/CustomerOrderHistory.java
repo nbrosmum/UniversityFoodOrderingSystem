@@ -4,17 +4,22 @@
  */
 package ufos;
 
+import java.util.*;
+import javax.swing.table.DefaultTableModel;
+
+
 /**
  *
  * @author User
  */
 public class CustomerOrderHistory extends javax.swing.JFrame {
     GUI ui = new GUI();
-    /**
-     * Creates new form CustomerOrderHistory
-     */
+    DB Orderdb = new DB("Order");
+    Customer c = new Customer();
+
     public CustomerOrderHistory() {
         initComponents();
+        load();
     }
 
     /**
@@ -26,17 +31,21 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        OrderHistoryTable = new javax.swing.JTable();
         Backbtn = new javax.swing.JButton();
         Reorderbtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        OrderIDTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        FoodListMenu = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -47,7 +56,50 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane2.setViewportView(jTable2);
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable3);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        OrderHistoryTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Order ID", "Date", "Total Price"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        OrderHistoryTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                OrderHistoryTableMouseReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(OrderHistoryTable);
+        if (OrderHistoryTable.getColumnModel().getColumnCount() > 0) {
+            OrderHistoryTable.getColumnModel().getColumn(0).setResizable(false);
+            OrderHistoryTable.getColumnModel().getColumn(1).setResizable(false);
+            OrderHistoryTable.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         Backbtn.setText("Back");
         Backbtn.addActionListener(new java.awt.event.ActionListener() {
@@ -65,32 +117,53 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
 
         jLabel1.setText("Order ID :");
 
+        OrderIDTextField.setEditable(false);
+
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setText("Order History");
+
+        FoodListMenu.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Food Name", "Portion", "Price"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(FoodListMenu);
+        if (FoodListMenu.getColumnModel().getColumnCount() > 0) {
+            FoodListMenu.getColumnModel().getColumn(0).setResizable(false);
+            FoodListMenu.getColumnModel().getColumn(1).setResizable(false);
+            FoodListMenu.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Reorderbtn))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(39, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(Backbtn)
-                .addGap(22, 22, 22))
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Backbtn)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(OrderIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(Reorderbtn))
+                        .addComponent(jLabel2)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -99,12 +172,14 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Reorderbtn)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(OrderIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Backbtn)
                 .addContainerGap(22, Short.MAX_VALUE))
         );
@@ -118,9 +193,40 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
     }//GEN-LAST:event_BackbtnActionPerformed
 
     private void ReorderbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReorderbtnActionPerformed
-        // TODO add your handling code here:
+       String selectedOrderId = OrderIDTextField.getText();
+       c.reorder(selectedOrderId);
+       load();
     }//GEN-LAST:event_ReorderbtnActionPerformed
 
+    private void OrderHistoryTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderHistoryTableMouseReleased
+        DefaultTableModel model = (DefaultTableModel)OrderHistoryTable.getModel();
+        DefaultTableModel model2 = (DefaultTableModel)FoodListMenu.getModel();
+        int row = OrderHistoryTable.getSelectedRow();
+        String selectedOrderId = String.valueOf(model.getValueAt(row, 0));
+        Orderdb.loadData(model2, model, row, FoodListMenu);
+        OrderIDTextField.setText(selectedOrderId);
+    }//GEN-LAST:event_OrderHistoryTableMouseReleased
+
+    public void load(){
+        DefaultTableModel model = (DefaultTableModel)OrderHistoryTable.getModel();
+        ArrayList<String> lines = Orderdb.readFile();
+        model.setRowCount(0);
+        Set<String> orderIds = new HashSet<>(); // Set to store orderIds
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            String OrderID = parts[0];
+            String date = parts[6];
+            String TotalPrice = parts[7];
+   
+            // If orderId is already in the set, skip this line
+            if (!orderIds.add(OrderID)) {
+                continue;
+            }
+
+            model.addRow(new Object[]{OrderID,date,TotalPrice});
+        }
+        Orderdb.closeResources();
+    }
     /**
      * @param args the command line arguments
      */
@@ -158,11 +264,17 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Backbtn;
+    private javax.swing.JTable FoodListMenu;
+    private javax.swing.JTable OrderHistoryTable;
+    private javax.swing.JTextField OrderIDTextField;
     private javax.swing.JButton Reorderbtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
     // End of variables declaration//GEN-END:variables
 }

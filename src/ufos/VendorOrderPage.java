@@ -7,16 +7,16 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.*;
 
-public class OrderPage extends javax.swing.JFrame {
-    
+
+public class VendorOrderPage extends javax.swing.JFrame {
     private DefaultTableModel model = new DefaultTableModel();
     private DefaultTableModel model2 = new DefaultTableModel();
-    private String[] columnName = {"OrderID", "Date", "Status", "TotalPrice"};
+    private String[] columnName = {"OrderID", "Date", "Status", "TotalPrice","DeliveryMethod"};
     private String[] columnName2 = {"FoodName", "Portion", "Price"};
     DB db = new DB("Order");
     GUI ui = new GUI();
     
-    public OrderPage() {
+    public VendorOrderPage() {
         initComponents();
         model.setColumnIdentifiers(columnName);
         model2.setColumnIdentifiers(columnName2);
@@ -24,31 +24,49 @@ public class OrderPage extends javax.swing.JFrame {
         load();
     }
 
+    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        FoodMenu = new javax.swing.JButton();
-        OrderHistory = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        FoodList = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         OrderList = new javax.swing.JTable();
-        Accept = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        FoodList = new javax.swing.JTable();
         Cancel = new javax.swing.JButton();
-
-        jTable1.setModel(model);
-        jScrollPane1.setViewportView(jTable1);
+        Accept = new javax.swing.JButton();
+        OrderHistory = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        FoodMenu = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        FoodMenu.setText("Food Menu");
-        FoodMenu.addActionListener(new java.awt.event.ActionListener() {
+        OrderList.setModel(model);
+        OrderList.getTableHeader().setReorderingAllowed(false);
+        OrderList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                OrderListMouseReleased(evt);
+            }
+        });
+        jScrollPane4.setViewportView(OrderList);
+
+        FoodList.setModel(model2);
+        FoodList.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(FoodList);
+
+        Cancel.setText("Cancel");
+        Cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FoodMenuActionPerformed(evt);
+                CancelActionPerformed(evt);
+            }
+        });
+
+        Accept.setText("Accept");
+        Accept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AcceptActionPerformed(evt);
             }
         });
 
@@ -62,28 +80,17 @@ public class OrderPage extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Order Page");
 
-        FoodList.setModel(model2);
-        jScrollPane3.setViewportView(FoodList);
-
-        OrderList.setModel(model);
-        OrderList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                OrderListMouseReleased(evt);
-            }
-        });
-        jScrollPane4.setViewportView(OrderList);
-
-        Accept.setText("Accept");
-        Accept.addActionListener(new java.awt.event.ActionListener() {
+        FoodMenu.setText("Food Menu");
+        FoodMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AcceptActionPerformed(evt);
+                FoodMenuActionPerformed(evt);
             }
         });
 
-        Cancel.setText("Cancel");
-        Cancel.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("Done");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CancelActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -94,7 +101,6 @@ public class OrderPage extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -102,13 +108,18 @@ public class OrderPage extends javax.swing.JFrame {
                                 .addComponent(FoodMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(126, 126, 126)
                                 .addComponent(jLabel1)))
-                        .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(OrderHistory)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(Accept, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                                .addComponent(Cancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addContainerGap(33, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(OrderHistory))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(Accept, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                    .addComponent(Cancel, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,10 +131,12 @@ public class OrderPage extends javax.swing.JFrame {
                     .addComponent(OrderHistory))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
+                        .addGap(63, 63, 63)
                         .addComponent(Accept)
                         .addGap(18, 18, 18)
-                        .addComponent(Cancel))
+                        .addComponent(Cancel)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -136,29 +149,51 @@ public class OrderPage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void FoodMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoodMenuActionPerformed
-        ui.callPage("FoodMenu");
-        this.dispose();
-    }//GEN-LAST:event_FoodMenuActionPerformed
-
-    private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistoryActionPerformed
-        ui.callPage("OrderHistory");
-        this.dispose();;
-    }//GEN-LAST:event_OrderHistoryActionPerformed
+    private void OrderListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderListMouseReleased
+        int row = OrderList.getSelectedRow();
+        db.loadData(model2, model, row, FoodList);
+//        model2.setRowCount(0);
+//        int row = OrderList.getSelectedRow();
+//        String orderId = String.valueOf(model.getValueAt(row,0));      
+//        List<String> sameOrderIds = new ArrayList<>();
+//        try {
+//            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                String[] parts = line.split(",");
+//                String currentOrderId = parts[0];
+//                String foodName = parts[2];
+//                String portion = parts[3];
+//                String price = parts[4];
+//
+//                // If currentOrderId is the same as model orderId, add it to the list
+//                if (currentOrderId.equals(orderId)) {
+//                    sameOrderIds.add(currentOrderId);
+//                    model2.addRow(new Object[]{foodName,portion,price});
+//                }
+//                
+//                // 
+//                
+//            }
+//            reader.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        };
+    }//GEN-LAST:event_OrderListMouseReleased
 
     private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
-           // Get the orderId of the chosen row in the model
+// Get the orderId of the chosen row in the model
         int row = OrderList.getSelectedRow();
         String orderId = String.valueOf(model.getValueAt(row, 0));
 
-   // Read the Order.txt file line by line
+// Read the Order.txt file line by line
         List<String> data = db.readFile();
         List<String> sameIDd = new ArrayList<>();
         for (String line : data) {
             String[] parts = line.split(",");
             String currentOrderId = parts[0];
 
-    // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
+// If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
             if (currentOrderId.equals(orderId)) {
                 sameIDd.add(line);
             }
@@ -186,10 +221,10 @@ public class OrderPage extends javax.swing.JFrame {
         db.writeFile();
         for (String line : sameIDd) {
             String[] parts = line.split(",");
-            String status = parts[4];
+            String status = parts[5];
             if (status.equals("Pending")) {
                 String[] updatedParts = Arrays.copyOf(parts, parts.length);
-                updatedParts[4] = "Canceled";
+                updatedParts[5] = "Cancelled";
                 line = String.join(",", updatedParts);                            
 
                 
@@ -207,49 +242,19 @@ public class OrderPage extends javax.swing.JFrame {
         load();
     }//GEN-LAST:event_CancelActionPerformed
 
-    private void OrderListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderListMouseReleased
-        model2.setRowCount(0);
-        int row = OrderList.getSelectedRow();
-        String orderId = String.valueOf(model.getValueAt(row,0));      
-        List<String> sameOrderIds = new ArrayList<>();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                String currentOrderId = parts[0];
-                String foodName = parts[1];
-                String portion = parts[2];
-                String price = parts[3];
-
-                // If currentOrderId is the same as model orderId, add it to the list
-                if (currentOrderId.equals(orderId)) {
-                    sameOrderIds.add(currentOrderId);
-                    model2.addRow(new Object[]{foodName,portion,price});
-                }
-                
-                // 
-                
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        };
-    }//GEN-LAST:event_OrderListMouseReleased
-
     private void AcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptActionPerformed
-   // Get the orderId of the chosen row in the model
+// Get the orderId of the chosen row in the model
         int row = OrderList.getSelectedRow();
         String orderId = String.valueOf(model.getValueAt(row, 0));
 
-   // Read the Order.txt file line by line
+// Read the Order.txt file line by line
         List<String> data = db.readFile();
         List<String> sameIDd = new ArrayList<>();
         for (String line : data) {
             String[] parts = line.split(",");
             String currentOrderId = parts[0];
 
-    // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
+// If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
             if (currentOrderId.equals(orderId)) {
                 sameIDd.add(line);
             }
@@ -277,10 +282,10 @@ public class OrderPage extends javax.swing.JFrame {
         db.writeFile();
         for (String line : sameIDd) {
             String[] parts = line.split(",");
-            String status = parts[4];
+            String status = parts[5];
             if (status.equals("Pending")) {
                 String[] updatedParts = Arrays.copyOf(parts, parts.length);
-                updatedParts[4] = "Accepted";
+                updatedParts[5] = "Preparing";
                 line = String.join(",", updatedParts);                            
 
                 
@@ -296,47 +301,107 @@ public class OrderPage extends javax.swing.JFrame {
        
         db.closeResources();
         load();
-   
     }//GEN-LAST:event_AcceptActionPerformed
 
-    private void load() {
-       try {
-           BufferedReader reader = new BufferedReader(new FileReader("DB/Service/Order.txt"));
-           String line;
-           model.setRowCount(0);
-           Set<String> orderIds = new HashSet<>(); // Set to store orderIds
-           while ((line = reader.readLine()) != null) {
-               String[] parts = line.split(",");
-               String orderId = parts[0];
+    private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistoryActionPerformed
+        ui.callPage("OrderHistory");
+        this.dispose();
+    }//GEN-LAST:event_OrderHistoryActionPerformed
 
-               // If orderId is already in the set, skip this line
-               if (!orderIds.add(orderId)) {
-                   continue;
-               }
+    private void FoodMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoodMenuActionPerformed
+        ui.callPage("FoodMenu");
+        this.dispose();
+    }//GEN-LAST:event_FoodMenuActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+// Get the orderId of the chosen row in the model
+        int row = OrderList.getSelectedRow();
+        String orderId = String.valueOf(model.getValueAt(row, 0));
 
-               String status = parts[4];
-               String dt = parts[5];
-               String totalprice = parts[6];
+// Read the Order.txt file line by line
+        List<String> data = db.readFile();
+        List<String> sameIDd = new ArrayList<>();
+        for (String line : data) {
+            String[] parts = line.split(",");
+            String currentOrderId = parts[0];
 
-               model.addRow(new Object[]{orderId,dt,status,totalprice});
-           }
-           reader.close();
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
+// If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
+            if (currentOrderId.equals(orderId)) {
+                sameIDd.add(line);
+            }
+        }
+        
+        data.removeIf(line -> {
+            String[] parts = line.split(",");
+            String currentOrderId = parts[0];
+            return currentOrderId.equals(orderId);
+         });     
+ 
+        db.overWriteFile();
+        try {
+            for (String line : data) {
+                db.bw.write(line);
+                db.bw.newLine();
+            }
+        } catch (IOException ex) {
+            System.out.println("Something went wrong.");
+        }
+        db.closeResources();
+        
+       
+        
+        db.writeFile();
+        for (String line : sameIDd) {
+            String[] parts = line.split(",");
+            String status = parts[5];
+            if (status.equals("Preparing")) {
+                String[] updatedParts = Arrays.copyOf(parts, parts.length);
+                updatedParts[5] = "Done";
+                line = String.join(",", updatedParts);                            
+
+                
+            }
+            try {
+                db.bw.write(line);
+                db.bw.newLine();
+            } catch (IOException ex) {
+                 System.out.println("Something went wrong.");
+            }           
+                       
+        }
+       
+        db.closeResources();
+        load();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void load() {  
+// OrderID | Food Name | Portion | Price | Status | Date | TotalPrice | DeliMethod | vendorID | CustomerID
+        ArrayList<String> lines = db.readFile();
+        model.setRowCount(0);
+        Set<String> orderIds = new HashSet<>(); // Set to store orderIds
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            String orderId = parts[0];
+            String status = parts[5];
+            String dt = parts[6];
+            String totalprice = parts[7];
+            String DM = parts[8];
+            
+            // If orderId is already in the set, skip this line
+            if (!orderIds.add(orderId)) {
+                continue;
+            }
+            if (status.equals("Cancelled")) {
+                continue;
+            }
+            
+            model.addRow(new Object[]{orderId,dt,status,totalprice,DM});
+        }
+        db.closeResources();
     }
-    
-
-
-    
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -345,20 +410,20 @@ public class OrderPage extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(OrderPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VendorOrderPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(OrderPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VendorOrderPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(OrderPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VendorOrderPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(OrderPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VendorOrderPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
-        /* Create and display the form */
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new OrderPage().setVisible(true);
+                new VendorOrderPage().setVisible(true);
             }
         });
     }
@@ -370,10 +435,9 @@ public class OrderPage extends javax.swing.JFrame {
     private javax.swing.JButton FoodMenu;
     private javax.swing.JButton OrderHistory;
     private javax.swing.JTable OrderList;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
