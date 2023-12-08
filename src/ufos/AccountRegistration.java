@@ -4,19 +4,141 @@
  */
 package ufos;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Walter
  */
 public class AccountRegistration extends javax.swing.JFrame {
-
+   GUI ui = new GUI();
+   DB adminDB = new DB ("Admin");
+   DB vendorDB = new DB ("Vendor");
+   DB runnerDB = new DB ("Runner");
+   DB customerDB = new DB ("Customer");
+   
+   
+   private DefaultTableModel adminTableModel;
+   private DefaultTableModel vendorTableModel;
+   private DefaultTableModel runnerTableModel;
+   private DefaultTableModel customerTableModel;
     /**
      * Creates new form Account_Registration
      */
     public AccountRegistration() {
         initComponents();
-    }
+        
+        adminTableModel = (DefaultTableModel) t_admin.getModel();
+        vendorTableModel = (DefaultTableModel) t_vendor.getModel();
+        runnerTableModel = (DefaultTableModel) t_runner.getModel();
+        customerTableModel = (DefaultTableModel) t_customer.getModel();
 
+        adminDB.loadData(adminTableModel, this::mapRow);
+        vendorDB.loadData(vendorTableModel, this::mapRow);
+        runnerDB.loadData(runnerTableModel, this::mapRow);
+        customerDB.loadData(customerTableModel, this::mapRow);
+       
+    }
+    
+    private Object[] mapRow(String line) {
+    // Exclude the first column (ID) from the mapping
+        String[] columns = line.split(",");
+        return Arrays.copyOfRange(columns, 1, columns.length);
+    }
+    private JTable getSelectedTable(String userType) {
+        switch (userType) {
+            case "Admin":
+                return t_admin;
+            case "Vendor":
+                return t_vendor;
+            case "Runner":
+                return t_runner;
+            case "Customer":
+                return t_customer;
+            default:
+                return null;
+        }
+    }
+    private int getSelectedRow(String userType) {
+        JTable selectedTable = getSelectedTable(userType);
+        return selectedTable.getSelectedRow();
+    }
+    
+    private void updateTable(String userType, int updatedRow) {
+        DefaultTableModel tableModel = getTableModel(userType);
+        DB db = getDB(userType);
+
+        if (tableModel != null && db != null) {
+            Object[] updatedData = db.loadDataForRow(updatedRow, this::mapRow);
+            for (int i = 0; i < tableModel.getColumnCount(); i++) {
+                tableModel.setValueAt(updatedData[i], updatedRow, i);
+            }
+        }
+    }
+    
+    private DefaultTableModel getTableModel(String userType) {
+        switch (userType) {
+            case "Admin":
+                return adminTableModel;
+            case "Vendor":
+                return vendorTableModel;
+            case "Runner":
+                return runnerTableModel;
+            case "Customer":
+                return customerTableModel;
+            default:
+                return null;
+        }
+    }
+    
+    private DB getDB(String userType) {
+        switch (userType) {
+            case "Admin":
+                return adminDB;
+            case "Vendor":
+                return vendorDB;
+            case "Runner":
+                return runnerDB;
+            case "Customer":
+                return customerDB;
+            default:
+                return null;
+        }
+    }
+    
+    private void clearFields() {
+        tf_usr.setText("");
+        tf_paswd.setText("");
+        tf_mail.setText("");
+        tf_pNumber.setText("");
+    }
+    
+    private void handleTableMouseClicked(String userType) {
+        int selectedRow = getSelectedRow(userType);
+
+        if (selectedRow != -1) {
+            // Set text fields with values from the selected row
+            tf_usr.setText(getTableModel(userType).getValueAt(selectedRow, 0).toString());
+            tf_paswd.setText(getTableModel(userType).getValueAt(selectedRow, 1).toString());
+            tf_mail.setText(getTableModel(userType).getValueAt(selectedRow, 2).toString());
+            tf_pNumber.setText(getTableModel(userType).getValueAt(selectedRow, 3).toString());
+        }
+    }
+    
+    
+    
+    
+    
+  
+    
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,16 +148,34 @@ public class AccountRegistration extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tf_usr = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        tf_paswd = new javax.swing.JTextField();
+        tf_mail = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        tf_pNumber = new javax.swing.JTextField();
+        btn_add = new javax.swing.JButton();
+        btn_update = new javax.swing.JButton();
+        btn_delete = new javax.swing.JButton();
+        btn_back = new javax.swing.JButton();
+        btn_clear = new javax.swing.JButton();
+        tp_user = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        t_customer = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        t_vendor = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        t_runner = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        t_admin = new javax.swing.JTable();
+
+        jScrollPane2.setViewportView(jTextPane1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -44,9 +184,9 @@ public class AccountRegistration extends javax.swing.JFrame {
 
         jLabel2.setText("Username:");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        tf_usr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                tf_usrActionPerformed(evt);
             }
         });
 
@@ -54,91 +194,450 @@ public class AccountRegistration extends javax.swing.JFrame {
 
         jLabel4.setText("Email:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Customer", "Vendor", "Runner" }));
+        tf_paswd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tf_paswdActionPerformed(evt);
+            }
+        });
+
+        tf_mail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tf_mailActionPerformed(evt);
+            }
+        });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Customer", "Vendor", "Runner", "Admin" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jLabel5.setText("Phone Number:");
+
+        tf_pNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tf_pNumberActionPerformed(evt);
+            }
+        });
+
+        btn_add.setText("Add");
+        btn_add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_addActionPerformed(evt);
+            }
+        });
+
+        btn_update.setText("Update");
+        btn_update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_updateActionPerformed(evt);
+            }
+        });
+
+        btn_delete.setText("Delete");
+        btn_delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_deleteActionPerformed(evt);
+            }
+        });
+
+        btn_back.setText("Back");
+        btn_back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_backActionPerformed(evt);
+            }
+        });
+
+        btn_clear.setText("Clear");
+        btn_clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_clearActionPerformed(evt);
+            }
+        });
+
+        tp_user.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                tp_userComponentAdded(evt);
+            }
+        });
+
+        t_customer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
-                "Username", "Password", "Email"
+                "Username", "Password", "Email", "Phone Number"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        t_customer.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                t_customerMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(t_customer);
+
+        tp_user.addTab("Customer", jScrollPane1);
+
+        t_vendor.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Username", "Password", "Email", "Phone Number"
+            }
+        ));
+        t_vendor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                t_vendorMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(t_vendor);
+
+        tp_user.addTab("Vendor", jScrollPane3);
+
+        t_runner.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Username", "Password", "Email", "Phone Number"
+            }
+        ));
+        t_runner.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                t_runnerMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(t_runner);
+
+        tp_user.addTab("Runner", jScrollPane4);
+
+        t_admin.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Username", "Password", "Email", "Phone Number"
+            }
+        ));
+        t_admin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                t_adminMouseClicked(evt);
+            }
+        });
+        jScrollPane5.setViewportView(t_admin);
+
+        tp_user.addTab("Admin", jScrollPane5);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(234, 234, 234)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(tp_user, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_back)
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(68, 68, 68)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(tf_mail, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(tf_pNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(75, 75, 75))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(tf_usr, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(54, 54, 54)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(154, 154, 154)
+                                .addComponent(tf_paswd, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(111, 111, 111)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btn_update, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_add, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(234, 234, 234)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 230, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tf_usr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tf_paswd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_add)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(85, 85, 85)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tf_mail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tf_pNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(btn_update)
+                        .addGap(27, 27, 27)
+                        .addComponent(btn_delete)))
+                .addGap(30, 30, 30)
+                .addComponent(btn_clear)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btn_back)
+                        .addGap(12, 12, 12))
+                    .addComponent(tp_user, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void tf_usrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_usrActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_tf_usrActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
+        String userType = jComboBox1.getSelectedItem().toString();
+        String username = tf_usr.getText();
+        String password = tf_paswd.getText();
+        String email = tf_mail.getText();
+        String phoneNumber = tf_pNumber.getText();
+
+        try {
+            
+            if (getDB(userType).emailExists(email)) {
+                JOptionPane.showMessageDialog(null, "Email already exists");
+                return; // Do not add the row if email already exists
+            }
+            switch (userType) {
+                case "Admin":
+                    Admin newAdmin = new Admin(username, password, email, phoneNumber);
+                    newAdmin.createUser(adminDB);
+                    break;
+                case "Vendor":
+                    Vendor newVendor = new Vendor(username, password, email, phoneNumber);
+                    newVendor.createUser(vendorDB);
+                    break;
+                case "Runner":
+                    Runner newRunner = new Runner(username, password, email, phoneNumber);
+                    newRunner.createUser(runnerDB);
+                    break;
+                case "Customer":
+                    CustomerAcc newCustomerAcc = new CustomerAcc(username, password, email, phoneNumber);
+                    newCustomerAcc.createUser(customerDB);
+                    break;
+            }
+
+            // Update the table after adding a new user
+            DefaultTableModel tableModel = getTableModel(userType);
+            tableModel.addRow(mapRow("," + username + "," + password + "," + email + "," + phoneNumber));
+
+
+            // Clear input fields
+            clearFields();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            // Handle the exception - you might want to show an error dialog
+        }
+        
+    }//GEN-LAST:event_btn_addActionPerformed
+
+    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
+        String userType = jComboBox1.getSelectedItem().toString();
+        int selectedRow = getSelectedRow(userType);
+
+        if (selectedRow != -1 && selectedRow < getTableModel(userType).getRowCount()) {
+            tf_usr.setText(getTableModel(userType).getValueAt(selectedRow, 0).toString());
+            tf_paswd.setText(getTableModel(userType).getValueAt(selectedRow, 1).toString());
+            tf_mail.setText(getTableModel(userType).getValueAt(selectedRow, 2).toString());
+            tf_pNumber.setText(getTableModel(userType).getValueAt(selectedRow, 3).toString());
+
+        } else {
+            // No row selected, show an error message or take appropriate action
+            JOptionPane.showMessageDialog(this, "Please select a row to update.", "No Row Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // ... Rest of the code for updating the user
+        try {
+            switch (userType) {
+                case "Admin":
+                    Admin adminToUpdate = new Admin(tf_usr.getText(), tf_paswd.getText(), tf_mail.getText(), tf_pNumber.getText());
+                    adminToUpdate.setId(getTableModel(userType).getValueAt(selectedRow, 0).toString());
+                    adminToUpdate.updateUser(adminDB);
+                    break;
+                case "Vendor":
+                    Vendor vendorToUpdate = new Vendor(tf_usr.getText(), tf_paswd.getText(), tf_mail.getText(), tf_pNumber.getText());
+                    vendorToUpdate.setId(getTableModel(userType).getValueAt(selectedRow, 0).toString());
+                    vendorToUpdate.updateUser(vendorDB);
+                    break;
+                case "Runner":
+                    Runner runnerToUpdate = new Runner(tf_usr.getText(), tf_paswd.getText(), tf_mail.getText(), tf_pNumber.getText());
+                    runnerToUpdate.setId(getTableModel(userType).getValueAt(selectedRow, 0).toString());
+                    runnerToUpdate.updateUser(runnerDB);
+                    break;
+                case "Customer":
+                    CustomerAcc customerToUpdate = new CustomerAcc(tf_usr.getText(), tf_paswd.getText(), tf_mail.getText(), tf_pNumber.getText());
+                    customerToUpdate.setId(getTableModel(userType).getValueAt(selectedRow, 0).toString());
+                    customerToUpdate.updateUser(customerDB);
+                    break;
+                // ... Add cases for other user types if needed
+            }
+
+            // Update the table after modifying a user
+            updateTable(userType, selectedRow);
+
+            // Clear input fields
+            clearFields();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            // Handle the exception - you might want to show an error dialog
+        }
+    }//GEN-LAST:event_btn_updateActionPerformed
+
+    private void tf_paswdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_paswdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_paswdActionPerformed
+
+    private void tf_mailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_mailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_mailActionPerformed
+
+    private void tf_pNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_pNumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_pNumberActionPerformed
+
+    private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
+        int selectedRow = getSelectedRow(jComboBox1.getSelectedItem().toString());
+
+        if (selectedRow != -1) {
+            String userType = jComboBox1.getSelectedItem().toString();
+
+            try {
+                // Get the ID of the user from the selected row
+                String userId = getTableModel(userType).getValueAt(selectedRow, 0).toString();
+
+                // Use the appropriate deleteUser method from the corresponding DB object
+                switch (userType) {
+                    case "Admin":
+                        Admin adminToDelete = new Admin();
+                        adminToDelete.setId(userId);
+                        adminToDelete.deleteUser(adminDB);
+                        break;
+                    case "Vendor":
+                        Vendor vendorToDelete = new Vendor();
+                        vendorToDelete.setId(userId);
+                        vendorToDelete.deleteUser(vendorDB);
+                        break;
+                    case "Runner":
+                        Runner runnerToDelete = new Runner();
+                        runnerToDelete.setId(userId);
+                        runnerToDelete.deleteUser(runnerDB);
+                        break;
+                    case "Customer":
+                        CustomerAcc customerToDelete = new CustomerAcc();
+                        customerToDelete.setId(userId);
+                        customerToDelete.deleteUser(customerDB);
+                        break;
+                    // ... Add cases for other user types if needed
+                }
+
+                // Remove the selected row from the table model
+                getTableModel(userType).removeRow(selectedRow);
+
+                // Remove the user from the text file
+                getDB(userType).deleteUserById(userId);
+
+                // Clear input fields
+                clearFields();
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                // Handle the exception - you might want to show an error dialog
+            }
+        } else {
+            // No row selected, show an error message or take appropriate action
+            JOptionPane.showMessageDialog(this, "Please select a row to delete.", "No Row Selected", JOptionPane.WARNING_MESSAGE);
+        }
+    
+       
+    }//GEN-LAST:event_btn_deleteActionPerformed
+
+    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+       
+        ui.callPage("AdminDashboard");
+        this.dispose();
+        
+    }//GEN-LAST:event_btn_backActionPerformed
+
+    private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
+        tf_usr.setText("");
+        tf_paswd.setText("");
+        tf_mail.setText("");
+        tf_pNumber.setText("");
+    }//GEN-LAST:event_btn_clearActionPerformed
+
+    private void tp_userComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_tp_userComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tp_userComponentAdded
+
+    private void t_customerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_customerMouseClicked
+        handleTableMouseClicked("Customer");
+    }//GEN-LAST:event_t_customerMouseClicked
+
+    private void t_vendorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_vendorMouseClicked
+        handleTableMouseClicked("Vendor");
+    }//GEN-LAST:event_t_vendorMouseClicked
+
+    private void t_runnerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_runnerMouseClicked
+        handleTableMouseClicked("Runner");
+    }//GEN-LAST:event_t_runnerMouseClicked
+
+    private void t_adminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_adminMouseClicked
+        handleTableMouseClicked("Admin");
+    }//GEN-LAST:event_t_adminMouseClicked
 
     /**
      * @param args the command line arguments
@@ -177,15 +676,31 @@ public class AccountRegistration extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_add;
+    private javax.swing.JButton btn_back;
+    private javax.swing.JButton btn_clear;
+    private javax.swing.JButton btn_delete;
+    private javax.swing.JButton btn_update;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTable t_admin;
+    private javax.swing.JTable t_customer;
+    private javax.swing.JTable t_runner;
+    private javax.swing.JTable t_vendor;
+    private javax.swing.JTextField tf_mail;
+    private javax.swing.JTextField tf_pNumber;
+    private javax.swing.JTextField tf_paswd;
+    private javax.swing.JTextField tf_usr;
+    private javax.swing.JTabbedPane tp_user;
     // End of variables declaration//GEN-END:variables
 }

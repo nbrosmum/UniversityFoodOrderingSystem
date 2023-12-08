@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 
+
 /**
  *
  * @author User
@@ -20,14 +21,17 @@ import javax.swing.table.DefaultTableModel;
 public class Customer extends User {
    private String customerID;
    private double credit;
+
    DB db = new DB("Order");
     public Customer( ) {
          
     }
     public Customer(String username, String password, String email) {
         super(username, password, email);   
-    }
 
+    }
+  
+ 
     public String getCustomerID() {
         return customerID;
     }
@@ -43,6 +47,7 @@ public class Customer extends User {
     public void setCredit(double credit) {
         this.credit = credit;
     }
+
     public void OrderFood(String orderID, String foodID, String foodName, int portion, double price, String status, String date, double totalPrice, String deliveryMethod,String VendorID,String RunnerID ) throws IOException{
         db.writeFile();
         String quantity = String.valueOf(portion);
@@ -76,4 +81,5 @@ public class Customer extends User {
         
     }
   
+
 }

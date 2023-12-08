@@ -134,7 +134,9 @@ public class DB {
             List<String> ids = new ArrayList<>();
             while ((line = br.readLine()) != null) {
                 String idStr = line.split(",")[0];
-                ids.add(idStr.substring(1));
+                if (!idStr.isEmpty()) {
+                    ids.add(idStr.substring(1));
+                }
             }
             br.close();
             Collections.sort(ids);
@@ -143,13 +145,14 @@ public class DB {
             } else {
                 return 0;
             }
-            
+
         } catch (IOException e) {
             e.printStackTrace();
-            
+
         }
         return 0;
     }
+
    
     public String generateId() {
         int newId = readLastId() + 1;
@@ -218,5 +221,73 @@ public class DB {
            e.printStackTrace();
        }
     }
+    
+    public boolean emailExists(String email) {
+        try {
+            br = new BufferedReader(new FileReader(f));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String existingEmail = line.split(",")[3].trim(); // Assuming email is at index 2
+                if (email.equals(existingEmail)) {
+                    return true;
+                }
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public Object[] loadDataForRow(int row, RowMapper mapper) {
+        try {
+            br = new BufferedReader(new FileReader(f));
+            String line;
+            int currentRow = 0;
+            while ((line = br.readLine()) != null) {
+                if (currentRow == row) {
+                    return mapper.mapRow(line);
+                }
+                currentRow++;
+            }
+            br.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error reading from file");
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    
+    public void deleteUser(String userId) throws IOException {
+        ArrayList<String> data = readFile();
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
+            for (String line : data) {
+                String[] userData = line.split(",");
+                if (!userData[0].equals(userId)) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+        }
+    }
+    
+    public void deleteUserById(String userId) throws IOException {
+        ArrayList<String> data = readFile();
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
+            for (String line : data) {
+                String[] userData = line.split(",");
+                if (!userData[0].equals(userId)) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+        }
+    }
+    
+    
+
 
 }
