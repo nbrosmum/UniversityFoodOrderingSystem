@@ -6,6 +6,7 @@ package ufos;
 
 
 
+
 /**
  *
  * @author User
@@ -16,9 +17,13 @@ public class Customer extends User {
    private String Email;
    private double credit;
    
-    public Customer(String username, String password, String email          ) {
-        super(username, password, email);   
+ 
+    
+    public Customer(){
+        
     }
+  
+ 
 
     public String getCustomerID() {
         return customerID;
@@ -51,7 +56,10 @@ public class Customer extends User {
     public void setCredit(double credit) {
         this.credit = credit;
     }
-   
+    
+     
+    
+    
        
        
 }

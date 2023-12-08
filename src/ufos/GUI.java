@@ -56,6 +56,12 @@ public class GUI {
             case "FoodMenu":
                 page = new FoodMenu();
                 break;
+            case "AccountRegistration":
+                page = new AccountRegistration();
+                break;
+            case "AdminDashboard":
+            page = new AdminDashboard();
+            break;
                 
             
             default:
