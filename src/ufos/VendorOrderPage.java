@@ -14,6 +14,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
     private String[] columnName = {"OrderID", "Date", "Status", "TotalPrice","DeliveryMethod"};
     private String[] columnName2 = {"FoodName", "Portion", "Price"};
     DB db = new DB("Order");
+    DB.OrderRowMapper mapper = db.new OrderRowMapper();
     GUI ui = new GUI();
     
     public VendorOrderPage() {
@@ -376,28 +377,31 @@ public class VendorOrderPage extends javax.swing.JFrame {
 
     private void load() {  
 // OrderID | Food Name | Portion | Price | Status | Date | TotalPrice | DeliMethod | vendorID | CustomerID
-        ArrayList<String> lines = db.readFile();
-        model.setRowCount(0);
-        Set<String> orderIds = new HashSet<>(); // Set to store orderIds
-        for (String line : lines) {
-            String[] parts = line.split(",");
-            String orderId = parts[0];
-            String status = parts[5];
-            String dt = parts[6];
-            String totalprice = parts[7];
-            String DM = parts[8];
-            
-            // If orderId is already in the set, skip this line
-            if (!orderIds.add(orderId)) {
-                continue;
-            }
-            if (status.equals("Cancelled")) {
-                continue;
-            }
-            
-            model.addRow(new Object[]{orderId,dt,status,totalprice,DM});
-        }
-        db.closeResources();
+       // Use DB class to read data
+       List<Object[]> rows = db.readData(mapper);
+
+       model.setRowCount(0);
+       Set<String> orderIds = new HashSet<>(); // Set to store orderIds
+
+       for (Object[] rowData : rows) {
+           String orderId = (String) rowData[0];
+            String status = (String) rowData[5];
+            String dt = (String) rowData[6];
+            String totalprice = (String) rowData[7];
+            String DM = (String) rowData[8];
+
+           // If orderId is already in the set, skip this line
+           if (!orderIds.add(orderId)) {
+               continue;
+           }
+           if (status.equals("Cancelled")) {
+               continue;
+           }
+
+           model.addRow(new Object[]{orderId,dt,status,totalprice,DM});
+       }
+       db.closeResources();
+
     }
 
     public static void main(String args[]) {

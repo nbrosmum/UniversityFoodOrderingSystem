@@ -14,6 +14,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
     String vendorId = vt.getVendorId();
     GUI ui = new GUI();
     DB db = new DB("Menu");
+    DB.MenuRowMapper mapper = db.new MenuRowMapper();
     
     
     public VendorFoodMenu() {
@@ -304,15 +305,12 @@ public class VendorFoodMenu extends javax.swing.JFrame {
     }
     
     private void load() {
-        
-        ArrayList<String> lines = db.readFile();
-//        ArrayList<Object[]> data = new ArrayList<>();
+        List<Object[]> rows = db.readData(mapper);
         model.setRowCount(0);
-        for (String line : lines) {
-            String[] parts = line.split(",");
-            String foodName = parts[1];
-            double price = Double.parseDouble(parts[2]);
-            String description = parts[3];
+        for (Object[] rowData : rows) {
+            String foodName = (String) rowData[1];
+            double price = Double.parseDouble((String) rowData[2]);
+            String description = (String) rowData[3];
 //            String vdId = parts[4];
             
             // If orderId is already in the set, skip this line
