@@ -1,19 +1,22 @@
 package ufos;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.*;
 
 
 public class CustomerReview extends javax.swing.JFrame {
+    GUI ui = new GUI();
     // Create an array for the ratings
     String[] ratings = {"1", "2", "3", "4", "5"};
     // Create a new DefaultComboBoxModel
     DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(ratings);
     DefaultComboBoxModel<String> model2 = new DefaultComboBoxModel<>(ratings);
-     DB fr = new DB("FoodReview");
-     DB dr = new DB("DeliveryReview");
+    Review r = new Review();
 
 
     public CustomerReview() {
@@ -172,17 +175,31 @@ public class CustomerReview extends javax.swing.JFrame {
 
     private void SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitActionPerformed
         
-        //FoodreviewID | OrderID | ReviewContent | Date | vendorID
+
         //variables
-        int foodRate = (int) FoodRate.getSelectedItem();
-        int deliRate = (int) DeliRate.getSelectedItem();
+        String foodRate = (String) FoodRate.getSelectedItem();
+        String deliRate = (String) DeliRate.getSelectedItem();
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         String foodText = FoodCom.getText();
         String deliText = DeliCom.getText();
+        
+        try {
+            r.Foodview(null,null,date,foodRate,foodText);
+            r.Runnerview(null,null,date,deliRate,deliText);
+            ui.callPage("CustomerProfilePage");
+            this.dispose();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(CustomerReview.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
            
     }//GEN-LAST:event_SubmitActionPerformed
 
     private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
-        
+        JOptionPane.showMessageDialog(rootPane, "Must Review the order");
     }//GEN-LAST:event_CancelActionPerformed
 
     /**

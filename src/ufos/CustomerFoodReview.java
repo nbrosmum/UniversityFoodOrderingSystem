@@ -4,12 +4,16 @@
  */
 package ufos;
 
+import java.util.List;
+
 /**
  *
  * @author User
  */
 public class CustomerFoodReview extends javax.swing.JFrame {
     GUI ui = new GUI();
+    DB fdb = new DB("FoodReview");
+    DB.ReviewRowMapper review = fdb.new ReviewRowMapper();
     /**
      * Creates new form FoodReview
      */
@@ -137,7 +141,10 @@ public class CustomerFoodReview extends javax.swing.JFrame {
        ui.callPage("CustomerFoodMenu");
        this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
-
+    private void load(){
+       List<Object[]> rows = fdb.readData(review);
+       
+    }
     /**
      * @param args the command line arguments
      */

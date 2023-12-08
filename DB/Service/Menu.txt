@@ -1,4 +1,5 @@
-F003,dsadasdasd,3.0,dasdasdasdasd,null
-F004,dadsadsda,4.0,dsadasdasdas,null
-F002,sdasdasd,5.0,dasdasdasd,null
-F005,dasdasd,64.0,dsadsadsda,null
+F003,dsadasdasd,3.0,dasdasdasdasd,V001
+F004,dadsadsda,4.0,dsadasdasdas,V001
+F002,sdasdasd,5.0,dasdasdasd,V001
+F005,dasdasd,64.0,dsadsadsda,V001
+F006,rice,2.0,rice lo,null

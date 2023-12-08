@@ -53,11 +53,11 @@ public class DB {
                 break;
             case "FoodReview":
                 directoryPath = "DB\\Service\\";
-                prefixID = "FR";
+                prefixID = "R";
                 break;
             case "DeliveryReview":
                 directoryPath = "DB\\Service\\";
-                prefixID = "DR";
+                prefixID = "D";
                 break;
             default:
                 break;
