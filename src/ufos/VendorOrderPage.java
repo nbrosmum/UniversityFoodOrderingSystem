@@ -14,17 +14,22 @@ public class VendorOrderPage extends javax.swing.JFrame {
     private String[] columnName = {"OrderID", "Date", "Status", "TotalPrice","DeliveryMethod"};
     private String[] columnName2 = {"FoodName", "Portion", "Price"};
     DB db = new DB("Order");
+    User u = new User();
     DB.OrderRowMapper mapper = db.new OrderRowMapper();
+    List<Object[]> rows = db.readData(mapper);
     GUI ui = new GUI();
     
     public VendorOrderPage() {
         initComponents();
+
+    }
+    public VendorOrderPage(User id) {
+        initComponents();
+        u = id;
         model.setColumnIdentifiers(columnName);
         model2.setColumnIdentifiers(columnName2);
-        Vendor vt = new Vendor();
         load();
     }
-
     
 
     @SuppressWarnings("unchecked")
@@ -298,12 +303,12 @@ public class VendorOrderPage extends javax.swing.JFrame {
     }//GEN-LAST:event_AcceptActionPerformed
 
     private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistoryActionPerformed
-        ui.callPage("OrderHistory");
+        ui.callPage("VendorOrderHistory", u);
         this.dispose();
     }//GEN-LAST:event_OrderHistoryActionPerformed
 
     private void FoodMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoodMenuActionPerformed
-        ui.callPage("FoodMenu");
+        ui.callPage("VendorFoodMenu",u);
         this.dispose();
     }//GEN-LAST:event_FoodMenuActionPerformed
 
@@ -371,6 +376,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
 
     private void load() {  
         // read data from mapper
+        String vId = u.getId();
         List<Object[]> rows = db.readData(mapper);
         
         model.setRowCount(0);// reset model
@@ -383,17 +389,20 @@ public class VendorOrderPage extends javax.swing.JFrame {
             String dt = (String) rowData[6];
             String totalprice = (String) rowData[7];
             String DM = (String) rowData[8];
+            String vendorID = (String) rowData[9];
 
            // If orderId is already in the set, skip this line
-           if (!orderIds.add(orderId)) {
-               continue;
-           }
-           // If status is Cancelled, skip this line
-           if (status.equals("Cancelled")) {
-               continue;
-           }
+            if (vendorID.equals(vId)) {
+                if (!orderIds.add(orderId)) {
+                    continue;
+                }
+                // If status is Cancelled, skip this line
+                if (status.equals("Cancelled")) {
+                    continue;
+                }
 
-           model.addRow(new Object[]{orderId,dt,status,totalprice,DM}); // add into the model
+                model.addRow(new Object[]{orderId,dt,status,totalprice,DM}); // add into the model
+            }            
        }
        db.closeResources(); // close it
 

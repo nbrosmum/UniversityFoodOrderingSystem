@@ -10,13 +10,18 @@ package ufos;
  */
 public class CustomerOrderStatus extends javax.swing.JFrame {
     GUI ui = new GUI();
+    User u = new User();
+
     /**
      * Creates new form OrderStatus
      */
     public CustomerOrderStatus() {
         initComponents();
     }
-
+    public CustomerOrderStatus(User id) {
+        initComponents();     
+        u = id;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -106,7 +111,7 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackbtnActionPerformed
-        ui.callPage("CustomerFoodMenu");
+        ui.callPage("CustomerFoodMenu",u);
         this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
 

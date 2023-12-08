@@ -11,9 +11,11 @@ package ufos;
  * @author Walter
  */
 public class Runner extends User {
-    public Runner(String username, String password, String email, String phoneNumber){
+    public Runner( String id,String username, String password, String email, String phoneNumber) {
+        super(id,username, password, email, phoneNumber);
+    }
+    public Runner( String username, String password, String email, String phoneNumber) {
         super(username, password, email, phoneNumber);
-            
     }
     
     public Runner(){

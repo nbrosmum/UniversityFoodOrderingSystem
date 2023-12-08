@@ -14,7 +14,7 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"OrderID", "Date", "DeliveryMethod", "TotalPrice"};
     Vendor vt = new Vendor();
-    String vendorId = vt.getVendorId();
+    User u = new User();
     DB od = new DB("Order");
     DB fr = new DB("FoodReview"); 
     GUI ui = new GUI();
@@ -22,9 +22,12 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     DB.ReviewRowMapper review = fr.new ReviewRowMapper();
 
     public VendorOrderHistory() {
+        initComponents();    
+    }
+    public VendorOrderHistory(User id) {
         initComponents();
         model.setColumnIdentifiers(columnName);
-        Vendor vt = new Vendor();
+        u = id;
         load();
     }
 
@@ -185,12 +188,19 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void FoodMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoodMenuActionPerformed
-        ui.callPage("FoodMenu");
+        VendorFoodMenu wp = new VendorFoodMenu(u);
+        wp.setVisible(true);
+        wp.pack();
+        wp.setLocationRelativeTo(null);
+        wp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.dispose();
+//        
+//        ui.callPage("VendorFoodMenu",u);
+//        this.dispose();
     }//GEN-LAST:event_FoodMenuActionPerformed
 
     private void OrderPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderPageActionPerformed
-        ui.callPage("OrderPage");
+        ui.callPage("VendorOrderPage",u);
         this.dispose();
     }//GEN-LAST:event_OrderPageActionPerformed
 
@@ -218,6 +228,7 @@ public class VendorOrderHistory extends javax.swing.JFrame {
 
     private void ChoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChoicesActionPerformed
         TotalPrice.setText("");
+        String vId = u.getId();
         String selectedOption = (String) Choices.getSelectedItem();
         List<Object[]> rows = od.readData(mapper);
         model.setRowCount(0);      
@@ -230,29 +241,32 @@ public class VendorOrderHistory extends javax.swing.JFrame {
             LocalDate dt = LocalDate.parse((String) rowData[6], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             double totalprice = Double.parseDouble((String) rowData[7]);
             String DM = (String) rowData[8];
+            String vendorID = (String) rowData[9];
             
-            if (!orderIds.add(orderId)) {
-                continue;
-            }
+            if (vendorID.equals(vId)) {
+                if (!orderIds.add(orderId)) {
+                    continue;
+                }
                         
-            if (selectedOption.equals("Daily")) {
-                if (dt.isEqual(now)) {
+                if (selectedOption.equals("Daily")) {
+                    if (dt.isEqual(now)) {
+                        model.addRow(new Object[]{orderId, dt, DM, totalprice});
+                        totalRevenue += totalprice;
+                    }
+                } else if (selectedOption.equals("Monthly")) {
+                    if (dt.getMonth() == now.getMonth() && dt.getYear() == now.getYear()) {
+                        model.addRow(new Object[]{orderId, dt, DM, totalprice});
+                        totalRevenue += totalprice;
+                    }
+                } else if (selectedOption.equals("Quarterly")) {
+                    if (dt.getMonthValue() >= now.getMonthValue() - 3 && dt.getMonthValue() <= now.getMonthValue() && dt.getYear() == now.getYear()) {
+                        model.addRow(new Object[]{orderId, dt, DM, totalprice});
+                        totalRevenue += totalprice;
+                    }
+                } else{
                     model.addRow(new Object[]{orderId, dt, DM, totalprice});
                     totalRevenue += totalprice;
                 }
-            } else if (selectedOption.equals("Monthly")) {
-                if (dt.getMonth() == now.getMonth() && dt.getYear() == now.getYear()) {
-                    model.addRow(new Object[]{orderId, dt, DM, totalprice});
-                    totalRevenue += totalprice;
-                }
-            } else if (selectedOption.equals("Quarterly")) {
-                if (dt.getMonthValue() >= now.getMonthValue() - 3 && dt.getMonthValue() <= now.getMonthValue() && dt.getYear() == now.getYear()) {
-                    model.addRow(new Object[]{orderId, dt, DM, totalprice});
-                    totalRevenue += totalprice;
-                }
-            } else{
-                model.addRow(new Object[]{orderId, dt, DM, totalprice});
-                totalRevenue += totalprice;
             }
         }
 //        System.out.println(totalRevenue);
@@ -264,6 +278,7 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     
     private void load() {
        // Use DB class to read data
+       String vId = u.getId();
        List<Object[]> rows = od.readData(mapper);
        double totalRevenue = 0.0;
 
@@ -275,14 +290,16 @@ public class VendorOrderHistory extends javax.swing.JFrame {
            String dt = (String) rowData[6];
            double totalprice = Double.parseDouble((String) rowData[7]);
            String DM = (String) rowData[8];
+           String vendorID = (String) rowData[9];
 
            // If orderId is already in the set, skip this line
-           if (!orderIds.add(orderId)) {
-               continue;
-           }
-
-           model.addRow(new Object[]{orderId,dt,DM,totalprice});
-           totalRevenue += totalprice;
+            if (vendorID.equals(vId)) {
+                if (!orderIds.add(orderId)) {
+                    continue;
+                }
+                model.addRow(new Object[]{orderId,dt,DM,totalprice});
+                totalRevenue += totalprice;
+            } 
        }
        TotalPrice.setText(String.valueOf(totalRevenue));
        od.closeResources();

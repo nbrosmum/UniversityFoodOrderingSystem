@@ -8,22 +8,23 @@ import javax.swing.table.*;
 public class VendorFoodMenu extends javax.swing.JFrame {
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"Food Name", "Description", "Price"};
-    Vendor vt = new Vendor();
-    String vendorId = vt.getVendorId();
+    User u = new User();
     GUI ui = new GUI();
     DB db = new DB("Menu");
     DB.MenuRowMapper mapper = db.new MenuRowMapper();
-    
+
     
     public VendorFoodMenu() {
         initComponents();
-        model.setColumnIdentifiers(columnName);
-        load();
+        
     }
     
-    public VendorFoodMenu(Vendor vendorId) {
+    public VendorFoodMenu(User id) {
         initComponents();
-        vt = vendorId;
+        model.setColumnIdentifiers(columnName); 
+        u = id;
+        load();
+           
     }
 
     @SuppressWarnings("unchecked")
@@ -203,7 +204,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_FoodMenuMouseReleased
 
     private void OrderPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderPageActionPerformed
-        ui.callPage("OrderPage");
+        ui.callPage("VendorOrderPage",u);
         this.dispose();
     }//GEN-LAST:event_OrderPageActionPerformed
 
@@ -249,13 +250,14 @@ public class VendorFoodMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteItemActionPerformed
 
     private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistoryActionPerformed
-        ui.callPage("OrderHistory");
+        ui.callPage("VendorOrderHistory",u);
         this.dispose();
     }//GEN-LAST:event_OrderHistoryActionPerformed
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
 
         // variables
+        String vId = u.getId();
         String foodName =  NameText.getText();
         double price = Double.parseDouble(PriceText.getText());
         String Description = DescriptionText.getText();
@@ -263,7 +265,8 @@ public class VendorFoodMenu extends javax.swing.JFrame {
         //Add in Text
         db.writeFile();
         String priceString = String.valueOf(price);
-        String vendorIdString = String.valueOf(vendorId);
+        String vendorIdString = String.valueOf(vId);
+        System.out.print(vId);
         String FoodItem = db.id + "," + foodName + "," +  priceString + "," + Description + "," + vendorIdString;
         try {
             db.bw.write(FoodItem + "\n");
@@ -279,7 +282,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_addItemActionPerformed
 
     private void updateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateItemActionPerformed
-
+        String vId = u.getId();
         int selectedRow = FoodMenu.getSelectedRow();
         if (selectedRow != -1) {
             // get modal information
@@ -306,7 +309,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
             String foodText = NameText.getText();
             double priceText = Double.parseDouble(PriceText.getText());
             String descText = DescriptionText.getText();
-            String vendorIdString = String.valueOf(vendorId);
+            String vendorIdString = String.valueOf(vId);
             // update the information but keep the original id
             String updatedLine = id + "," + foodText + "," + String.valueOf(priceText) + "," + descText + "," + vendorIdString;
             data.add(updatedLine);
@@ -336,27 +339,21 @@ public class VendorFoodMenu extends javax.swing.JFrame {
     }
     
     private void load() {
+        String vId = u.getId();        
         List<Object[]> rows = db.readData(mapper);
+        List<Object[]> newRows = new ArrayList<>();
         model.setRowCount(0);
         for (Object[] rowData : rows) {
             String foodName = (String) rowData[1];
             double price = Double.parseDouble((String) rowData[2]);
             String description = (String) rowData[3];
-//            String vdId = parts[4];
+            String vdId = (String) rowData[4];
             
             // If orderId is already in the set, skip this line
-//            if (vdId.equals(vendorId)) {
-//                data.add(new Object[]{foodName, description, price});
-//            }
-            model.addRow(new Object[]{foodName, description, price});
-        }
-   
-   // Set the model's data to the new list
-//            for (Object[] row : data) {
-//                model.addRow(row);
-//            }
-//            
-                    
+            if (vdId.equals(vId)) {
+                model.addRow(new Object[]{foodName, description, price});
+            }
+        }             
         db.closeResources();
 
     }
