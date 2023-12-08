@@ -184,6 +184,46 @@ public class DB {
            e.printStackTrace();
        }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public List<Object[]> readData(RowMapper mapper) {
         List<Object[]> rows = new ArrayList<>();
         try {
