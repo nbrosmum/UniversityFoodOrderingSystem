@@ -68,6 +68,8 @@ public class GUI {
             case "RunnerHistory":
                 page = new RunnerHistory(u);
                 break;
+            case "NotificationPage":
+                page = new NotificationPage(u);
             case "TopUpPage":
                 page = new TopUpPage(u);
                 break;

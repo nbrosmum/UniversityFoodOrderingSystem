@@ -33,15 +33,11 @@ public class DB {
                 break;
             case "Menu":
                 directoryPath = "DB\\Service\\";
-                prefixID = "F";
+                prefixID = "M";
                 break;
             case "Order":
                 directoryPath = "DB\\Service\\";
                 prefixID = "O";
-                break;
-            case "Payment":
-                directoryPath = "DB\\Service\\";
-                prefixID = "P";
                 break;
             case "Transaction":
                 directoryPath = "DB\\Service\\";
@@ -53,7 +49,7 @@ public class DB {
                 break;
             case "FoodReview":
                 directoryPath = "DB\\Service\\";
-                prefixID = "R";
+                prefixID = "F";
                 break;
             case "DeliveryReview":
                 directoryPath = "DB\\Service\\";
@@ -267,33 +263,6 @@ public class DB {
         return null;
     }
     
-//    public void deleteUser(String userId) throws IOException {
-//        ArrayList<String> data = readFile();
-//
-//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
-//            for (String line : data) {
-//                String[] userData = line.split(",");
-//                if (!userData[0].equals(userId)) {
-//                    writer.write(line);
-//                    writer.newLine();
-//                }
-//            }
-//        }
-//    }
-//    
-//    public void deleteUserById(String userId) throws IOException {
-//        ArrayList<String> data = readFile();
-//
-//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
-//            for (String line : data) {
-//                String[] userData = line.split(",");
-//                if (!userData[0].equals(userId)) {
-//                    writer.write(line);
-//                    writer.newLine();
-//                }
-//            }
-//        }
-//    }
     public List<Object[]> readData(RowMapper mapper) {
         List<Object[]> rows = new ArrayList<>();
         try {
@@ -324,16 +293,10 @@ public class DB {
             String dt = parts[6];
             String totalprice = parts[7];
             String DM = parts[8];
-            String vendorId = parts[9];
-            String customerId;
-            String runnerId;
-            if (parts.length > 10) {
-                customerId = parts[10];
-                runnerId = parts[11];
-            } else {
-                customerId = null; // or throw an exception
-                runnerId = null;
-            }
+            String vendorId = parts.length > 9 ? parts[9] : null;
+            String customerId = parts.length > 10 ? parts[10] : null;
+            String runnerId = parts.length > 11 ? parts[11] : null;
+            
 
             return new Object[]{orderId,foodId,foodName,portion,price,status,dt,totalprice,DM,vendorId,customerId,runnerId};
         }
@@ -393,6 +356,7 @@ public class DB {
             }
         }
     }
+    public class TransactionRowMapper implements RowMapper {
     
     public class BalanceNotificationRowMapper implements RowMapper {
     @Override
@@ -400,6 +364,13 @@ public class DB {
             String[] parts = line.split(",");
 
             // Check if parts array has at least 6 elements
+            if (parts.length >= 5) {
+                String transactionID = parts[0];
+                String customerID = parts[1];
+                String purpose = parts[2];
+                String transaction = parts[3];
+                String balance = parts[4];
+                return new Object[]{transactionID,customerID,purpose,transaction,balance};
             if (parts.length >= 6) {
                 String customerId = parts[0];
                 String customerName = parts[1];
@@ -418,6 +389,7 @@ public class DB {
         }
     }
    
-    
-
 }
+
+
+

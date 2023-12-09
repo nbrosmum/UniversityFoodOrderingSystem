@@ -51,7 +51,6 @@ public class CustomerReview extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         Submit = new javax.swing.JButton();
-        Cancel = new javax.swing.JButton();
         FoodRate = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -92,13 +91,6 @@ public class CustomerReview extends javax.swing.JFrame {
             }
         });
 
-        Cancel.setText("Cancel");
-        Cancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CancelActionPerformed(evt);
-            }
-        });
-
         FoodRate.setModel(model);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -125,10 +117,7 @@ public class CustomerReview extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(Cancel)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(Submit))
+                                .addComponent(Submit)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(63, 63, 63)
@@ -168,9 +157,7 @@ public class CustomerReview extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
                 .addGap(68, 68, 68)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Submit)
-                    .addComponent(Cancel))
+                .addComponent(Submit)
                 .addGap(24, 24, 24))
         );
 
@@ -201,10 +188,6 @@ public class CustomerReview extends javax.swing.JFrame {
         
            
     }//GEN-LAST:event_SubmitActionPerformed
-
-    private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "Must Review the order");
-    }//GEN-LAST:event_CancelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -242,7 +225,6 @@ public class CustomerReview extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Cancel;
     private javax.swing.JTextArea DeliCom;
     private javax.swing.JComboBox<String> DeliRate;
     private javax.swing.JTextArea FoodCom;

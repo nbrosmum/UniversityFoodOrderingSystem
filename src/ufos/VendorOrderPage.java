@@ -39,6 +39,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton2 = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         OrderList = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -49,6 +50,8 @@ public class VendorOrderPage extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         FoodMenu = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+
+        jButton2.setText("jButton2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -184,132 +187,140 @@ public class VendorOrderPage extends javax.swing.JFrame {
     private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
 // Get the orderId of the chosen row in the model
         int row = OrderList.getSelectedRow();
-        String orderId = String.valueOf(model.getValueAt(row, 0));
+        if (row != -1){
+            String orderId = String.valueOf(model.getValueAt(row, 0));
 
-// Read the Order.txt file line by line
-        List<String> data = db.readFile();
-        List<String> sameIDd = new ArrayList<>();
-        for (String line : data) {
-            String[] parts = line.split(",");
-            String currentOrderId = parts[0];
-
-// If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
-            if (currentOrderId.equals(orderId)) {
-                sameIDd.add(line);
-            }
-        }
-        
-        data.removeIf(line -> {
-            String[] parts = line.split(",");
-            String currentOrderId = parts[0];
-            return currentOrderId.equals(orderId);
-         });     
- 
-        db.overWriteFile();
-        try {
+    // Read the Order.txt file line by line
+            List<String> data = db.readFile();
+            List<String> sameIDd = new ArrayList<>();
             for (String line : data) {
-                db.bw.write(line);
-                db.bw.newLine();
-            }
-        } catch (IOException ex) {
-            System.out.println("Something went wrong.");
-        }
-        db.closeResources();
-        
-       
-        
-        db.writeFile();
-        for (String line : sameIDd) {
-            String[] parts = line.split(",");
-            String status = parts[5];
-            if (status.equals("Pending")) {
-                String[] updatedParts = Arrays.copyOf(parts, parts.length);
-                updatedParts[5] = "Cancelled";
-                line = String.join(",", updatedParts);                            
+                String[] parts = line.split(",");
+                String currentOrderId = parts[0];
 
-                
+    // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
+                if (currentOrderId.equals(orderId)) {
+                    sameIDd.add(line);
+                }
+            }
+
+            data.removeIf(line -> {
+                String[] parts = line.split(",");
+                String currentOrderId = parts[0];
+                return currentOrderId.equals(orderId);
+             });     
+
+            db.overWriteFile();
+            try {
+                for (String line : data) {
+                    db.bw.write(line);
+                    db.bw.newLine();
+                }
+            } catch (IOException ex) {
+                System.out.println("Something went wrong.");
+            }
+            db.closeResources();
+
+
+
+            db.writeFile();
+            for (String line : sameIDd) {
+                String[] parts = line.split(",");
+                String status = parts[5];
+                if (status.equals("Pending")) {
+                    String[] updatedParts = Arrays.copyOf(parts, parts.length);
+                    updatedParts[5] = "Cancelled";
+                    line = String.join(",", updatedParts);                            
+
+
+                }
+                try {
+                    db.bw.write(line);
+                    db.bw.newLine();
+
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+                }                   
+            db.closeResources();
+            load();
             }
             try {
-                db.bw.write(line);
-                db.bw.newLine();
-                
+                nt.Vendor(u);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
-            }                   
-        db.closeResources();
-        load();
-        }
-        try {
-            nt.Vendor(u);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Choose a line","Fail", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_CancelActionPerformed
 
     private void AcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptActionPerformed
 // Get the orderId of the chosen row in the model
         int row = OrderList.getSelectedRow();
-        String orderId = String.valueOf(model.getValueAt(row, 0));
+        if (row != -1){
+            String orderId = String.valueOf(model.getValueAt(row, 0));
 
-// Read the Order.txt file line by line
-        List<String> data = db.readFile();
-        List<String> sameIDd = new ArrayList<>();
-        for (String line : data) {
-            String[] parts = line.split(",");
-            String currentOrderId = parts[0];
-
-// If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
-            if (currentOrderId.equals(orderId)) {
-                sameIDd.add(line);
-            }
-        }
-        
-        data.removeIf(line -> {
-            String[] parts = line.split(",");
-            String currentOrderId = parts[0];
-            return currentOrderId.equals(orderId);
-         });     
- 
-        db.overWriteFile();
-        try {
+    // Read the Order.txt file line by line
+            List<String> data = db.readFile();
+            List<String> sameIDd = new ArrayList<>();
             for (String line : data) {
-                db.bw.write(line);
-                db.bw.newLine();
-            }
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
-        }
-        db.closeResources();
-        
-       
-        
-        db.writeFile();
-        for (String line : sameIDd) {
-            String[] parts = line.split(",");
-            String status = parts[5];
-            if (status.equals("Pending")) {
-                String[] updatedParts = Arrays.copyOf(parts, parts.length);
-                updatedParts[5] = "Preparing";
-                line = String.join(",", updatedParts);                            
+                String[] parts = line.split(",");
+                String currentOrderId = parts[0];
 
-                
+    // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
+                if (currentOrderId.equals(orderId)) {
+                    sameIDd.add(line);
+                }
             }
+
+            data.removeIf(line -> {
+                String[] parts = line.split(",");
+                String currentOrderId = parts[0];
+                return currentOrderId.equals(orderId);
+             });     
+
+            db.overWriteFile();
             try {
-                db.bw.write(line);
-                db.bw.newLine();
-                
+                for (String line : data) {
+                    db.bw.write(line);
+                    db.bw.newLine();
+                }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
-            }           
-                       
-        }
-        JOptionPane.showMessageDialog(null, "Accepted", "Success", JOptionPane.INFORMATION_MESSAGE);
-        db.closeResources();
-        load();
-        try {
-            nt.Vendor(u);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+            }
+            db.closeResources();
+
+
+
+            db.writeFile();
+            for (String line : sameIDd) {
+                String[] parts = line.split(",");
+                String status = parts[5];
+                if (status.equals("Pending")) {
+                    String[] updatedParts = Arrays.copyOf(parts, parts.length);
+                    updatedParts[5] = "Preparing";
+                    line = String.join(",", updatedParts);                            
+
+
+                }
+                try {
+                    db.bw.write(line);
+                    db.bw.newLine();
+
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+                }           
+
+            }
+            JOptionPane.showMessageDialog(null, "Accepted", "Success", JOptionPane.INFORMATION_MESSAGE);
+            db.closeResources();
+            load();
+            try {
+                nt.Vendor(u);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Choose a line","Fail", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_AcceptActionPerformed
 
@@ -326,68 +337,72 @@ public class VendorOrderPage extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 // Get the orderId of the chosen row in the model
         int row = OrderList.getSelectedRow();
-        String orderId = String.valueOf(model.getValueAt(row, 0));
+        if (row != -1){
+            String orderId = String.valueOf(model.getValueAt(row, 0));
 
-// Read the Order.txt file line by line
-        List<String> data = db.readFile();
-        List<String> sameIDd = new ArrayList<>();
-        for (String line : data) {
-            String[] parts = line.split(",");
-            String currentOrderId = parts[0];
-
-// If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
-            if (currentOrderId.equals(orderId)) {
-                sameIDd.add(line);
-            }
-        }
-        
-        data.removeIf(line -> {
-            String[] parts = line.split(",");
-            String currentOrderId = parts[0];
-            return currentOrderId.equals(orderId);
-         });     
- 
-        db.overWriteFile();
-        try {
+    // Read the Order.txt file line by line
+            List<String> data = db.readFile();
+            List<String> sameIDd = new ArrayList<>();
             for (String line : data) {
-                db.bw.write(line);
-                db.bw.newLine();
-            }
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
-        }
-        db.closeResources();
-        
-       
-        
-        db.writeFile();
-        for (String line : sameIDd) {
-            String[] parts = line.split(",");
-            String status = parts[5];
-            if (status.equals("Preparing")) {
-                String[] updatedParts = Arrays.copyOf(parts, parts.length);
-                updatedParts[5] = "Done";
-                line = String.join(",", updatedParts);                            
+                String[] parts = line.split(",");
+                String currentOrderId = parts[0];
 
-                
+    // If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
+                if (currentOrderId.equals(orderId)) {
+                    sameIDd.add(line);
+                }
             }
+
+            data.removeIf(line -> {
+                String[] parts = line.split(",");
+                String currentOrderId = parts[0];
+                return currentOrderId.equals(orderId);
+             });     
+
+            db.overWriteFile();
             try {
-                db.bw.write(line);
-                db.bw.newLine();
-                
+                for (String line : data) {
+                    db.bw.write(line);
+                    db.bw.newLine();
+                }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
-            }           
-                       
-        }
-        JOptionPane.showMessageDialog(null, "Done", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+            db.closeResources();
 
-        db.closeResources();
-        load();
-        try {
-            nt.Vendor(u);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+
+
+            db.writeFile();
+            for (String line : sameIDd) {
+                String[] parts = line.split(",");
+                String status = parts[5];
+                if (status.equals("Preparing")) {
+                    String[] updatedParts = Arrays.copyOf(parts, parts.length);
+                    updatedParts[5] = "Done";
+                    line = String.join(",", updatedParts);                            
+
+
+                }
+                try {
+                    db.bw.write(line);
+                    db.bw.newLine();
+
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+                }           
+
+            }
+            JOptionPane.showMessageDialog(null, "Done", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            db.closeResources();
+            load();
+            try {
+                nt.Vendor(u);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Choose a line","Fail", JOptionPane.INFORMATION_MESSAGE);
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -465,6 +480,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
     private javax.swing.JButton OrderHistory;
     private javax.swing.JTable OrderList;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;

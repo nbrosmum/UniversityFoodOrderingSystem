@@ -22,7 +22,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
     public VendorFoodMenu(User id) {
         initComponents();
         model.setColumnIdentifiers(columnName); 
-        u = id;
+        this.u = id;
         load();
            
     }

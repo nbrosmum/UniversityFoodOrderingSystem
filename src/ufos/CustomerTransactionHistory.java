@@ -4,6 +4,11 @@
  */
 package ufos;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
@@ -11,16 +16,18 @@ package ufos;
 public class CustomerTransactionHistory extends javax.swing.JFrame {
     GUI ui = new GUI();
     User u = new User();
-
+    DB db = new DB("Transaction");
+    DB.TransactionRowMapper mapper = db.new TransactionRowMapper();
     /**
      * Creates new form TransactionHistory
      */
-    public CustomerTransactionHistory() {
-        initComponents();
+    public CustomerTransactionHistory(){
+        initComponents();  
     }
     public CustomerTransactionHistory(User id) {
         initComponents();     
-        u = id;
+        this.u = id; 
+        load();
     }
 
     /**
@@ -33,24 +40,21 @@ public class CustomerTransactionHistory extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TransactionTable = new javax.swing.JTable();
         Backbtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TransactionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Transaction Id", "Customer Id", "Customer Name", "Balance"
+                "Transaction Id", "Trasaction", "Balance"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(TransactionTable);
 
         Backbtn.setText("Back");
         Backbtn.addActionListener(new java.awt.event.ActionListener() {
@@ -97,7 +101,30 @@ public class CustomerTransactionHistory extends javax.swing.JFrame {
       ui.callPage("EWallet",u);
       this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
+    
+    private void load() {
+       DefaultTableModel model  = (DefaultTableModel)TransactionTable.getModel();
+       // Use DB class to read data
+       String Id = u.getId();
+       List<Object[]> rows = db.readData(mapper);
 
+       model.setRowCount(0);
+ 
+       for (Object[] rowData : rows) {
+           String TransactionID =(String) rowData[0];
+           String UserID =(String) rowData[1];
+           String Transaction =(String) rowData[3];
+           String balance=(String) rowData[4];
+  
+
+            if (UserID.equals(Id)) {
+                model.addRow(new Object[]{TransactionID,Transaction,balance});
+
+            } 
+       }
+
+       db.closeResources();
+    }
     /**
      * @param args the command line arguments
      */
@@ -136,8 +163,8 @@ public class CustomerTransactionHistory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Backbtn;
+    private javax.swing.JTable TransactionTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

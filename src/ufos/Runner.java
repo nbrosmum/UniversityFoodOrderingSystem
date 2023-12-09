@@ -4,6 +4,8 @@
  */
 package ufos;
 
+import java.io.IOException;
+
 
 
 /**
@@ -11,6 +13,7 @@ package ufos;
  * @author Walter
  */
 public class Runner extends User {
+    DB db = new DB("Runner");
     public Runner( String id,String username, String password, String email, String phoneNumber) {
         super(id,username, password, email, phoneNumber);
     }
@@ -18,6 +21,13 @@ public class Runner extends User {
         super(username, password, email, phoneNumber);
     }
     
+
+    public void register() throws IOException{
+        db.writeFile();
+        db.bw.write(db.id + "," + this.getUsername()+ "," + this.getPassword()+ "," + this.getEmail() + "," + this.getPhoneNumber());
+        db.bw.newLine();
+        db.closeResources();
+    }
 //    public Runner(){
 //        
 //    }

@@ -13,8 +13,8 @@ package ufos;
  */
 public class EWallet extends javax.swing.JFrame {
     GUI ui = new GUI();
-
     User u = new User();
+    Customer c = new Customer();
     /**
      * Creates new form EWallet
      */
@@ -22,11 +22,12 @@ public class EWallet extends javax.swing.JFrame {
         initComponents();
     }
     
-
-
     public EWallet(User id) {
         initComponents();     
-        u = id;
+        this.u = id;
+        double credit = c.getBalance(u.getId());
+        String creditStr = String.valueOf(credit);
+        BalanceTxtF.setText(creditStr);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -44,7 +45,7 @@ public class EWallet extends javax.swing.JFrame {
         TransactionHistorybtn = new javax.swing.JButton();
         Backbtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        tf_bAmount = new javax.swing.JTextField();
+        BalanceTxtF = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,7 +60,7 @@ public class EWallet extends javax.swing.JFrame {
 
         jLabel3.setText("Top - Up");
 
-        tf_amount.setText("$0.00");
+        tf_amount.setText("0.00");
         tf_amount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tf_amountActionPerformed(evt);
@@ -83,9 +84,10 @@ public class EWallet extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel4.setText("Wallet");
 
-        tf_bAmount.addActionListener(new java.awt.event.ActionListener() {
+        BalanceTxtF.setEditable(false);
+        BalanceTxtF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tf_bAmountActionPerformed(evt);
+                BalanceTxtFActionPerformed(evt);
             }
         });
 
@@ -117,7 +119,7 @@ public class EWallet extends javax.swing.JFrame {
                                         .addComponent(Topupbtn))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(33, 33, 33)
-                                        .addComponent(tf_bAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                        .addComponent(BalanceTxtF, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -126,10 +128,10 @@ public class EWallet extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addGap(54, 54, 54)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(tf_bAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BalanceTxtF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -155,16 +157,16 @@ public class EWallet extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_TransactionHistorybtnActionPerformed
 
-    private void tf_bAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_bAmountActionPerformed
+    private void BalanceTxtFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BalanceTxtFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tf_bAmountActionPerformed
+    }//GEN-LAST:event_BalanceTxtFActionPerformed
 
     private void tf_amountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_amountActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tf_amountActionPerformed
 
     private void TopupbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TopupbtnActionPerformed
-     
+        
     }//GEN-LAST:event_TopupbtnActionPerformed
 
     /**
@@ -204,12 +206,12 @@ public class EWallet extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Backbtn;
+    private javax.swing.JTextField BalanceTxtF;
     private javax.swing.JButton Topupbtn;
     private javax.swing.JButton TransactionHistorybtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField tf_amount;
-    private javax.swing.JTextField tf_bAmount;
     // End of variables declaration//GEN-END:variables
 }

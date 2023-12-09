@@ -1,9 +1,2 @@
 V001,mumcj,mumcj,mumcj@gmail.com,0123456789,mamak
 V002,ct,123,h,64546,Hello
-V003,hi,123,h1,987,iuyit
-V004,hi1,123,h2,987,iuyit
-V005,hi2,123,h3,987,iuyit
-V006,hi3,123,h4,987,iuyit
-V007,hi4,123,h5,987,iuyit
-V008,hi5,123,h6,987,iuyit
-V009,hi6,123,h7,987,iuyit
