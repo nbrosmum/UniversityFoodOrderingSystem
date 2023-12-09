@@ -126,13 +126,13 @@ public class loginPage extends javax.swing.JFrame {
         }else if(u.login(emailU, passU, role)){
             JOptionPane.showMessageDialog(null, "Login Successful !");
             if(role.equals("Customer")){
-                ui.callPage("CustomerProfilePage");
+                ui.callPage("CustomerProfilePage",u);
             }else if(role.equals("Admin")){
-                ui.callPage("AdminDashboard");
+                ui.callPage("AdminDashboard",u);
             }else if(role.equals("Vendor")){
-                ui.callPage("VendorOrderHistory");
+                ui.callPage("VendorOrderHistory",u);
             }else if(role.equals("Runner")){
-                ui.callPage("RunnerFrame");
+                ui.callPage("RunnerFrame",u);
             }
             this.dispose();
         }else{

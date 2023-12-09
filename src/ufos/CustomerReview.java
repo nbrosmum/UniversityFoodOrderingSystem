@@ -11,6 +11,7 @@ import javax.swing.table.*;
 
 public class CustomerReview extends javax.swing.JFrame {
     GUI ui = new GUI();
+    User u = new User();
     // Create an array for the ratings
     String[] ratings = {"1", "2", "3", "4", "5"};
     // Create a new DefaultComboBoxModel
@@ -20,6 +21,9 @@ public class CustomerReview extends javax.swing.JFrame {
 
 
     public CustomerReview() {
+        initComponents();
+    }
+    public CustomerReview(User u) {
         initComponents();
          
         // Set the model for the JComboBoxes
@@ -186,7 +190,7 @@ public class CustomerReview extends javax.swing.JFrame {
         try {
             r.Foodview(null,null,date,foodRate,foodText);
             r.Runnerview(null,null,date,deliRate,deliText);
-            ui.callPage("CustomerProfilePage");
+            ui.callPage("CustomerProfilePage",u);
             this.dispose();
             
         } catch (IOException ex) {

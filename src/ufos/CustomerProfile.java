@@ -10,11 +10,17 @@ package ufos;
  */
 public class CustomerProfile extends javax.swing.JFrame {
     GUI ui = new GUI();
+    User u = new User();
+
     /**
      * Creates new form CustomerProfile
      */
     public CustomerProfile() {
         initComponents();
+    }
+    public CustomerProfile(User id) {
+        initComponents();     
+        u = id;
     }
 
     /**
@@ -121,7 +127,7 @@ public class CustomerProfile extends javax.swing.JFrame {
     }//GEN-LAST:event_ChangePasswordbtnActionPerformed
 
     private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackbtnActionPerformed
-       ui.callPage("CustomerProfilePage");
+       ui.callPage("CustomerProfilePage",u);
        this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
 

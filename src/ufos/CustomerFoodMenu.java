@@ -24,6 +24,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
     GUI ui = new GUI();
     DB db = new DB("Menu");
     DB dbOrder = new DB("Order");
+    User u = new User();
     Customer c = new Customer();
     Order o;
     SpinnerNumberModel spinnerModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
@@ -36,6 +37,9 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
      * Creates new form CustomerFoodMenu
      */
     public CustomerFoodMenu() {
+       
+    }
+    public CustomerFoodMenu(User u) {
         this.o = new Order(items);
         initComponents();
         QuantitySpinner.setModel(spinnerModel);
@@ -392,22 +396,22 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_CancelOrderbtnActionPerformed
 
     private void FoodReviewbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoodReviewbtnActionPerformed
-       ui.callPage("CustomerFoodReview");
+       ui.callPage("CustomerFoodReview",u);
        this.dispose();
     }//GEN-LAST:event_FoodReviewbtnActionPerformed
 
     private void OrderStatusbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderStatusbtnActionPerformed
-        ui.callPage("CustomerOrderStatus");
+        ui.callPage("CustomerOrderStatus",u);
         this.dispose();
     }//GEN-LAST:event_OrderStatusbtnActionPerformed
 
     private void OrderHistorybtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistorybtnActionPerformed
-        ui.callPage("CustomerOrderHistory");
+        ui.callPage("CustomerOrderHistory",u);
         this.dispose();
     }//GEN-LAST:event_OrderHistorybtnActionPerformed
 
     private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackbtnActionPerformed
-        ui.callPage("CustomerProfilePage");
+        ui.callPage("CustomerProfilePage",u);
         this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
 

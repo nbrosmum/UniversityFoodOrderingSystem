@@ -11,6 +11,7 @@ import javax.swing.JFrame;
  * @author User
  */
 public class GUI {
+    User u = new User();
     public void OpenPage(JFrame frame) {
         frame.setVisible(true);
         frame.pack();
@@ -18,55 +19,55 @@ public class GUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
-    public void callPage(String pageName){
+    public void callPage(String pageName, User u){
         // page name just same as the class name
         JFrame page = null;
     
         switch (pageName) {
             case "EWallet":
-                page = new EWallet();
+                page = new EWallet(u);
                 break;
             case "CustomerFoodMenu":
-                page = new CustomerFoodMenu();
+                page = new CustomerFoodMenu(u);
                 break;
             case "CustomerProfile":
-                page = new CustomerProfile();
+                page = new CustomerProfile(u);
                 break;
             case "CustomerProfilePage":
-                page = new CustomerProfilePage();
+                page = new CustomerProfilePage(u);
                 break;
             case "CustomerTransactionHistory":
-                page = new CustomerTransactionHistory();
+                page = new CustomerTransactionHistory(u);
                 break;
             case "CustomerOrderHistory":
-                page = new CustomerOrderHistory();
+                page = new CustomerOrderHistory(u);
                 break;
             case "CustomerOrderStatus":
-                page = new CustomerOrderStatus();
+                page = new CustomerOrderStatus(u);
                 break;
             case "CustomerFoodReview":
-                page = new CustomerFoodReview();
+                page = new CustomerFoodReview(u);
                 break;
             case "VendorOrderHistory":
-                page = new VendorOrderHistory();
+                page = new VendorOrderHistory(u);
                 break;
             case "VendorOrderPage":
-                page = new VendorOrderPage();
+                page = new VendorOrderPage(u);
                 break;
             case "VendorFoodMenu":
-                page = new VendorFoodMenu();
+                page = new VendorFoodMenu(u);
                 break;
             case "AccountRegistration":
                 page = new AccountRegistration();
                 break;
             case "AdminDashboard":
-                page = new AdminDashboard();
+                page = new AdminDashboard(u);
                 break;
             case "RunnerFrame":
-                page = new RunnerFrame();
+                page = new RunnerFrame(u);
                 break;
             case "RunnerHistory":
-                page = new RunnerHistory();
+                page = new RunnerHistory(u);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid page: " + pageName);

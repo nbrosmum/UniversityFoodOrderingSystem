@@ -12,8 +12,14 @@ import javax.swing.JFrame;
  */
 public class CustomerProfilePage extends javax.swing.JFrame {
    GUI ui = new GUI();
+   User u = new User();
+
     public CustomerProfilePage() {
         initComponents();
+    }
+    public CustomerProfilePage(User id) {
+        initComponents();     
+        u = id;
     }
 
     /**
@@ -145,17 +151,17 @@ public class CustomerProfilePage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void EWalletbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EWalletbtnActionPerformed
-        ui.callPage("EWallet");
+        ui.callPage("EWallet",u);
         this.dispose();
     }//GEN-LAST:event_EWalletbtnActionPerformed
 
     private void MenubtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenubtnActionPerformed
-        ui.callPage("CustomerFoodMenu");
+        ui.callPage("CustomerFoodMenu",u);
         this.dispose();
     }//GEN-LAST:event_MenubtnActionPerformed
 
     private void ProfilebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProfilebtnActionPerformed
-        ui.callPage("CustomerProfile");
+        ui.callPage("CustomerProfile",u);
         this.dispose();
     }//GEN-LAST:event_ProfilebtnActionPerformed
 
