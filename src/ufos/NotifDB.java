@@ -8,7 +8,6 @@ import javax.swing.*;
 public class NotifDB {    
     DB nt = new DB("Notification");
     DB db = new DB("Order");
-    User u = new User();
     DB.OrderRowMapper mapper = db.new OrderRowMapper();
            
     
@@ -146,4 +145,5 @@ public class NotifDB {
         }        
         nt.closeResources(); // close it          
     }
+
 }

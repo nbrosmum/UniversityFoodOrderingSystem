@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class TopUpPage extends javax.swing.JFrame {
 
     GUI ui = new GUI();
+    User u = new User();
     
     DB customerDB = new DB("Customer");
     DB.CustomerRowMapper cMapper = customerDB.new CustomerRowMapper();
@@ -33,11 +34,15 @@ public class TopUpPage extends javax.swing.JFrame {
     
     public TopUpPage() {
         initComponents();
-        
-       
+    }
+    
 
+    public TopUpPage(User id) {
+        initComponents();     
+        u = id;
         loadCustomerData();
     }
+
     
     
 
@@ -276,7 +281,7 @@ public class TopUpPage extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_tUpActionPerformed
 
     private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
-        ui.callPage("AdminDashboard");
+        ui.callPage("AdminDashboard",u);
         this.dispose();
     }//GEN-LAST:event_btn_backActionPerformed
 

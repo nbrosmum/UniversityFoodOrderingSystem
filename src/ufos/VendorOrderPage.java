@@ -39,6 +39,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton2 = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         OrderList = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -49,6 +50,8 @@ public class VendorOrderPage extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         FoodMenu = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+
+        jButton2.setText("jButton2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -465,6 +468,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
     private javax.swing.JButton OrderHistory;
     private javax.swing.JTable OrderList;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;

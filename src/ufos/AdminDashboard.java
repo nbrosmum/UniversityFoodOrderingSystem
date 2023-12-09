@@ -80,7 +80,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_accRActionPerformed
 
     private void btn_tuCreditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tuCreditActionPerformed
-        ui.callPage("TopUpPage");
+        ui.callPage("TopUpPage",u);
         this.dispose();
     }//GEN-LAST:event_btn_tuCreditActionPerformed
 

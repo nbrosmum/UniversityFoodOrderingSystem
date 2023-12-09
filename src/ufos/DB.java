@@ -388,24 +388,4 @@ public class DB {
         }
     }
    
-    
-
-        }
-    }
-    
-    public class MenuRowMapper implements RowMapper {      
-        @Override
-        public Object[] mapRow(String line) {
-            String[] parts = line.split(",");
-            String foodID  = parts[0];
-            String foodName  = parts[1];
-            String price  = parts[2];
-            String description  = parts[3];
-            String vendorId  = parts[4];            
-
-            return new Object[]{foodID,foodName,price,description,vendorId};
-        }
-    }
-
-
 }
