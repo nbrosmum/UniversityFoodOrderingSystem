@@ -42,17 +42,6 @@ public class TopUpPage extends javax.swing.JFrame {
         loadCustomerData();
         
     }
-    
-    public TopUpPage(User id) {
-        initComponents();     
-        this.u = id;
-        loadCustomerData();
-           
-    }
-
-    
-    
-
     public void loadCustomerData() {
         List<Object[]> rows = customerDB.readData(cMapper);
         DefaultTableModel model = (DefaultTableModel) t_tuRecord.getModel();
@@ -74,35 +63,6 @@ public class TopUpPage extends javax.swing.JFrame {
         customerDB.closeResources();
     }
     
-    
-    
-    private void updateCustomerBalance(String customerId, Double newBalance) {
-        // Read all customer data
-        List<String> customerLines = customerDB.readFile();
-        List<String> updatedCustomerData = new ArrayList<>();
-
-        for (String line : customerLines) {
-            String[] parts = line.split(",");
-            if (parts.length >= 6 && parts[0].trim().equals(customerId.trim())) {
-                // Update the balance
-                parts[5] = String.valueOf(newBalance);
-            }
-            updatedCustomerData.add(String.join(",", parts));
-        }
-
-        // Write the updated data back to the customer file
-        try {
-            customerDB.writeFile(updatedCustomerData);
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error updating customer balance");
-        } finally {
-            customerDB.closeResources();
-        }
-    }
-    
- 
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -292,7 +252,7 @@ public class TopUpPage extends javax.swing.JFrame {
             model.setValueAt(newBalance, selectedRow, 2);
 
             // Update the customer balance in the file
-            updateCustomerBalance(customerID, newBalance);
+            t.updateCustomerBalance(customerID, newBalance);
             t.WriteTransactionFile(customerID, customerName, topUpAmount);
    
             // Clear the top-up amount field
@@ -327,7 +287,7 @@ public class TopUpPage extends javax.swing.JFrame {
             String customerName = t_tuRecord.getValueAt(selectedRow, 1).toString();
             String balance = t_tuRecord.getValueAt(selectedRow, 2).toString();
 
-            // Open the GenerateReceiptPage and pass the user and customer data
+            //Open the GenerateReceiptPage and pass the user and customer data
             GenerateReceiptPage generateReceiptPage = new GenerateReceiptPage(u, customerId, customerName, balance);
             generateReceiptPage.setVisible(true);
             this.dispose();
@@ -355,41 +315,7 @@ public class TopUpPage extends javax.swing.JFrame {
     }//GEN-LAST:event_t_tuRecordMouseClicked
 
     private void btn_bNotificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_bNotificationActionPerformed
-        ui.callPage("BalanceNotifcationPage", u);
-
-        try {
-            int selectedRow = t_tuRecord.getSelectedRow();
-            if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(null, "Please select a customer from the table.");
-                return;
-            }
-
-            String customerID = t_tuRecord.getValueAt(selectedRow, 0).toString();
-            String customerName = t_tuRecord.getValueAt(selectedRow, 1).toString();
-
-            String topUpAmount = tf_tuAmount.getText();
-            String status = "Pending";
-
-            // Get balance from the table
-            double balance = Double.parseDouble(t_tuRecord.getValueAt(selectedRow, 2).toString());
-            String balanceStr = String.valueOf(balance);
-
-            // Write data to BalanceNotification.txt
-            writeToBalanceNotificationFile(customerID, customerName, balanceStr, topUpAmount, status);
-
-            // Display the customer ID and Name in text fields
-            tf_cId.setText(customerID);
-            tf_cName.setText(customerName);
-
-            // Refresh the BalanceNotificationPage table
-           
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Invalid top-up amount!");
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error writing to BalanceNotification.txt");
-        }
-        
+        ui.callPage("BalanceNotifcationPage", u);      
     }//GEN-LAST:event_btn_bNotificationActionPerformed
 
     /**

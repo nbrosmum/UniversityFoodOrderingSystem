@@ -22,7 +22,7 @@ public class BalanceNotifcationPage extends javax.swing.JFrame {
     DB customerDB = new DB("Customer");
     DB balanceNotificationDB = new DB("BalanceNotification");
    
-    DB.BalanceNotificationRowMapper bnMapper = balanceNotificationDB.new BalanceNotificationRowMapper();
+    DB.BalanceNotificationRowMapper mapper = balanceNotificationDB.new BalanceNotificationRowMapper();
     /**
      * Creates new form BalanceNotifcationPage
      */
@@ -31,41 +31,27 @@ public class BalanceNotifcationPage extends javax.swing.JFrame {
         loadBalanceNotificationData();
     }
     
-     public BalanceNotifcationPage(User id) {
+     public BalanceNotifcationPage(User u) {
         initComponents();     
-        u = id;
+        this.u = u;
         loadBalanceNotificationData();
         
            
     }
      
-    public void loadBalanceNotificationData() {
-        // Assuming you have a BalanceNotificationRowMapper class
-        
-        try {
-            List<Object[]> rows = balanceNotificationDB.readData(bnMapper);
-            DefaultTableModel model = (DefaultTableModel) t_bNotification.getModel();
-            model.setRowCount(0);
-
-            for (Object[] rowData : rows) {
-                if (rowData == null || rowData.length < 5) {
-                    continue; // Skip invalid rows
-                }
-
-                String customerId = (String) rowData[0];
-                String customerName = (String) rowData[1];
-                String balanceStr = (String) rowData[2];  // Assuming balance is at index 2
-                String topUpAmountStr = (String) rowData[3];
-                String status = (String) rowData[4];
-
-                model.addRow(new Object[]{customerId, customerName, balanceStr, topUpAmountStr, status});
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error loading balance notification data");
-        } finally {
-            balanceNotificationDB.closeResources();
-        }
+    public void loadBalanceNotificationData() {     
+      DefaultTableModel model  = (DefaultTableModel)t_bNotification.getModel();
+      List<Object[]> rows = balanceNotificationDB.readData(mapper);
+      model.setRowCount(0);
+      for(Object[] rowData : rows){
+         String CustomerID =(String) rowData[0];
+         String Name =(String) rowData[1];
+         String balance=(String) rowData[2]; 
+         String Status =(String) rowData[3]; 
+         model.addRow(new Object[]{CustomerID,Name,balance,Status});
+      }
+      balanceNotificationDB.closeResources();
+      
     }
     
      private void updateBalanceNotification(String customerId, String status ) {
@@ -94,13 +80,6 @@ public class BalanceNotifcationPage extends javax.swing.JFrame {
         }
     }
      
-   
-     
-     
-     
-    
-    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -123,13 +102,13 @@ public class BalanceNotifcationPage extends javax.swing.JFrame {
 
         t_bNotification.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Customer ID", "Customer Name", "Balance", "TopUpAmount", "Status"
+                "Customer ID", "Customer Name", "TopUpAmount", "Status"
             }
         ));
         t_bNotification.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -189,8 +168,7 @@ public class BalanceNotifcationPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
-        ui.callPage("TopUpPage", u);
-        this.dispose();
+         this.dispose();
     }//GEN-LAST:event_btn_backActionPerformed
 
     private void btn_doneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_doneActionPerformed

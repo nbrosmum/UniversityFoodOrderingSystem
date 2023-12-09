@@ -4,6 +4,11 @@
  */
 package ufos;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 
 
 
@@ -41,11 +46,12 @@ public class EWallet extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         Topupbtn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        tf_amount = new javax.swing.JTextField();
+        TpTF = new javax.swing.JTextField();
         TransactionHistorybtn = new javax.swing.JButton();
         Backbtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         BalanceTxtF = new javax.swing.JTextField();
+        NotifBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,10 +66,10 @@ public class EWallet extends javax.swing.JFrame {
 
         jLabel3.setText("Top - Up");
 
-        tf_amount.setText("0.00");
-        tf_amount.addActionListener(new java.awt.event.ActionListener() {
+        TpTF.setText("0.00");
+        TpTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tf_amountActionPerformed(evt);
+                TpTFActionPerformed(evt);
             }
         });
 
@@ -91,6 +97,13 @@ public class EWallet extends javax.swing.JFrame {
             }
         });
 
+        NotifBtn.setText("Notification");
+        NotifBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NotifBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,18 +121,20 @@ public class EWallet extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addComponent(TransactionHistorybtn, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel1)
-                                    .addComponent(tf_amount, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(TpTF, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(18, 18, 18)
                                         .addComponent(Topupbtn))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(33, 33, 33)
-                                        .addComponent(BalanceTxtF, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                        .addComponent(BalanceTxtF, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(NotifBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(TransactionHistorybtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -136,10 +151,12 @@ public class EWallet extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Topupbtn)
-                    .addComponent(tf_amount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TpTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addComponent(TransactionHistorybtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60)
+                .addGap(18, 18, 18)
+                .addComponent(NotifBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
                 .addComponent(Backbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -161,13 +178,29 @@ public class EWallet extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_BalanceTxtFActionPerformed
 
-    private void tf_amountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_amountActionPerformed
+    private void TpTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TpTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tf_amountActionPerformed
+    }//GEN-LAST:event_TpTFActionPerformed
 
     private void TopupbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TopupbtnActionPerformed
-        
+        String TopupValue = TpTF.getText();
+        String tp = "Top Up Value : $" + TopupValue;
+        int choice = JOptionPane.showConfirmDialog(null, tp, "Confirm Payment", JOptionPane.YES_NO_OPTION);
+        if(choice == JOptionPane.YES_OPTION){
+            try {
+                c.Topup(u.getId(), u.getUsername(), TopupValue);
+            } catch (IOException ex) {
+                Logger.getLogger(EWallet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+       
     }//GEN-LAST:event_TopupbtnActionPerformed
+
+    private void NotifBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NotifBtnActionPerformed
+        ui.callPage("BalanceNotification", u);
+        this.dispose();
+    }//GEN-LAST:event_NotifBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -207,11 +240,12 @@ public class EWallet extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Backbtn;
     private javax.swing.JTextField BalanceTxtF;
+    private javax.swing.JButton NotifBtn;
     private javax.swing.JButton Topupbtn;
+    private javax.swing.JTextField TpTF;
     private javax.swing.JButton TransactionHistorybtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField tf_amount;
     // End of variables declaration//GEN-END:variables
 }

@@ -70,6 +70,7 @@ public class GUI {
                 break;
             case "NotificationPage":
                 page = new NotificationPage(u);
+                break;
             case "TopUpPage":
                 page = new TopUpPage(u);
                 break;
