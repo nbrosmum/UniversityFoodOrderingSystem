@@ -6,6 +6,7 @@ package ufos;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 
 
 
@@ -38,17 +40,27 @@ public class TopUpPage extends javax.swing.JFrame {
         initComponents();
         this.u = u;
         loadCustomerData();
+        
+    }
+    
+    public TopUpPage(User id) {
+        initComponents();     
+        this.u = id;
+        loadCustomerData();
+           
     }
 
     
     
 
-    private void loadCustomerData() {
+    public void loadCustomerData() {
         List<Object[]> rows = customerDB.readData(cMapper);
         DefaultTableModel model = (DefaultTableModel) t_tuRecord.getModel();
         model.setRowCount(0);
 
         for (Object[] rowData : rows) {
+            System.out.println("Row data: " + Arrays.toString(rowData));
+
             if (rowData == null || rowData.length < 5) {
                 continue; // Skip invalid rows
             }
@@ -88,6 +100,8 @@ public class TopUpPage extends javax.swing.JFrame {
             customerDB.closeResources();
         }
     }
+    
+ 
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -106,6 +120,7 @@ public class TopUpPage extends javax.swing.JFrame {
         tf_cId = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         tf_cName = new javax.swing.JTextField();
+        btn_bNotification = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -163,6 +178,13 @@ public class TopUpPage extends javax.swing.JFrame {
 
         jLabel5.setText("Customer Name: ");
 
+        btn_bNotification.setText("Notification");
+        btn_bNotification.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_bNotificationActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -182,23 +204,29 @@ public class TopUpPage extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tf_cId)
-                                    .addComponent(tf_cName, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(tf_tuAmount)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(tf_cId)
+                                            .addComponent(tf_cName, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(tf_tuAmount)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btn_tUp, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btn_gReceipt)
+                                        .addGap(26, 26, 26))))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btn_tUp, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btn_gReceipt)
-                                .addGap(26, 26, 26)))))
+                                .addGap(65, 65, 65)
+                                .addComponent(btn_bNotification, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -225,14 +253,16 @@ public class TopUpPage extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btn_tUp, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btn_gReceipt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(148, 148, 148)
-                        .addComponent(btn_back)
-                        .addGap(18, 18, 18))
+                        .addGap(27, 27, 27)
+                        .addComponent(btn_bNotification, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(80, 80, 80))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(12, 12, 12)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(108, 108, 108))))
+                        .addGap(63, 63, 63)))
+                .addComponent(btn_back)
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -266,7 +296,7 @@ public class TopUpPage extends javax.swing.JFrame {
             t.WriteTransactionFile(customerID, customerName, topUpAmount);
    
             // Clear the top-up amount field
-            tf_tuAmount.setText("");
+           
 
             // Display the customer ID and Name in text fields
             tf_cId.setText(customerID);
@@ -286,7 +316,24 @@ public class TopUpPage extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_backActionPerformed
 
     private void btn_gReceiptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_gReceiptActionPerformed
-        // TODO add your handling code here:
+        try {
+            int selectedRow = t_tuRecord.getSelectedRow(); // Assuming t_tuRecord is your JTable
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(null, "Please select a customer from the table.");
+                return;
+            }
+
+            String customerId = t_tuRecord.getValueAt(selectedRow, 0).toString();
+            String customerName = t_tuRecord.getValueAt(selectedRow, 1).toString();
+            String balance = t_tuRecord.getValueAt(selectedRow, 2).toString();
+
+            // Open the GenerateReceiptPage and pass the user and customer data
+            GenerateReceiptPage generateReceiptPage = new GenerateReceiptPage(u, customerId, customerName, balance);
+            generateReceiptPage.setVisible(true);
+            this.dispose();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid balance format!");
+        }
     }//GEN-LAST:event_btn_gReceiptActionPerformed
 
     private void t_tuRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_tuRecordMouseClicked
@@ -306,6 +353,44 @@ public class TopUpPage extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_t_tuRecordMouseClicked
+
+    private void btn_bNotificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_bNotificationActionPerformed
+        ui.callPage("BalanceNotifcationPage", u);
+
+        try {
+            int selectedRow = t_tuRecord.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(null, "Please select a customer from the table.");
+                return;
+            }
+
+            String customerID = t_tuRecord.getValueAt(selectedRow, 0).toString();
+            String customerName = t_tuRecord.getValueAt(selectedRow, 1).toString();
+
+            String topUpAmount = tf_tuAmount.getText();
+            String status = "Pending";
+
+            // Get balance from the table
+            double balance = Double.parseDouble(t_tuRecord.getValueAt(selectedRow, 2).toString());
+            String balanceStr = String.valueOf(balance);
+
+            // Write data to BalanceNotification.txt
+            writeToBalanceNotificationFile(customerID, customerName, balanceStr, topUpAmount, status);
+
+            // Display the customer ID and Name in text fields
+            tf_cId.setText(customerID);
+            tf_cName.setText(customerName);
+
+            // Refresh the BalanceNotificationPage table
+           
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid top-up amount!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error writing to BalanceNotification.txt");
+        }
+        
+    }//GEN-LAST:event_btn_bNotificationActionPerformed
 
     /**
      * @param args the command line arguments
@@ -343,6 +428,7 @@ public class TopUpPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_bNotification;
     private javax.swing.JButton btn_back;
     private javax.swing.JButton btn_gReceipt;
     private javax.swing.JButton btn_tUp;

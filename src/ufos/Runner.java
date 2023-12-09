@@ -28,6 +28,10 @@ public class Runner extends User {
         db.bw.newLine();
         db.closeResources();
     }
+//    public Runner(){
+//        
+//    }
+//    
  
     
 }

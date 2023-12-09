@@ -9,6 +9,7 @@ public class NotifDB {
     DB nt = new DB("Notification");
     DB db = new DB("Order");
     DB.OrderRowMapper mapper = db.new OrderRowMapper();
+    DB.CustomerRowMapper cmapper = db.new CustomerRowMapper();
            
     
     public void Vendor(User u) throws IOException{
@@ -145,5 +146,4 @@ public class NotifDB {
         }        
         nt.closeResources(); // close it          
     }
-
 }

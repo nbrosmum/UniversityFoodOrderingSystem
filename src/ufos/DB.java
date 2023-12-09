@@ -55,6 +55,10 @@ public class DB {
                 directoryPath = "DB\\Service\\";
                 prefixID = "D";
                 break;
+            case "BalanceNotification":
+                directoryPath = "DB\\Service\\";
+                prefixID = "B";
+                break;
             default:
                 break;
         }
@@ -342,6 +346,8 @@ public class DB {
                 String customerEmail = parts[3];
                 String customerPhoneNumber = parts[4];
                 String balanceStr = parts[5];
+                
+                
 
                 return new Object[]{customerId, customerName, customerPassword, customerEmail, customerPhoneNumber, balanceStr};
             } else {
@@ -351,6 +357,8 @@ public class DB {
         }
     }
     public class TransactionRowMapper implements RowMapper {
+    
+    public class BalanceNotificationRowMapper implements RowMapper {
     @Override
         public Object[] mapRow(String line) {
             String[] parts = line.split(",");
@@ -363,6 +371,17 @@ public class DB {
                 String transaction = parts[3];
                 String balance = parts[4];
                 return new Object[]{transactionID,customerID,purpose,transaction,balance};
+            if (parts.length >= 6) {
+                String customerId = parts[0];
+                String customerName = parts[1];
+                String customerPassword = parts[2];
+                String topupStr = parts[3];
+                String status = parts[4];
+                String balanceStr = parts[5];
+                
+                
+
+                return new Object[]{customerId, customerName, customerPassword, topupStr, status, balanceStr};
             } else {
                 
                 return null;
