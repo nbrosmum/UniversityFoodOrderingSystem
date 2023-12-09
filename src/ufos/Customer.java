@@ -24,9 +24,11 @@ public class Customer extends User {
 
 
    DB db = new DB("Order");
-    public Customer( ) {
-         
-    }
+   DB cdb = new DB("Customer");
+
+    public Customer() {
+   
+     }
     public Customer( String id,String username, String password, String email,String phoneNumber) {
          super( id,username, password, email,phoneNumber);
      }
@@ -38,17 +40,28 @@ public class Customer extends User {
         return balance;
 
     }
+    public double getBalance(String Userid) {
+        ArrayList<String> Data = cdb.readFile();
+        for (String line : Data) {
+            String[] parts = line.split(",");
+            if (parts[0].equals(Userid)) {
+                balance = Double.parseDouble(parts[5]);
+            }
+        }
+        return balance;
+
+    }
 
     public void setBalance(double balance) {
         this.balance = balance;
     }
 
-    public void OrderFood(String orderID, String foodID, String foodName, int portion, double price, String status, String date, double totalPrice, String deliveryMethod,String VendorID,String RunnerID ) throws IOException{
+    public void OrderFood(String orderID, String foodID, String foodName, int portion, double price, String status, String date, double totalPrice, String deliveryMethod,String VendorID,String CustomerID,String RunnerID ) throws IOException{
         db.writeFile();
         String quantity = String.valueOf(portion);
         String priceString = String.valueOf(price);
         String TotalPriceString = String.valueOf(totalPrice);
-        String orderDetails = orderID + "," + foodID+ "," + foodName+ "," + quantity+ "," + priceString + "," + status +"," + date + "," + TotalPriceString+ "," + deliveryMethod+ ","+ VendorID+ "," + super.getId() + "," +RunnerID;//vendorID
+        String orderDetails = orderID + "," + foodID+ "," + foodName+ "," + quantity+ "," + priceString + "," + status +"," + date + "," + TotalPriceString+ "," + deliveryMethod+ ","+ VendorID+ "," + CustomerID + "," +RunnerID;//vendorID
         db.bw.write(orderDetails);
         db.bw.newLine();
         db.closeResources();
@@ -75,6 +88,16 @@ public class Customer extends User {
         }
         
     }
+    
+    public void register() throws IOException{
+        balance = 0.0;
+        String balanceStr = String.valueOf(balance);
+        cdb.writeFile();
+        cdb.bw.write(cdb.id + "," + this.getUsername()+ "," + this.getPassword()+ "," + this.getEmail() + "," + this.getPhoneNumber() + "," + balanceStr);
+        cdb.bw.newLine();
+        cdb.closeResources();
+    }
+    
   
 
 }

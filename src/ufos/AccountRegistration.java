@@ -451,9 +451,20 @@ public class AccountRegistration extends javax.swing.JFrame {
             }else if(username.equals("")&& password.equals("") && email.equals("") && phoneNumber.equals("")){
                 JOptionPane.showMessageDialog(null, "please fill in the detail");
             }else{
-                u.register(username, password, email, phoneNumber, role);
-                DefaultTableModel tableModel = getTableModel(role);
-                tableModel.addRow(mapRow("," + username + "," + password + "," + email + "," + phoneNumber));
+                if(role.equals("Customer")){
+                    Customer c = new Customer(username,password,email,phoneNumber);
+                    c.register();
+                }else if(role.equals("Admin")){
+                    Admin a = new Admin(username,password,email,phoneNumber);
+                    a.register();
+                }else if(role.equals("Vendor")){
+                   Vendor v = new Vendor(username,password,email,phoneNumber);
+                   v.register();
+                }else if(role.equals("Runner")){
+                    Runner r = new Runner(username,password,email,phoneNumber);
+                    r.register();
+                }
+                
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error registering user: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

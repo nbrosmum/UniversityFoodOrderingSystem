@@ -20,7 +20,8 @@ public class CustomerTransactionHistory extends javax.swing.JFrame {
     }
     public CustomerTransactionHistory(User id) {
         initComponents();     
-        u = id;
+        this.u = id;
+       
     }
 
     /**
@@ -41,13 +42,13 @@ public class CustomerTransactionHistory extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Transaction Id", "Customer Id", "Customer Name", "Balance"
+                "Transaction Id", "Trasaction", "Balance"
             }
         ));
         jScrollPane1.setViewportView(jTable1);

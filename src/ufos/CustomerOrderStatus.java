@@ -4,6 +4,11 @@
  */
 package ufos;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
@@ -11,16 +16,21 @@ package ufos;
 public class CustomerOrderStatus extends javax.swing.JFrame {
     GUI ui = new GUI();
     User u = new User();
+    DB db = new DB("Order");
+    DB.OrderRowMapper mapper = db.new OrderRowMapper();
 
     /**
      * Creates new form OrderStatus
      */
     public CustomerOrderStatus() {
         initComponents();
+        load();
     }
     public CustomerOrderStatus(User id) {
         initComponents();     
-        u = id;
+        this.u = id;
+        u.getId();
+        load();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,7 +45,6 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
         OrderStatusTable = new javax.swing.JTable();
         Backbtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        Checkbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,8 +84,6 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Order Status ");
 
-        Checkbtn.setText("Check");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -86,10 +93,7 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(Checkbtn)
-                            .addGap(18, 18, 18)
-                            .addComponent(Backbtn))
+                        .addComponent(Backbtn)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
@@ -101,9 +105,7 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Backbtn)
-                    .addComponent(Checkbtn))
+                .addComponent(Backbtn)
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -114,7 +116,33 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
         ui.callPage("CustomerFoodMenu",u);
         this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
+     private void load() {
+       DefaultTableModel model  = (DefaultTableModel)OrderStatusTable.getModel();
+       // Use DB class to read data
+       String Id = u.getId();
+       List<Object[]> rows = db.readData(mapper);
 
+       model.setRowCount(0);
+       Set<String> orderIds = new HashSet<>(); // Set to store orderIds
+
+       for (Object[] rowData : rows) {
+           String orderId = (String) rowData[0];
+           String dt = (String) rowData[6];
+           String Status =(String)rowData[5];
+           String Userid = (String)rowData[10];
+  
+
+            if (Userid.equals(Id)) {
+                if (!orderIds.add(orderId)) {
+                    continue;
+                }
+                model.addRow(new Object[]{orderId,dt,Status});
+
+            } 
+       }
+
+       db.closeResources();
+    }
     /**
      * @param args the command line arguments
      */
@@ -153,7 +181,6 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Backbtn;
-    private javax.swing.JButton Checkbtn;
     private javax.swing.JTable OrderStatusTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

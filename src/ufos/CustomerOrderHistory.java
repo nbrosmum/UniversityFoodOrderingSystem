@@ -24,7 +24,7 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
     }
     public CustomerOrderHistory(User id) {
         initComponents();     
-        u = id;
+        this.u = id;
         load();
      
     }
@@ -216,6 +216,7 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
 
     public void load(){
         DefaultTableModel model = (DefaultTableModel)OrderHistoryTable.getModel();
+        String UserID = u.getId();
         ArrayList<String> lines = Orderdb.readFile();
         model.setRowCount(0);
         Set<String> orderIds = new HashSet<>(); // Set to store orderIds
@@ -224,13 +225,14 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
             String OrderID = parts[0];
             String date = parts[6];
             String TotalPrice = parts[7];
-   
-            // If orderId is already in the set, skip this line
-            if (!orderIds.add(OrderID)) {
-                continue;
+            if(parts[10].equals(UserID)){
+                if (!orderIds.add(OrderID)) {
+                    continue;
+                }
+                model.addRow(new Object[]{OrderID,date,TotalPrice});
             }
 
-            model.addRow(new Object[]{OrderID,date,TotalPrice});
+         
         }
         Orderdb.closeResources();
     }

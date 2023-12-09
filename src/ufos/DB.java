@@ -33,7 +33,7 @@ public class DB {
                 break;
             case "Menu":
                 directoryPath = "DB\\Service\\";
-                prefixID = "F";
+                prefixID = "M";
                 break;
             case "Order":
                 directoryPath = "DB\\Service\\";
@@ -53,7 +53,7 @@ public class DB {
                 break;
             case "FoodReview":
                 directoryPath = "DB\\Service\\";
-                prefixID = "R";
+                prefixID = "F";
                 break;
             case "DeliveryReview":
                 directoryPath = "DB\\Service\\";
@@ -263,33 +263,6 @@ public class DB {
         return null;
     }
     
-//    public void deleteUser(String userId) throws IOException {
-//        ArrayList<String> data = readFile();
-//
-//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
-//            for (String line : data) {
-//                String[] userData = line.split(",");
-//                if (!userData[0].equals(userId)) {
-//                    writer.write(line);
-//                    writer.newLine();
-//                }
-//            }
-//        }
-//    }
-//    
-//    public void deleteUserById(String userId) throws IOException {
-//        ArrayList<String> data = readFile();
-//
-//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
-//            for (String line : data) {
-//                String[] userData = line.split(",");
-//                if (!userData[0].equals(userId)) {
-//                    writer.write(line);
-//                    writer.newLine();
-//                }
-//            }
-//        }
-//    }
     public List<Object[]> readData(RowMapper mapper) {
         List<Object[]> rows = new ArrayList<>();
         try {
@@ -390,22 +363,7 @@ public class DB {
    
     
 
-        }
-    }
-    
-    public class MenuRowMapper implements RowMapper {      
-        @Override
-        public Object[] mapRow(String line) {
-            String[] parts = line.split(",");
-            String foodID  = parts[0];
-            String foodName  = parts[1];
-            String price  = parts[2];
-            String description  = parts[3];
-            String vendorId  = parts[4];            
-
-            return new Object[]{foodID,foodName,price,description,vendorId};
-        }
-    }
-
-
 }
+
+
+

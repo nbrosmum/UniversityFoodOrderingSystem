@@ -78,54 +78,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-   
-    public void register(String username, String password, String email, String phoneNumber, String role) throws IOException{
-        User newUser;
-        DB db;
-        if (this.users == null) {
-            this.users = new ArrayList<>();
-        }
-        switch (role) {
-           case "Customer":
-               newUser = new Customer(username, password, email, phoneNumber);
-               db = new DB(role);
-               break;
-           case "Admin":
-               newUser = new Admin( username, password, email, phoneNumber);
-               db = new DB(role);
-               break;
-           case "Vendor":
-               newUser = new Vendor(username, password, email, phoneNumber);
-               db = new DB(role);
-                String storeName = JOptionPane.showInputDialog("Enter Store Name:");
-                if (storeName != null) {
-                    ((Vendor) newUser).setStoreName(storeName);
-                }
-               break;
-           case "Runner":
-               newUser = new Runner(username, password, email, phoneNumber);
-               db = new DB(role);
-               break;
-           default:
-               throw new IllegalArgumentException("Invalid role");
-       }
-        this.users.add(newUser);
-        double balance = 0.0;
-        String balanceStr = String.valueOf(balance);
-        
-        db.writeFile();
-        if(role.equals("Customer")){
-           db.bw.write(db.id + "," + username + "," + password + "," + email + "," + phoneNumber + "," + balanceStr); 
-           db.bw.newLine();
-        }else if(role.equals("Vendor")){
-            db.bw.write(db.id + "," + username + "," + password + "," + email + "," + phoneNumber + "," + ((Vendor) newUser).getStoreName());
-            db.bw.newLine();
-        }else{
-           db.bw.write(db.id + "," + username + "," + password + "," + email + "," + phoneNumber);
-           db.bw.newLine();
-        }
-        db.closeResources();
-    }
     
     public boolean login(String Email, String Password,String role){
         DB db = new DB(role);

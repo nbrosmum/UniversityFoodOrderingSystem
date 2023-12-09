@@ -25,7 +25,6 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
     User u = new User();
     DB db = new DB("Menu");
     DB dbOrder = new DB("Order");
-    User u = new User();
     Customer c = new Customer();
     Order o;
     SpinnerNumberModel spinnerModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
@@ -43,9 +42,10 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
     public CustomerFoodMenu(User id) {
         this.o = new Order(items);
         initComponents();     
-        u = id;
+        this.u = id;
         QuantitySpinner.setModel(spinnerModel);
         load();
+        System.out.println(u.getId());
     }
 
     /**
@@ -366,7 +366,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
             String foodID = o.getFoodID(foodName);
        
             try {
-                c.OrderFood(orderID, foodID, foodName, quantity, price, status, currentDateTime, totalPrice, selectedValue,selectedVendorId,"R001");// runner
+                c.OrderFood(orderID, foodID, foodName, quantity, price, status, currentDateTime, totalPrice, selectedValue,selectedVendorId,u.getId() ,"R001");
                 message = true;
             } catch (IOException ex) {
                 Logger.getLogger(CustomerFoodMenu.class.getName()).log(Level.SEVERE, null, ex);
