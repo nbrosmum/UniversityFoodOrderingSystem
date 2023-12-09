@@ -67,11 +67,11 @@ public class AdminDashboard extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
+                .addGap(77, 77, 77)
                 .addComponent(btn_accR, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
+                .addGap(57, 57, 57)
                 .addComponent(btn_tuCredit, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(141, Short.MAX_VALUE))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         pack();
@@ -83,7 +83,8 @@ public class AdminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_accRActionPerformed
 
     private void btn_tuCreditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tuCreditActionPerformed
-        // TODO add your handling code here:
+        ui.callPage("TopUpPage");
+        this.dispose();
     }//GEN-LAST:event_btn_tuCreditActionPerformed
 
     /**

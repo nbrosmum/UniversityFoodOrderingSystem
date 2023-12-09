@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ufos;
 import java.io.*;
 import javax.swing.*;
@@ -106,6 +102,14 @@ public class DB {
         }catch(IOException e){
             JOptionPane.showMessageDialog(null, "Error Write file");
             e.printStackTrace();
+        }
+    }
+    public void writeFile(List<String> lines) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine(); // Write a new line character after each line
+            }
         }
     }
     
@@ -259,34 +263,130 @@ public class DB {
         return null;
     }
     
-    public void deleteUser(String userId) throws IOException {
-        ArrayList<String> data = readFile();
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
-            for (String line : data) {
-                String[] userData = line.split(",");
-                if (!userData[0].equals(userId)) {
-                    writer.write(line);
-                    writer.newLine();
-                }
+//    public void deleteUser(String userId) throws IOException {
+//        ArrayList<String> data = readFile();
+//
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
+//            for (String line : data) {
+//                String[] userData = line.split(",");
+//                if (!userData[0].equals(userId)) {
+//                    writer.write(line);
+//                    writer.newLine();
+//                }
+//            }
+//        }
+//    }
+//    
+//    public void deleteUserById(String userId) throws IOException {
+//        ArrayList<String> data = readFile();
+//
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
+//            for (String line : data) {
+//                String[] userData = line.split(",");
+//                if (!userData[0].equals(userId)) {
+//                    writer.write(line);
+//                    writer.newLine();
+//                }
+//            }
+//        }
+//    }
+    public List<Object[]> readData(RowMapper mapper) {
+        List<Object[]> rows = new ArrayList<>();
+        try {
+            br = new BufferedReader(new FileReader(f));
+            String line;
+            while ((line = br.readLine()) != null) {
+                Object[] rowData = mapper.mapRow(line);
+                rows.add(rowData);
             }
+            br.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error reading from file");
+            e.printStackTrace();
+        }
+        return rows;
+    }
+    
+    public class OrderRowMapper implements RowMapper {      
+        @Override
+        public Object[] mapRow(String line) {
+            String[] parts = line.split(",");
+            String orderId = parts[0];
+            String foodId = parts[1];
+            String foodName = parts[2];
+            String portion = parts[3];
+            String price = parts[4];            
+            String status = parts[5];
+            String dt = parts[6];
+            String totalprice = parts[7];
+            String DM = parts[8];
+            String vendorId = parts[9];
+            String customerId;
+            String runnerId;
+            if (parts.length > 10) {
+                customerId = parts[10];
+                runnerId = parts[11];
+            } else {
+                customerId = null; // or throw an exception
+                runnerId = null;
+            }
+
+            return new Object[]{orderId,foodId,foodName,portion,price,status,dt,totalprice,DM,vendorId,customerId,runnerId};
+        }
+    }
+
+    public class ReviewRowMapper implements RowMapper {      
+        @Override
+        public Object[] mapRow(String line) {
+            String[] parts = line.split(",");
+            String foodReviewID  = parts[0];
+            String orderId  = parts[1];
+            String vendorId  = parts[2];
+            String dt  = parts[3];
+            String rating  = parts[4];            
+            String comment  = parts[5];
+
+            return new Object[]{foodReviewID,orderId,vendorId,dt,rating,comment};
         }
     }
     
-    public void deleteUserById(String userId) throws IOException {
-        ArrayList<String> data = readFile();
+    public class MenuRowMapper implements RowMapper {      
+        @Override
+        public Object[] mapRow(String line) {
+            String[] parts = line.split(",");
+            String foodID  = parts[0];
+            String foodName  = parts[1];
+            String price  = parts[2];
+            String description  = parts[3];
+            String vendorId  = parts[4];            
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
-            for (String line : data) {
-                String[] userData = line.split(",");
-                if (!userData[0].equals(userId)) {
-                    writer.write(line);
-                    writer.newLine();
-                }
-            }
+            return new Object[]{foodID,foodName,price,description,vendorId};
         }
     }
     
+    
+    public class CustomerRowMapper implements RowMapper {
+    @Override
+        public Object[] mapRow(String line) {
+            String[] parts = line.split(",");
+
+            // Check if parts array has at least 6 elements
+            if (parts.length >= 6) {
+                String customerId = parts[0];
+                String customerName = parts[1];
+                String customerPassword = parts[2];
+                String customerEmail = parts[3];
+                String customerPhoneNumber = parts[4];
+                String balanceStr = parts[5];
+
+                return new Object[]{customerId, customerName, customerPassword, customerEmail, customerPhoneNumber, balanceStr};
+            } else {
+                
+                return null;
+            }
+        }
+    }
+   
     
 
 

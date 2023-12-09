@@ -47,23 +47,30 @@ public class GUI {
             case "CustomerFoodReview":
                 page = new CustomerFoodReview();
                 break;
-            case "OrderHistory":
+            case "VendorOrderHistory":
                 page = new VendorOrderHistory();
                 break;
-            case "OrderPage":
+            case "VendorOrderPage":
                 page = new VendorOrderPage();
                 break;
-            case "FoodMenu":
+            case "VendorFoodMenu":
                 page = new VendorFoodMenu();
                 break;
             case "AccountRegistration":
                 page = new AccountRegistration();
                 break;
             case "AdminDashboard":
-            page = new AdminDashboard();
-            break;
-                
-            
+                page = new AdminDashboard();
+                break;
+            case "RunnerFrame":
+                page = new RunnerFrame();
+                break;
+            case "RunnerHistory":
+                page = new RunnerHistory();
+                break;
+            case"TopUpPage":
+                page = new TopUpPage();
+                break;
             default:
                 throw new IllegalArgumentException("Invalid page: " + pageName);
         }
