@@ -1,6 +1,8 @@
 package ufos;
 
 import java.io.*;
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,9 +16,10 @@ public class VendorOrderPage extends javax.swing.JFrame {
     private String[] columnName = {"OrderID", "Date", "Status", "TotalPrice","DeliveryMethod"};
     private String[] columnName2 = {"FoodName", "Portion", "Price"};
     DB db = new DB("Order");
+//    DB nt = new DB("Notification");
+    NotifDB nt = new NotifDB();
     User u = new User();
     DB.OrderRowMapper mapper = db.new OrderRowMapper();
-    List<Object[]> rows = db.readData(mapper);
     GUI ui = new GUI();
     
     public VendorOrderPage() {
@@ -232,12 +235,15 @@ public class VendorOrderPage extends javax.swing.JFrame {
                 
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
-            }           
-                       
-        }
-        JOptionPane.showMessageDialog(null, "Cancelled", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }                   
         db.closeResources();
         load();
+        }
+        try {
+            nt.Vendor(u);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_CancelActionPerformed
 
     private void AcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptActionPerformed
@@ -300,6 +306,11 @@ public class VendorOrderPage extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Accepted", "Success", JOptionPane.INFORMATION_MESSAGE);
         db.closeResources();
         load();
+        try {
+            nt.Vendor(u);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_AcceptActionPerformed
 
     private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistoryActionPerformed
@@ -370,14 +381,23 @@ public class VendorOrderPage extends javax.swing.JFrame {
                        
         }
         JOptionPane.showMessageDialog(null, "Done", "Success", JOptionPane.INFORMATION_MESSAGE);
+
         db.closeResources();
         load();
+        try {
+            nt.Vendor(u);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void load() {  
         // read data from mapper
         String vId = u.getId();
         List<Object[]> rows = db.readData(mapper);
+        LocalDate now = LocalDate.now();
+        
         
         model.setRowCount(0);// reset model
         Set<String> orderIds = new HashSet<>(); // Set to store orderIds (it won't have dublicates
@@ -386,13 +406,14 @@ public class VendorOrderPage extends javax.swing.JFrame {
             // the number of rowData is depended on the number that was asssigned in the DB Override mapper
             String orderId = (String) rowData[0]; 
             String status = (String) rowData[5];
-            String dt = (String) rowData[6];
+            LocalDate dt = LocalDate.parse((String) rowData[6], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             String totalprice = (String) rowData[7];
             String DM = (String) rowData[8];
             String vendorID = (String) rowData[9];
+            
 
            // If orderId is already in the set, skip this line
-            if (vendorID.equals(vId)) {
+            if (vendorID.equals(vId) && dt.isEqual(now)) {
                 if (!orderIds.add(orderId)) {
                     continue;
                 }
@@ -407,6 +428,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
        db.closeResources(); // close it
 
     }
+    
 
     public static void main(String args[]) {
 

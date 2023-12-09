@@ -261,6 +261,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
         String foodName =  NameText.getText();
         double price = Double.parseDouble(PriceText.getText());
         String Description = DescriptionText.getText();
+        
 
         //Add in Text
         db.writeFile();

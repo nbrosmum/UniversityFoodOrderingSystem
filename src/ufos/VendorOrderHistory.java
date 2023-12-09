@@ -269,7 +269,6 @@ public class VendorOrderHistory extends javax.swing.JFrame {
                 }
             }
         }
-//        System.out.println(totalRevenue);
         TotalPrice.setText(String.valueOf(totalRevenue));
         od.closeResources();
     }//GEN-LAST:event_ChoicesActionPerformed

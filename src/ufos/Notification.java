@@ -1,12 +1,27 @@
 
 package ufos;
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.*;
 
 public class Notification extends javax.swing.JFrame {
-
+    User u = new User();
+    GUI ui = new GUI();
+    DB nt = new DB("Notification");
+    private DefaultTableModel model = new DefaultTableModel();
+    private String[] columnName = {"Notification", "Status"};
 
     public Notification() {
         initComponents();
     }
+    public Notification(User id) {
+        initComponents();     
+        u = id;
+        model.setColumnIdentifiers(columnName);
+        load();
+    }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -15,7 +30,7 @@ public class Notification extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         Filter = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        Notif = new javax.swing.JTable();
         Read = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -30,20 +45,15 @@ public class Notification extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        Notif.setModel(model);
+        jScrollPane1.setViewportView(Notif);
 
         Read.setText("Read");
+        Read.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReadActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -75,7 +85,7 @@ public class Notification extends javax.swing.JFrame {
                         .addComponent(Filter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(Read)))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         pack();
@@ -84,17 +94,118 @@ public class Notification extends javax.swing.JFrame {
     private void FilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FilterActionPerformed
         String selectedOption = (String) Filter.getSelectedItem();
         
-        
-        if (selectedOption.equals("Unread")){
+        String ID = u.getId();
+        ArrayList<String> lines = nt.readFile();
+        model.setRowCount(0);
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            String Context = parts[1];
+            String SendId = parts[2];
+            String Receive = parts[3];
+            String Status = parts[4];
             
-        } else if (selectedOption.equals("Read")){
-            
-        } else {
-            
+            if (selectedOption.equals("Unread")){
+                if (ID.equals(Receive) && Status.equals("Unread")) {
+                    model.addRow(new Object[]{Context,Status});
+                }
+
+            } else if (selectedOption.equals("Read")){                
+                if (ID.equals(Receive) && Status.equals("Read")) {
+                    model.addRow(new Object[]{Context,Status});
+                }
+            } else {
+                if (ID.equals(Receive)) {
+                    model.addRow(new Object[]{Context,Status});
+                }
+            }
         }
-                
+        nt.closeResources(); 
+        load();
     }//GEN-LAST:event_FilterActionPerformed
 
+    private void ReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReadActionPerformed
+//
+//        ArrayList<String> lines = nt.readFile();
+//        model.setRowCount(0);
+//        
+//        
+//// Get the orderId of the chosen row in the model
+//        int row = Notif.getSelectedRow();
+//        String orderId = String.valueOf(model.getValueAt(row, 0));
+//
+//// Read the Order.txt file line by line
+//        List<String> data = db.readFile();
+//        List<String> sameIDd = new ArrayList<>();
+//        for (String line : data) {
+//            String[] parts = line.split(",");
+//            String currentOrderId = parts[0];
+//
+//// If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
+//            if (currentOrderId.equals(orderId)) {
+//                sameIDd.add(line);
+//            }
+//        }
+//        
+//        data.removeIf(line -> {
+//            String[] parts = line.split(",");
+//            String currentOrderId = parts[0];
+//            return currentOrderId.equals(orderId);
+//         });     
+// 
+//        db.overWriteFile();
+//        try {
+//            for (String line : data) {
+//                db.bw.write(line);
+//                db.bw.newLine();
+//            }
+//        } catch (IOException ex) {
+//            System.out.println("Something went wrong.");
+//        }
+//        db.closeResources();
+//        
+//       
+//        
+//        db.writeFile();
+//        for (String line : sameIDd) {
+//            String[] parts = line.split(",");
+//            String status = parts[5];
+//            if (status.equals("Pending")) {
+//                String[] updatedParts = Arrays.copyOf(parts, parts.length);
+//                updatedParts[5] = "Cancelled";
+//                line = String.join(",", updatedParts);                            
+//
+//                
+//            }
+//            try {
+//                db.bw.write(line);
+//                db.bw.newLine();
+//                
+//            } catch (IOException ex) {
+//                JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+//            }                   
+//        db.closeResources();
+//        load();
+//        }
+    }//GEN-LAST:event_ReadActionPerformed
+
+    public void load(){
+        String ID = u.getId();
+        ArrayList<String> lines = nt.readFile();
+        model.setRowCount(0);
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            String Context = parts[1];
+            String SendId = parts[2];
+            String Receive = parts[3];
+            String Status = parts[4];
+   
+            // If orderId is already in the set, skip this line
+            if (ID.equals(Receive)) {
+                model.addRow(new Object[]{Context,Status});
+            }
+        }
+        nt.closeResources();
+    }
     
 
     public static void main(String args[]) {
@@ -131,9 +242,9 @@ public class Notification extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> Filter;
+    private javax.swing.JTable Notif;
     private javax.swing.JButton Read;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
