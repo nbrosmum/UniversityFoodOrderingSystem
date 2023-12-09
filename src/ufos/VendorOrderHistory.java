@@ -8,20 +8,26 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.*;
+import javax.swing.tree.*;
 
 public class VendorOrderHistory extends javax.swing.JFrame {
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"OrderID", "Date", "DeliveryMethod", "TotalPrice"};
     Vendor vt = new Vendor();
-    String vendorId = vt.getVendorId();
+    User u = new User();
     DB od = new DB("Order");
     DB fr = new DB("FoodReview"); 
     GUI ui = new GUI();
+    DB.OrderRowMapper mapper = od.new OrderRowMapper();
+    DB.ReviewRowMapper review = fr.new ReviewRowMapper();
 
     public VendorOrderHistory() {
+        initComponents();    
+    }
+    public VendorOrderHistory(User id) {
         initComponents();
         model.setColumnIdentifiers(columnName);
-        Vendor vt = new Vendor();
+        u = id;
         load();
     }
 
@@ -36,7 +42,6 @@ public class VendorOrderHistory extends javax.swing.JFrame {
         OrderHistory = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         ReviewText = new javax.swing.JTextArea();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -81,9 +86,6 @@ public class VendorOrderHistory extends javax.swing.JFrame {
         ReviewText.setWrapStyleWord(true);
         jScrollPane3.setViewportView(ReviewText);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel2.setText("Revenue");
-
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("Order History");
 
@@ -95,7 +97,7 @@ public class VendorOrderHistory extends javax.swing.JFrame {
 
         RatingNo.setEditable(false);
 
-        Choices.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Daily", "Monthly", "Quarterly" }));
+        Choices.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Daily", "Monthly", "Quarterly" }));
         Choices.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ChoicesActionPerformed(evt);
@@ -129,9 +131,7 @@ public class VendorOrderHistory extends javax.swing.JFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(155, 155, 155)
-                                .addComponent(jLabel3)
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabel2)))
+                                .addComponent(jLabel3)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -168,39 +168,39 @@ public class VendorOrderHistory extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel7)
                             .addComponent(Choices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addComponent(jLabel2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel6)
-                                    .addComponent(TotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(43, 43, 43)
-                                        .addComponent(jLabel5))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(RatingNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel4)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(TotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(11, 11, 11)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(RatingNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void FoodMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoodMenuActionPerformed
-        ui.callPage("FoodMenu");
+        VendorFoodMenu wp = new VendorFoodMenu(u);
+        wp.setVisible(true);
+        wp.pack();
+        wp.setLocationRelativeTo(null);
+        wp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.dispose();
+//        
+//        ui.callPage("VendorFoodMenu",u);
+//        this.dispose();
     }//GEN-LAST:event_FoodMenuActionPerformed
 
     private void OrderPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderPageActionPerformed
-        ui.callPage("OrderPage");
+        ui.callPage("VendorOrderPage",u);
         this.dispose();
     }//GEN-LAST:event_OrderPageActionPerformed
 
@@ -209,27 +209,17 @@ public class VendorOrderHistory extends javax.swing.JFrame {
         int row = OrderHistory.getSelectedRow();
         String orderId = String.valueOf(model.getValueAt(row, 0));
 
-// Read the Order.txt file line by line
-//        List<String> order = od.readFile();
-        List<String> review = fr.readFile();
-        List<String> sameIDd = new ArrayList<>();
-        for (String line : review) {
-            String[] parts = line.split(",");
-            String currentOrderId = parts[1];
 
-// If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
+        List<Object[]> rows = fr.readData(review);
+// Read the Order.txt file line by line
+        for (Object[] rowData : rows){
+            String currentOrderId = (String) rowData[1];
+            String sameIDdValue = (String) rowData[5];
+            String Rating = (String) rowData[4];
             if (currentOrderId.equals(orderId)) {
-                sameIDd.add(line);
-            }
-            
-        }
-        
-        for (String line : sameIDd) {
-            String[] parts = line.split(",");
-            String sameIDdValue = parts[5];
-            String Rating = parts[4];
-            ReviewText.setText(sameIDdValue);
-            RatingNo.setText(Rating);
+                ReviewText.setText(sameIDdValue);
+                RatingNo.setText(Rating);
+            }    
         }
   
         fr.closeResources();         
@@ -237,76 +227,83 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     }//GEN-LAST:event_OrderHistoryMouseReleased
 
     private void ChoicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChoicesActionPerformed
-               
+        TotalPrice.setText("");
+        String vId = u.getId();
         String selectedOption = (String) Choices.getSelectedItem();
-        model.setRowCount(0);
-        List<String> lines = od.readFile();       
+        List<Object[]> rows = od.readData(mapper);
+        model.setRowCount(0);      
         LocalDate now = LocalDate.now();
         Set<String> orderIds = new HashSet<>();
         double totalRevenue = 0.0; // Declare totalRevenue
-
-        for (String line : lines) {
-            String[] parts = line.split(",");
-            LocalDate date = LocalDate.parse(parts[6], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            String orderId = parts[0];
-            double totalprice = Double.parseDouble(parts[7]);
-            String DM = parts[8];
+        
+        for (Object[] rowData : rows){
+            String orderId = (String) rowData[0];
+            LocalDate dt = LocalDate.parse((String) rowData[6], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            double totalprice = Double.parseDouble((String) rowData[7]);
+            String DM = (String) rowData[8];
+            String vendorID = (String) rowData[9];
             
-            if (!orderIds.add(orderId)) {
-                continue;
-            }
-            
-            
-            if (selectedOption.equals("Daily")) {
-                if (date.isEqual(now)) {
-                    model.addRow(new Object[]{orderId, date, DM, totalprice});
+            if (vendorID.equals(vId)) {
+                if (!orderIds.add(orderId)) {
+                    continue;
+                }
+                        
+                if (selectedOption.equals("Daily")) {
+                    if (dt.isEqual(now)) {
+                        model.addRow(new Object[]{orderId, dt, DM, totalprice});
+                        totalRevenue += totalprice;
+                    }
+                } else if (selectedOption.equals("Monthly")) {
+                    if (dt.getMonth() == now.getMonth() && dt.getYear() == now.getYear()) {
+                        model.addRow(new Object[]{orderId, dt, DM, totalprice});
+                        totalRevenue += totalprice;
+                    }
+                } else if (selectedOption.equals("Quarterly")) {
+                    if (dt.getMonthValue() >= now.getMonthValue() - 3 && dt.getMonthValue() <= now.getMonthValue() && dt.getYear() == now.getYear()) {
+                        model.addRow(new Object[]{orderId, dt, DM, totalprice});
+                        totalRevenue += totalprice;
+                    }
+                } else{
+                    model.addRow(new Object[]{orderId, dt, DM, totalprice});
                     totalRevenue += totalprice;
                 }
-            } else if (selectedOption.equals("Monthly")) {
-                if (date.getMonth() == now.getMonth() && date.getYear() == now.getYear()) {
-                    model.addRow(new Object[]{orderId, date, DM, totalprice});
-                    totalRevenue += totalprice;
-                }
-            } else if (selectedOption.equals("Quarterly")) {
-                if (date.getMonthValue() >= now.getMonthValue() - 3 && date.getMonthValue() <= now.getMonthValue() && date.getYear() == now.getYear()) {
-                    model.addRow(new Object[]{orderId, date, DM, totalprice});
-                    totalRevenue += totalprice;
-                }
-            } else{
-                model.addRow(new Object[]{orderId, date, DM, totalprice});
-                totalRevenue += totalprice;
             }
         }
-//        System.out.println(totalRevenue);
         TotalPrice.setText(String.valueOf(totalRevenue));
         od.closeResources();
     }//GEN-LAST:event_ChoicesActionPerformed
 
-    private void load() {  
-// OrderID = 0 | FoodID = 1 | Food Name = 2 | Portion = 3 | Price = 4 | Status = 5 | Date = 5 | TotalPrice = 6 | DeliMethod = 7 | vendorID = 8 | CustomerID = 9 |
-        ArrayList<String> lines = od.readFile();
-        model.setRowCount(0);
-        Set<String> orderIds = new HashSet<>(); // Set to store orderIds
-        for (String line : lines) {
-            String[] parts = line.split(",");
-            String orderId = parts[0];
-            String status = parts[5];
-            String dt = parts[6];
-            String totalprice = parts[7];
-            String DM = parts[8];
-            
-            // If orderId is already in the set, skip this line
-            if (!orderIds.add(orderId)) {
-                continue;
-            }
-            if (status.equals("Cancelled")) {
-                continue;
-            }
-            
-            model.addRow(new Object[]{orderId,dt,DM,totalprice});
-        }
-        od.closeResources();
+    
+    
+    private void load() {
+       // Use DB class to read data
+       String vId = u.getId();
+       List<Object[]> rows = od.readData(mapper);
+       double totalRevenue = 0.0;
+
+       model.setRowCount(0);
+       Set<String> orderIds = new HashSet<>(); // Set to store orderIds
+
+       for (Object[] rowData : rows) {
+           String orderId = (String) rowData[0];
+           String dt = (String) rowData[6];
+           double totalprice = Double.parseDouble((String) rowData[7]);
+           String DM = (String) rowData[8];
+           String vendorID = (String) rowData[9];
+
+           // If orderId is already in the set, skip this line
+            if (vendorID.equals(vId)) {
+                if (!orderIds.add(orderId)) {
+                    continue;
+                }
+                model.addRow(new Object[]{orderId,dt,DM,totalprice});
+                totalRevenue += totalprice;
+            } 
+       }
+       TotalPrice.setText(String.valueOf(totalRevenue));
+       od.closeResources();
     }
+
 
     
     public static void main(String args[]) {
@@ -350,7 +347,6 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     private javax.swing.JTextArea ReviewText;
     private javax.swing.JTextField TotalPrice;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

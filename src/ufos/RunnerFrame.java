@@ -11,14 +11,20 @@ import javax.swing.table.DefaultTableModel;
  * @author ginger
  */
 public class RunnerFrame extends javax.swing.JFrame {
-
+    User u = new User();
     /**
      * Creates new form Runner
      */
     public RunnerFrame() {
         initComponents();
     }
+    
 
+    public RunnerFrame(User id) {
+        initComponents();     
+        u = id;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

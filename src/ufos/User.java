@@ -4,23 +4,55 @@
  */
 package ufos;
 
+import java.io.IOException;
+import java.util.*;
+import javax.swing.JOptionPane;
+
+
 /**
  *
  * @author Walter
  */
 public class User {
+    private String id;
     private String username;
     private String password;
     private String email;
-    
+    private String phoneNumber;
+    private List<User> users;
+  
     public User(){
         
     }
     
-    public User(String username, String password, String email){
+    public User(String id,String username, String password, String email, String phoneNumber){
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.phoneNumber = phoneNumber;
+        
+    }
+    public User(String username, String password, String email, String phoneNumber){
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber; 
+    }
+    public String getId(){
+        return id;
+    }
+    
+    public void setId(String id){
+        this.id = id;
+    }
+    
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getUsername() {
@@ -47,21 +79,65 @@ public class User {
         this.email = email;
     }
     
-    public void createUser(){
-        
+    public boolean login(String Email, String Password,String role){
+        DB db = new DB(role);
+        ArrayList<String> data = db.readFile();
+        for(String line : data){
+            String[] value = line.split(",");
+            if(value[3].equals(Email) && value[2].equals(Password)){
+                this.id = value[0];
+                this.username = value[1];
+                this.email = value[3];
+                return true;
+            }
+        }
+        return false;
     }
     
-    public void readUser(){
-        
-    }
+    public void update(String id,String username, String password, String email, String phoneNumber, String role) {
+
+        DB db = new DB(role);
+        ArrayList<String> data = db.readFile();
+        List<String> updatedData = new ArrayList<>();
+
+        for (String line : data) {
+            String[] value = line.split(",");
+            if (value.length >= 6 && value[0].trim().equals(id.trim())) {
+                System.out.println("Updating line: " + line);
+                if (role.equals("Customer") || role.equals("Vendor")) {
+                    updatedData.add(id + "," + username + "," + password + "," + email + "," + phoneNumber + "," + value[5]);
+                } else {
+                    updatedData.add(id + "," + username + "," + password + "," + email + "," + phoneNumber);
+                }
+            } else {
+                System.out.println("Line not updated: " + line);
+                updatedData.add(line);
+            }
+        }
+
+        try {
+            db.writeFile(updatedData);
+            db.closeResources();
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+            e.printStackTrace();
+        }
+     }
     
-    public void updateUser(){
-        
-    }
     
-    public void deleteUser(){
-        
-    }
+    public void delete(String id, String role) throws IOException{
+        DB db = new DB(role);
+        ArrayList<String> data = db.readFile();
+        List<String> updatedData = new ArrayList<>();
+        for (String line : data) {
+            String[] value = line.split(",");
+            if (!value[0].equals(id)) {
+                updatedData.add(line);
+            }
+        }
+        db.writeFile(updatedData);
+        db.closeResources();
+        }
     
-    
-}
+ }
+

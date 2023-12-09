@@ -1,22 +1,29 @@
 package ufos;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.*;
 
 
 public class CustomerReview extends javax.swing.JFrame {
+    GUI ui = new GUI();
+    User u = new User();
     // Create an array for the ratings
     String[] ratings = {"1", "2", "3", "4", "5"};
     // Create a new DefaultComboBoxModel
     DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(ratings);
     DefaultComboBoxModel<String> model2 = new DefaultComboBoxModel<>(ratings);
-     DB fr = new DB("FoodReview");
-     DB dr = new DB("DeliveryReview");
+    Review r = new Review();
 
 
     public CustomerReview() {
+        initComponents();
+    }
+    public CustomerReview(User u) {
         initComponents();
          
         // Set the model for the JComboBoxes
@@ -44,7 +51,6 @@ public class CustomerReview extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         Submit = new javax.swing.JButton();
-        Cancel = new javax.swing.JButton();
         FoodRate = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -85,13 +91,6 @@ public class CustomerReview extends javax.swing.JFrame {
             }
         });
 
-        Cancel.setText("Cancel");
-        Cancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CancelActionPerformed(evt);
-            }
-        });
-
         FoodRate.setModel(model);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -118,10 +117,7 @@ public class CustomerReview extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(Cancel)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(Submit))
+                                .addComponent(Submit)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(63, 63, 63)
@@ -161,9 +157,7 @@ public class CustomerReview extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
                 .addGap(68, 68, 68)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Submit)
-                    .addComponent(Cancel))
+                .addComponent(Submit)
                 .addGap(24, 24, 24))
         );
 
@@ -172,46 +166,28 @@ public class CustomerReview extends javax.swing.JFrame {
 
     private void SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitActionPerformed
         
-        //FoodreviewID | OrderID | ReviewContent | Date | vendorID
+
         //variables
-        int foodRate = (int) FoodRate.getSelectedItem();
-        int deliRate = (int) DeliRate.getSelectedItem();
+        String foodRate = (String) FoodRate.getSelectedItem();
+        String deliRate = (String) DeliRate.getSelectedItem();
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         String foodText = FoodCom.getText();
         String deliText = DeliCom.getText();
-        Date dt = new Date();
-        
-        // add food review
-        fr.writeFile();
-        String fR = String.valueOf(foodRate);
-        String foodReview = fr.id + "," + orderId + "," + fR + "," + foodText + "," + dt + "," + vendorId;
-        try {
-            fr.bw.write(foodReview + "\n");
-        } catch (IOException ex) {
-            System.out.println("Something went wrong.");
-        }
-       
-        fr.closeResources();
-        
-        //add delivery review
-        dr.writeFile();
-        String dR = String.valueOf(deliRate);
-        String deliReview = dr.id + "," + orderId + "," + dR + "," + deliText + "," + dt + "," + vendorId;
         
         try {
-            dr.bw.write(deliReview + "\n");
+            r.Foodview(null,null,date,foodRate,foodText);
+            r.Runnerview(null,null,date,deliRate,deliText);
+            ui.callPage("CustomerProfilePage",u);
+            this.dispose();
+            
         } catch (IOException ex) {
-            System.out.println("Something went wrong.");
+            Logger.getLogger(CustomerReview.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
-        dr.closeResources();
         
-         
         
+        
+           
     }//GEN-LAST:event_SubmitActionPerformed
-
-    private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CancelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -249,7 +225,6 @@ public class CustomerReview extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Cancel;
     private javax.swing.JTextArea DeliCom;
     private javax.swing.JComboBox<String> DeliRate;
     private javax.swing.JTextArea FoodCom;

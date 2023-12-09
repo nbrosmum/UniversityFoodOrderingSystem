@@ -2,29 +2,29 @@ package ufos;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.*;
 
 public class VendorFoodMenu extends javax.swing.JFrame {
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"Food Name", "Description", "Price"};
-    Vendor vt = new Vendor();
-    String vendorId = vt.getVendorId();
+    User u = new User();
     GUI ui = new GUI();
     DB db = new DB("Menu");
-    
+    DB.MenuRowMapper mapper = db.new MenuRowMapper();
+
     
     public VendorFoodMenu() {
         initComponents();
-        model.setColumnIdentifiers(columnName);
-        load();
+        
     }
     
-    public VendorFoodMenu(Vendor vendorId) {
+    public VendorFoodMenu(User id) {
         initComponents();
-        vt = vendorId;
+        model.setColumnIdentifiers(columnName); 
+        this.u = id;
+        load();
+           
     }
 
     @SuppressWarnings("unchecked")
@@ -117,69 +117,75 @@ public class VendorFoodMenu extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(OrderHistory)
-                        .addGap(32, 32, 32)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(OrderPage, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Desciption)
-                            .addComponent(Price)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
-                            .addComponent(PriceText)
-                            .addComponent(NameText)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(Desciption)
+                                    .addComponent(Price)
+                                    .addComponent(jLabel2))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                                    .addComponent(PriceText)
+                                    .addComponent(NameText)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(addItem)
+                                .addGap(18, 18, 18)
+                                .addComponent(deleteItem)
+                                .addGap(18, 18, 18)
+                                .addComponent(updateItem)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(addItem)
-                        .addGap(18, 18, 18)
-                        .addComponent(deleteItem)
-                        .addGap(18, 18, 18)
-                        .addComponent(updateItem)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(OrderHistory)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(199, 199, 199)
+                        .addComponent(OrderPage, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(130, 130, 130)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(NameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Price)
-                            .addComponent(PriceText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Desciption)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(deleteItem)
-                            .addComponent(updateItem)
-                            .addComponent(addItem))
-                        .addGap(12, 12, 12))
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(OrderHistory)
-                                    .addComponent(OrderPage))
-                                .addGap(16, 16, 16)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jSeparator1))))
+                            .addComponent(jSeparator1)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(OrderPage)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(NameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Price)
+                                    .addComponent(PriceText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Desciption)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(32, 32, 32)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(deleteItem)
+                                    .addComponent(updateItem)
+                                    .addComponent(addItem))
+                                .addGap(12, 12, 12))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(OrderHistory)
+                                    .addComponent(jLabel1))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(62, 62, 62))
         );
 
@@ -198,7 +204,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_FoodMenuMouseReleased
 
     private void OrderPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderPageActionPerformed
-        ui.callPage("OrderPage");
+        ui.callPage("VendorOrderPage",u);
         this.dispose();
     }//GEN-LAST:event_OrderPageActionPerformed
 
@@ -211,7 +217,30 @@ public class VendorFoodMenu extends javax.swing.JFrame {
             String description = (String) model.getValueAt(selectedRow, 1);
             double price = (Double) model.getValueAt(selectedRow, 2);
 
-            vt.delete(foodName, price, description);
+            List<String> data = db.readFile();
+            String temp = "";
+            String id = "";
+            for (String line : data) {
+                String[] parts = line.split(",");
+                if (parts[1].equals(foodName) && parts[2].equals(Double.toString(price)) && parts[3].equals(description)) {
+                    temp = line;
+                    id = parts[0];
+
+                }
+            } 
+            data.remove(temp);
+            db.overWriteFile();
+            try {
+                for (String line : data) {
+                    db.bw.write(line);
+                    db.bw.newLine();
+                }             
+                JOptionPane.showMessageDialog(null, "Deleted", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "This item can't be delete","Fail", JOptionPane.ERROR_MESSAGE);
+            }
+            db.closeResources();
+
 
         }
 
@@ -221,35 +250,40 @@ public class VendorFoodMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteItemActionPerformed
 
     private void OrderHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderHistoryActionPerformed
-        ui.callPage("OrderHistory");
+        ui.callPage("VendorOrderHistory",u);
         this.dispose();
     }//GEN-LAST:event_OrderHistoryActionPerformed
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
 
         // variables
+        String vId = u.getId();
         String foodName =  NameText.getText();
         double price = Double.parseDouble(PriceText.getText());
         String Description = DescriptionText.getText();
+        
 
         //Add in Text
         db.writeFile();
         String priceString = String.valueOf(price);
-        String vendorIdString = String.valueOf(vendorId);
+        String vendorIdString = String.valueOf(vId);
+        System.out.print(vId);
         String FoodItem = db.id + "," + foodName + "," +  priceString + "," + Description + "," + vendorIdString;
         try {
             db.bw.write(FoodItem + "\n");
+            JOptionPane.showMessageDialog(null, "Added", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException ex) {
-            System.out.println("Something went wrong.");
+            JOptionPane.showMessageDialog(null, "Error in Adding","Fail", JOptionPane.ERROR_MESSAGE);
         }
         db.closeResources();
 
         load();
         clearTextField();
+        
     }//GEN-LAST:event_addItemActionPerformed
 
     private void updateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateItemActionPerformed
-
+        String vId = u.getId();
         int selectedRow = FoodMenu.getSelectedRow();
         if (selectedRow != -1) {
             // get modal information
@@ -276,7 +310,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
             String foodText = NameText.getText();
             double priceText = Double.parseDouble(PriceText.getText());
             String descText = DescriptionText.getText();
-            String vendorIdString = String.valueOf(vendorId);
+            String vendorIdString = String.valueOf(vId);
             // update the information but keep the original id
             String updatedLine = id + "," + foodText + "," + String.valueOf(priceText) + "," + descText + "," + vendorIdString;
             data.add(updatedLine);
@@ -287,8 +321,10 @@ public class VendorFoodMenu extends javax.swing.JFrame {
                     db.bw.write(line);
                     db.bw.newLine();
                 }
+                JOptionPane.showMessageDialog(null, "Updated", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
-                System.out.println("Something went wrong.");
+                JOptionPane.showMessageDialog(null, "Error in updating","Fail", JOptionPane.ERROR_MESSAGE);
+
             }
             db.closeResources();
         }
@@ -304,30 +340,21 @@ public class VendorFoodMenu extends javax.swing.JFrame {
     }
     
     private void load() {
-        
-        ArrayList<String> lines = db.readFile();
-//        ArrayList<Object[]> data = new ArrayList<>();
+        String vId = u.getId();        
+        List<Object[]> rows = db.readData(mapper);
+        List<Object[]> newRows = new ArrayList<>();
         model.setRowCount(0);
-        for (String line : lines) {
-            String[] parts = line.split(",");
-            String foodName = parts[1];
-            double price = Double.parseDouble(parts[2]);
-            String description = parts[3];
-//            String vdId = parts[4];
+        for (Object[] rowData : rows) {
+            String foodName = (String) rowData[1];
+            double price = Double.parseDouble((String) rowData[2]);
+            String description = (String) rowData[3];
+            String vdId = (String) rowData[4];
             
             // If orderId is already in the set, skip this line
-//            if (vdId.equals(vendorId)) {
-//                data.add(new Object[]{foodName, description, price});
-//            }
-            model.addRow(new Object[]{foodName, description, price});
-        }
-   
-   // Set the model's data to the new list
-//            for (Object[] row : data) {
-//                model.addRow(row);
-//            }
-//            
-                    
+            if (vdId.equals(vId)) {
+                model.addRow(new Object[]{foodName, description, price});
+            }
+        }             
         db.closeResources();
 
     }

@@ -1,5 +1,0 @@
-
-
-Username: walter
-Password: 1234
-Email: walter1@gmail.com

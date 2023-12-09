@@ -4,19 +4,34 @@
  */
 package ufos;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author User
  */
 public class CustomerOrderStatus extends javax.swing.JFrame {
     GUI ui = new GUI();
+    User u = new User();
+    DB db = new DB("Order");
+    DB.OrderRowMapper mapper = db.new OrderRowMapper();
+
     /**
      * Creates new form OrderStatus
      */
     public CustomerOrderStatus() {
         initComponents();
+        load();
     }
-
+    public CustomerOrderStatus(User id) {
+        initComponents();     
+        this.u = id;
+        u.getId();
+        load();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,24 +42,37 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        OrderStatusTable = new javax.swing.JTable();
         Backbtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        OrderStatusTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "OrderID", "Date", "Status"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(OrderStatusTable);
+        if (OrderStatusTable.getColumnModel().getColumnCount() > 0) {
+            OrderStatusTable.getColumnModel().getColumn(0).setResizable(false);
+            OrderStatusTable.getColumnModel().getColumn(1).setResizable(false);
+            OrderStatusTable.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         Backbtn.setText("Back");
         Backbtn.addActionListener(new java.awt.event.ActionListener() {
@@ -85,10 +113,36 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackbtnActionPerformed
-        ui.callPage("CustomerFoodMenu");
+        ui.callPage("CustomerFoodMenu",u);
         this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
+     private void load() {
+       DefaultTableModel model  = (DefaultTableModel)OrderStatusTable.getModel();
+       // Use DB class to read data
+       String Id = u.getId();
+       List<Object[]> rows = db.readData(mapper);
 
+       model.setRowCount(0);
+       Set<String> orderIds = new HashSet<>(); // Set to store orderIds
+
+       for (Object[] rowData : rows) {
+           String orderId = (String) rowData[0];
+           String dt = (String) rowData[6];
+           String Status =(String)rowData[5];
+           String Userid = (String)rowData[10];
+  
+
+            if (Userid.equals(Id)) {
+                if (!orderIds.add(orderId)) {
+                    continue;
+                }
+                model.addRow(new Object[]{orderId,dt,Status});
+
+            } 
+       }
+
+       db.closeResources();
+    }
     /**
      * @param args the command line arguments
      */
@@ -127,8 +181,8 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Backbtn;
+    private javax.swing.JTable OrderStatusTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
