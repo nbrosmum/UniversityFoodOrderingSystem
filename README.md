@@ -53,10 +53,9 @@ Notification
   - Update Wallet(receipt) (A > C)
 
 Notification for order
-- Order item (C > V)
-- Order Receive (C >V)
-- Order Accept & Decline (V > C) (if Accept (Payment Receipt else decline message))
-- Delivery Order(V > R)
-- Delivery Status(R > V)
-- Delivery Status(R > C)
+- Ordering item (C > V)
+- Receiving order (V > C)
+- Order Accepted/Declined (V > C) (if Accept (Payment Receipt else decline message))
+- Order Done (V > C) (V > R)
+- Delivery Status (R > C) (R > V)
 
