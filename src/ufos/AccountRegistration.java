@@ -528,7 +528,7 @@ public class AccountRegistration extends javax.swing.JFrame {
         u.delete(id, role);
     }
     private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
-        ui.callPage("AdminDashboard");
+        ui.callPage("AdminDashboard",u);
         this.dispose();
         
     }//GEN-LAST:event_btn_backActionPerformed

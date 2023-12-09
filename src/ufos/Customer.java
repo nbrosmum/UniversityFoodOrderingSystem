@@ -19,7 +19,9 @@ import javax.swing.table.DefaultTableModel;
  * @author User
  */
 public class Customer extends User {
+
    private double balance;
+
 
    DB db = new DB("Order");
     public Customer( ) {
@@ -31,9 +33,10 @@ public class Customer extends User {
     public Customer( String username, String password, String email,String phoneNumber) {
          super( username, password, email,phoneNumber);
      }
-  
+
     public double getBalance() {
         return balance;
+
     }
 
     public void setBalance(double balance) {

@@ -6,17 +6,16 @@ package ufos;
 
 import java.io.IOException;
 import java.util.*;
+import javax.swing.*;
 
-/**
- *
- * @author User
- */
+
 public class UFOS {
-
-    /*
-     * @param args the command line arguments
-     */
     public static void main(String[] args){
+        loginPage lg = new loginPage();
+        lg.setVisible(true);
+        lg.pack();
+        lg.setLocationRelativeTo(null);
+        lg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
     }
 }

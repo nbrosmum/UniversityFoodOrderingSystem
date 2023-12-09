@@ -14,12 +14,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CustomerOrderHistory extends javax.swing.JFrame {
     GUI ui = new GUI();
+    User u = new User();
     DB Orderdb = new DB("Order");
     Customer c = new Customer();
 
     public CustomerOrderHistory() {
         initComponents();
+        
+    }
+    public CustomerOrderHistory(User id) {
+        initComponents();     
+        u = id;
         load();
+     
     }
 
     /**
@@ -188,7 +195,7 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackbtnActionPerformed
-        ui.callPage("CustomerFoodMenu");
+        ui.callPage("CustomerFoodMenu",u);
         this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
 
