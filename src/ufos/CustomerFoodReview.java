@@ -4,17 +4,27 @@
  */
 package ufos;
 
+import java.util.List;
+
 /**
  *
  * @author User
  */
 public class CustomerFoodReview extends javax.swing.JFrame {
     GUI ui = new GUI();
+    DB fdb = new DB("FoodReview");
+    User u = new User();
+    DB.ReviewRowMapper review = fdb.new ReviewRowMapper();
     /**
      * Creates new form FoodReview
      */
     public CustomerFoodReview() {
         initComponents();
+    }
+    
+    public CustomerFoodReview(User u) {
+        initComponents();
+
     }
 
     /**
@@ -134,10 +144,13 @@ public class CustomerFoodReview extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackbtnActionPerformed
-       ui.callPage("CustomerFoodMenu");
+       ui.callPage("CustomerFoodMenu",u);
        this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
-
+    private void load(){
+       List<Object[]> rows = fdb.readData(review);
+       
+    }
     /**
      * @param args the command line arguments
      */

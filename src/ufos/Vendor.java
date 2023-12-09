@@ -67,7 +67,6 @@ public class Vendor extends User{
 
 
     }
-
   
     
 
@@ -88,7 +87,6 @@ public class Vendor extends User{
 //        }
 //    }
 //    
-
      
  }
 

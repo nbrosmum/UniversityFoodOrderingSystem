@@ -36,6 +36,10 @@ public class AccountRegistration extends javax.swing.JFrame {
      */
     public AccountRegistration() {
         initComponents();      
+
+       }
+    public AccountRegistration(User u) {
+        initComponents();      
         adminTableModel = (DefaultTableModel) t_admin.getModel();
         vendorTableModel = (DefaultTableModel) t_vendor.getModel();
         runnerTableModel = (DefaultTableModel) t_runner.getModel();

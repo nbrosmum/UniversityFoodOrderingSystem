@@ -50,8 +50,6 @@ public class Notification extends javax.swing.JFrame {
 
 
         Read.setText("Read");
-
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -104,7 +102,6 @@ public class Notification extends javax.swing.JFrame {
 
     
 
-
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -136,7 +133,6 @@ public class Notification extends javax.swing.JFrame {
             }
         });
     }
-
 
     private javax.swing.JComboBox<String> Filter;
     private javax.swing.JButton Read;

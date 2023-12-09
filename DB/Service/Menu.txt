@@ -4,3 +4,4 @@ F003,rice,5.0,dsadasd,V002
 F004,fire,98.0,dsadsa,V002
 F005,earth,78.0,dasdasd,V002
 F006,wind,78.0,dasdasdasd,V002
+F007,mee goreng,10.0,mee and gerong,V001

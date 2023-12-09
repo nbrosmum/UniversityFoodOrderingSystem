@@ -16,6 +16,9 @@ public class RunnerHistory extends javax.swing.JFrame {
     public RunnerHistory() {
         initComponents();
     }
+    public RunnerHistory(User u) {
+        initComponents();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
