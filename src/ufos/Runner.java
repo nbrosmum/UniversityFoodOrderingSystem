@@ -18,10 +18,10 @@ public class Runner extends User {
         super(username, password, email, phoneNumber);
     }
     
-    public Runner(){
-        
-    }
-    
+//    public Runner(){
+//        
+//    }
+//    
  
     
 }

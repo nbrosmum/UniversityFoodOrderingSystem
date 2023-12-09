@@ -22,7 +22,8 @@ public class Notification extends javax.swing.JFrame {
         model.setColumnIdentifiers(columnName);
         load();
     }
-
+    
+   
 
 
     @SuppressWarnings("unchecked")
@@ -193,23 +194,16 @@ public class Notification extends javax.swing.JFrame {
 //        }
     }//GEN-LAST:event_ReadActionPerformed
 
-    public void load(){
-        String ID = u.getId();
-        ArrayList<String> lines = nt.readFile();
+    public void load() {
         model.setRowCount(0);
+        ArrayList<String> lines = nt.readFile();
         for (String line : lines) {
             String[] parts = line.split(",");
-            String Context = parts[1];
-            String SendId = parts[2];
-            String Receive = parts[3];
-            String Status = parts[4];
-   
-            // If orderId is already in the set, skip this line
-            if (ID.equals(Receive)) {
-                model.addRow(new Object[]{Context,Status});
-            }
+            String context = parts[1];
+            String status = parts[4];
+
+            model.addRow(new Object[]{context, status});
         }
-        nt.closeResources();
     }
     
 
@@ -250,5 +244,5 @@ public class Notification extends javax.swing.JFrame {
     private javax.swing.JButton Read;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 }

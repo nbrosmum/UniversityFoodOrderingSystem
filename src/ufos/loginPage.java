@@ -19,6 +19,10 @@ public class loginPage extends javax.swing.JFrame {
     public loginPage() {
         initComponents();
     }
+    public loginPage(User id) {
+        initComponents();     
+        u = id;   
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

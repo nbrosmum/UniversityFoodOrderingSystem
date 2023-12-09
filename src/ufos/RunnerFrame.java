@@ -23,10 +23,7 @@ public class RunnerFrame extends javax.swing.JFrame {
         initComponents();
     }
 
-    public RunnerFrame(User id) {
-        initComponents();     
-        u = id;
-    }
+
     
     /**
      * This method is called from within the constructor to initialize the form.

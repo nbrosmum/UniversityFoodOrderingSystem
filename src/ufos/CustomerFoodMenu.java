@@ -25,7 +25,6 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
     User u = new User();
     DB db = new DB("Menu");
     DB dbOrder = new DB("Order");
-    User u = new User();
     Customer c = new Customer();
     Order o;
     SpinnerNumberModel spinnerModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);

@@ -59,6 +59,10 @@ public class DB {
                 directoryPath = "DB\\Service\\";
                 prefixID = "D";
                 break;
+            case "BalanceNotification":
+                directoryPath = "DB\\Service\\";
+                prefixID = "B";
+                break;
             default:
                 break;
         }
@@ -379,6 +383,8 @@ public class DB {
                 String customerEmail = parts[3];
                 String customerPhoneNumber = parts[4];
                 String balanceStr = parts[5];
+                
+                
 
                 return new Object[]{customerId, customerName, customerPassword, customerEmail, customerPhoneNumber, balanceStr};
             } else {
@@ -387,25 +393,31 @@ public class DB {
             }
         }
     }
-   
     
-
-        }
-    }
-    
-    public class MenuRowMapper implements RowMapper {      
-        @Override
+    public class BalanceNotificationRowMapper implements RowMapper {
+    @Override
         public Object[] mapRow(String line) {
             String[] parts = line.split(",");
-            String foodID  = parts[0];
-            String foodName  = parts[1];
-            String price  = parts[2];
-            String description  = parts[3];
-            String vendorId  = parts[4];            
 
-            return new Object[]{foodID,foodName,price,description,vendorId};
+            // Check if parts array has at least 6 elements
+            if (parts.length >= 6) {
+                String customerId = parts[0];
+                String customerName = parts[1];
+                String customerPassword = parts[2];
+                String topupStr = parts[3];
+                String status = parts[4];
+                String balanceStr = parts[5];
+                
+                
+
+                return new Object[]{customerId, customerName, customerPassword, topupStr, status, balanceStr};
+            } else {
+                
+                return null;
+            }
         }
     }
-
+   
+    
 
 }

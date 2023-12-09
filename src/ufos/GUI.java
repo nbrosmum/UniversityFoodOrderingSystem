@@ -11,7 +11,6 @@ import javax.swing.JFrame;
  * @author User
  */
 public class GUI {
-    User u = new User();
     public void OpenPage(JFrame frame) {
         frame.setVisible(true);
         frame.pack();
@@ -68,7 +67,18 @@ public class GUI {
                 break;
             case "RunnerHistory":
                 page = new RunnerHistory(u);
-
+                break;
+            case "TopUpPage":
+                page = new TopUpPage(u);
+                break;
+            case "GenerateReceiptPage":
+                page = new GenerateReceiptPage(u);
+                break;
+            case "loginPage":
+                page = new loginPage(u);
+                break;
+            case "BalanceNotifcationPage":
+                page = new BalanceNotifcationPage(u);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid page: " + pageName);

@@ -10,6 +10,7 @@ public class NotifDB {
     DB db = new DB("Order");
     User u = new User();
     DB.OrderRowMapper mapper = db.new OrderRowMapper();
+    DB.CustomerRowMapper cmapper = db.new CustomerRowMapper();
            
     
     public void Vendor(User u) throws IOException{
@@ -146,4 +147,34 @@ public class NotifDB {
         }        
         nt.closeResources(); // close it          
     }
+    
+    public void Admin(User u) throws IOException {
+        String adminID = "A001";
+        List<Object[]> rows = db.readData(cmapper);       
+        //NotificationID | Notification Context | SenderID | ReceiverID | Status |
+        Set<String> customerIds = new HashSet<>();
+        
+        for (Object[] rowData : rows) { // run all the data in the mapper
+            // the number of rowData is depended on the number that was asssigned in the DB Override mapper
+            String customerId = (String) rowData[0];
+            String status = (String) rowData[6];
+
+            if (!customerIds.add(customerId)) {
+                continue;
+            }
+            nt.writeFile();
+            if (status.equals("Top Up")) {
+                String notif = nt.id + "," + "Account Top-Up Sucessfully" + "," + adminID + "," + customerId + "," + "Unread";
+                try {
+                    nt.bw.write(notif + "\n");                    
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+                }
+            } 
+                        
+        }        
+        nt.closeResources();
+    }
+    
+    
 }
