@@ -1,0 +1,12 @@
+N001,Notification,V002,null,Unread
+N002,Your Order is done,V002,C001,Unread
+N003,Your Order is being prepared,V002,C001,Unread
+N004,Your Order is being prepared,V002,C001,Unread
+N005,Your Order is being prepared,V002,C001,Unread
+N006,Your Order is done,V002,C001,Unread
+N007,Your Order is being prepared,V002,C001,Unread
+N008,Your Order is being prepared,V002,C001,Unread
+N009,Your Order have been cancelled,V002,C001,Unread
+N010,Your Order is being prepared,V002,C001,Unread
+N011,Your Order is done,V002,null,Unread
+N011,Your Order is done,V002,C001,Unread
