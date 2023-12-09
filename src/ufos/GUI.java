@@ -68,7 +68,12 @@ public class GUI {
                 break;
             case "RunnerHistory":
                 page = new RunnerHistory(u);
-
+                break;
+            case "loginPage":
+                page = new loginPage(u);
+                break;
+            case "TopUpPage":
+                page = new TopUpPage(u);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid page: " + pageName);

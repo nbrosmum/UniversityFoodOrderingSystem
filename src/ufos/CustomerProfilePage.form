@@ -51,7 +51,7 @@
                   </Group>
                   <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="145" max="32767" attributes="0"/>
+              <EmptySpace min="51" pref="150" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
@@ -61,7 +61,10 @@
                       <EmptySpace min="-2" pref="182" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="Logoutbtn" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="Notifybtn" min="-2" max="-2" attributes="0"/>
+                          <Component id="Logoutbtn" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -79,6 +82,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
                   <Component id="IDLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="Notifybtn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -163,6 +167,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Food Order System"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="Notifybtn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Notification"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NotifybtnActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

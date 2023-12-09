@@ -39,10 +39,6 @@ public class DB {
                 directoryPath = "DB\\Service\\";
                 prefixID = "O";
                 break;
-            case "Payment":
-                directoryPath = "DB\\Service\\";
-                prefixID = "P";
-                break;
             case "Transaction":
                 directoryPath = "DB\\Service\\";
                 prefixID = "T";
@@ -354,6 +350,25 @@ public class DB {
                 String balanceStr = parts[5];
 
                 return new Object[]{customerId, customerName, customerPassword, customerEmail, customerPhoneNumber, balanceStr};
+            } else {
+                
+                return null;
+            }
+        }
+    }
+    public class TransactionRowMapper implements RowMapper {
+    @Override
+        public Object[] mapRow(String line) {
+            String[] parts = line.split(",");
+
+            // Check if parts array has at least 6 elements
+            if (parts.length >= 5) {
+                String transactionID = parts[0];
+                String customerID = parts[1];
+                String purpose = parts[2];
+                String transaction = parts[3];
+                String balance = parts[4];
+                return new Object[]{transactionID,customerID,purpose,transaction,balance};
             } else {
                 
                 return null;

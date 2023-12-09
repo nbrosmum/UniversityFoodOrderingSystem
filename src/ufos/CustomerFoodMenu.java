@@ -30,6 +30,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
     SpinnerNumberModel spinnerModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
     List<String[]> items = new ArrayList<>();
     private String selectedPrice = "";
+    private String orderID;
     private double totalPrice;
     private String selectedVendorId;
     private Map<String, String> vendorNameToIdMap = new HashMap<>();
@@ -45,7 +46,6 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
         this.u = id;
         QuantitySpinner.setModel(spinnerModel);
         load();
-        System.out.println(u.getId());
     }
 
     /**
@@ -81,6 +81,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
         FoodMenuTable = new javax.swing.JTable();
         FoodStoreCBox = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
+        Paymentbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -183,10 +184,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
 
         FoodMenuTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Food Name", "Price", "Desrciption"
@@ -219,6 +217,13 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
         });
 
         jLabel7.setText("Food Store");
+
+        Paymentbtn.setText("Payment");
+        Paymentbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PaymentbtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -253,24 +258,29 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(FoodStoreCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(FoodReviewbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(OrderStatusbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(OrderHistorybtn, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(Backbtn))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
+                        .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(AddCartbtn)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(FoodReviewbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(OrderStatusbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(OrderHistorybtn, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(Backbtn))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(21, 21, 21)
+                                .addGap(1, 1, 1)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(QuantitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(FoodAddCart))))))
+                                    .addComponent(jLabel3)
+                                    .addComponent(AddCartbtn)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(21, 21, 21)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(QuantitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(FoodAddCart)))))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Paymentbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18))
         );
         layout.setVerticalGroup(
@@ -298,7 +308,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -324,7 +334,10 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(OrderStatusbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(OrderHistorybtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(Paymentbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(OrderHistorybtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)))
                 .addGap(36, 36, 36))
         );
 
@@ -355,18 +368,26 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
         String selectedValue = (String) DelivaryStatus.getSelectedItem();
         String currentDateTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         String status = "Pending";
-        String orderID = dbOrder.generateId();
+        orderID = dbOrder.generateId();
         boolean message = false;
-
         for(int i = 0; i < Cartmodel.getRowCount(); i++) {
             // Get the values of each column in the current row
             String foodName = Cartmodel.getValueAt(i, 0).toString();
             int quantity = Integer.parseInt(Cartmodel.getValueAt(i, 1).toString());
             double price = Double.parseDouble(Cartmodel.getValueAt(i, 2).toString());
             String foodID = o.getFoodID(foodName);
-       
+               
             try {
-                c.OrderFood(orderID, foodID, foodName, quantity, price, status, currentDateTime, totalPrice, selectedValue,selectedVendorId,u.getId() ,"R001");
+                double adjustedTotalPrice = totalPrice;      
+                // Adjust total price based on delivery method
+                if ("Delivery".equals(selectedValue)) {
+                    adjustedTotalPrice += 5.0; // Add $5 for delivery
+                } else if ("Take Away".equals(selectedValue)) {
+                    adjustedTotalPrice += 2.0; // Add $2 for take away
+                }else{
+                    adjustedTotalPrice = totalPrice;
+                }
+                c.OrderFood(orderID, foodID, foodName, quantity, price, status, currentDateTime,adjustedTotalPrice , selectedValue,selectedVendorId,u.getId() ,"R001");
                 message = true;
             } catch (IOException ex) {
                 Logger.getLogger(CustomerFoodMenu.class.getName()).log(Level.SEVERE, null, ex);
@@ -461,6 +482,13 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
             loadFoodMenu();
         } 
     }//GEN-LAST:event_FoodStoreCBoxActionPerformed
+
+    private void PaymentbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PaymentbtnActionPerformed
+        Transaction t = new Transaction();
+        String selectedValue = (String) DelivaryStatus.getSelectedItem();
+        t.payment(u.getId(), orderID, totalPrice, selectedValue);
+        
+    }//GEN-LAST:event_PaymentbtnActionPerformed
     public void load(){    
         try {
             List<String> lines = Files.readAllLines(Paths.get("DB\\Account\\Vendor.txt"));
@@ -551,6 +579,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
     private javax.swing.JButton OrderHistorybtn;
     private javax.swing.JButton OrderStatusbtn;
     private javax.swing.JButton Orderbtn;
+    private javax.swing.JButton Paymentbtn;
     private javax.swing.JSpinner QuantitySpinner;
     private javax.swing.JTextField TotalPrice;
     private javax.swing.JLabel jLabel1;

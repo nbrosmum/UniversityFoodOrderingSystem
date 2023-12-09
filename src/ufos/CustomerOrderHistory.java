@@ -85,11 +85,11 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Order ID", "Date", "Total Price"
+                "Order ID", "Date", "Total Price", "Delivery method"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -225,11 +225,12 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
             String OrderID = parts[0];
             String date = parts[6];
             String TotalPrice = parts[7];
+            String DeliveryMethod = parts[8];
             if(parts[10].equals(UserID)){
                 if (!orderIds.add(OrderID)) {
                     continue;
                 }
-                model.addRow(new Object[]{OrderID,date,TotalPrice});
+                model.addRow(new Object[]{OrderID,date,TotalPrice,DeliveryMethod});
             }
 
          

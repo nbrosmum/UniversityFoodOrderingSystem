@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,18 +26,17 @@ public class TopUpPage extends javax.swing.JFrame {
     User u = new User();
     DB customerDB = new DB("Customer");
     DB.CustomerRowMapper cMapper = customerDB.new CustomerRowMapper();
-    Transaction transaction = new Transaction();
-    
-    
+    Transaction t= new Transaction();
     Customer customer = new Customer();
     
     
     
     public TopUpPage() {
         initComponents();
-        
-       
-
+    }
+    public TopUpPage(User u) {
+        initComponents();
+        this.u = u;
         loadCustomerData();
     }
     
@@ -261,7 +262,8 @@ public class TopUpPage extends javax.swing.JFrame {
 
             // Update the customer balance in the file
             updateCustomerBalance(customerID, newBalance);
-
+            t.WriteTransactionFile(customerID, customerName, topUpAmount);
+   
             // Clear the top-up amount field
             tf_tuAmount.setText("");
 
@@ -270,6 +272,8 @@ public class TopUpPage extends javax.swing.JFrame {
             tf_cName.setText(customerName);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Invalid top-up amount!");
+        } catch (IOException ex) {
+            Logger.getLogger(TopUpPage.class.getName()).log(Level.SEVERE, null, ex);
         }
         
 

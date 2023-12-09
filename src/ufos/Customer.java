@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -98,6 +99,25 @@ public class Customer extends User {
         cdb.closeResources();
     }
     
-  
+     public void updateBalance(String userId, double newBalance) {
+        ArrayList<String> customerData = db.readFile();
+        List<String> updatedCustomerData = new ArrayList<>();
 
+        for (String line : customerData) {
+            String[] parts = line.split(",");
+            if (parts.length >= 6 && parts[0].trim().equals(userId.trim())) {
+                // Update the balance
+                parts[5] = String.valueOf(newBalance);
+            }
+            updatedCustomerData.add(String.join(",", parts));
+        }
+
+        try {
+            db.writeFile(updatedCustomerData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            db.closeResources();
+        }
+    }
 }
