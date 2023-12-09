@@ -51,15 +51,12 @@ Notification
 - Admin & Customer
   - top up wallet (C > A)
   - Update Wallet(receipt) (A > C)
-- Vendor & Customer
-  - Order item (C > V)
-  - Order Accept & Decline (if Accept (Payment Receipt else decline message)) (V > C)
-  - Order Receive (C >V)
--Runner & Vendor
-  - Delivery Order(V > R)
-  - Delivery Status(R > V)
-- Runner & Customer
-  - Delivery Status(R > V)
 
-
+Notification for order
+- Order item (C > V)
+- Order Receive (C >V)
+- Order Accept & Decline (V > C) (if Accept (Payment Receipt else decline message))
+- Delivery Order(V > R)
+- Delivery Status(R > V)
+- Delivery Status(R > C)
 
