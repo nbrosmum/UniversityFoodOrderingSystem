@@ -68,7 +68,9 @@ public class GUI {
                 break;
             case "RunnerHistory":
                 page = new RunnerHistory(u);
-
+                break;
+            case "NotificationPage":
+                page = new NotificationPage(u);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid page: " + pageName);

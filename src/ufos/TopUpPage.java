@@ -33,11 +33,15 @@ public class TopUpPage extends javax.swing.JFrame {
     
     public TopUpPage() {
         initComponents();
-        
-       
+    }
+    
 
+    public TopUpPage(User id) {
+        initComponents();     
+        u = id;
         loadCustomerData();
     }
+
     
     
 
