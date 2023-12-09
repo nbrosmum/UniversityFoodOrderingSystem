@@ -293,16 +293,10 @@ public class DB {
             String dt = parts[6];
             String totalprice = parts[7];
             String DM = parts[8];
-            String vendorId = parts[9];
-            String customerId;
-            String runnerId;
-            if (parts.length > 10) {
-                customerId = parts[10];
-                runnerId = parts[11];
-            } else {
-                customerId = null; // or throw an exception
-                runnerId = null;
-            }
+            String vendorId = parts.length > 9 ? parts[9] : null;
+            String customerId = parts.length > 10 ? parts[10] : null;
+            String runnerId = parts.length > 11 ? parts[11] : null;
+            
 
             return new Object[]{orderId,foodId,foodName,portion,price,status,dt,totalprice,DM,vendorId,customerId,runnerId};
         }

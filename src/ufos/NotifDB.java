@@ -66,8 +66,8 @@ public class NotifDB {
         }        
         nt.closeResources(); // close it          
     }
-    public void Customer(User u) throws IOException{
-        String vId = u.getId();
+    public void Customer(String vId) throws IOException{
+        
         List<Object[]> rows = db.readData(mapper);       
         //NotificationID | Notification Context | SenderID | ReceiverID | Status |
         Set<String> orderIds = new HashSet<>();
@@ -80,11 +80,11 @@ public class NotifDB {
             String totalprice = (String) rowData[7];
             String DM = (String) rowData[8];
             String vendorID = (String) rowData[9];
-            String customerId = (String) rowData[10];
+            String CUSTOMERID = (String) rowData[10];
             String runnerId = (String) rowData[11];
 
             //vendorId = getID
-            if (customerId.equals(vId)) {
+            if (CUSTOMERID.equals(vId)) {
                 // If orderId is already in the set, skip this line
                 if (!orderIds.add(orderId)) {
                     continue;

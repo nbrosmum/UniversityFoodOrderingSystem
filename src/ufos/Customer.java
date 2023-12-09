@@ -20,15 +20,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Customer extends User {
 
-   private double balance;
+    private double balance;
+    NotifDB nt = new NotifDB();
 
-
-   DB db = new DB("Order");
-   DB cdb = new DB("Customer");
-
+    DB db = new DB("Order");
+    DB cdb = new DB("Customer");
+    
+    
     public Customer() {
-   
-     }
+    }
+
     public Customer( String id,String username, String password, String email,String phoneNumber) {
          super( id,username, password, email,phoneNumber);
      }
@@ -65,14 +66,18 @@ public class Customer extends User {
         db.bw.write(orderDetails);
         db.bw.newLine();
         db.closeResources();
+
+        nt.Customer(CustomerID);
+
     }
-    public void reorder(String orderId) {
+    public void reorder(String orderId) throws IOException {
         ArrayList<String> lines = db.readFile();
         String newOrderId = db.generateId();
         String Date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         for (String line : lines) {
             String[] parts = line.split(",");
             String currentOrderId = parts[0];
+            String CustomerID = parts[10];
             if (currentOrderId.equals(orderId)) {
                 String newLine = newOrderId + "," + parts[1] + "," + parts[2] + "," + parts[3] + "," + parts[4] + "," + parts[5] + "," + Date + "," + parts[7] + "," + parts[8] + "," + parts[9] + "," + parts[10] + "," + parts[11];
                 try {
@@ -85,6 +90,7 @@ public class Customer extends User {
                     e.printStackTrace();
                 }
             }
+            nt.Customer(CustomerID);
         }
         
     }
