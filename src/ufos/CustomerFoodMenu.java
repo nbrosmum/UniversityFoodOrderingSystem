@@ -22,6 +22,7 @@ import javax.swing.table.*;
  */
 public class CustomerFoodMenu extends javax.swing.JFrame {
     GUI ui = new GUI();
+    User u = new User();
     DB db = new DB("Menu");
     DB dbOrder = new DB("Order");
     User u = new User();
@@ -36,15 +37,15 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
     /**
      * Creates new form CustomerFoodMenu
      */
-    public CustomerFoodMenu() {
-       
+    public CustomerFoodMenu() {        
+        initComponents();        
     }
-    public CustomerFoodMenu(User u) {
+    public CustomerFoodMenu(User id) {
         this.o = new Order(items);
-        initComponents();
+        initComponents();     
+        u = id;
         QuantitySpinner.setModel(spinnerModel);
         load();
-        
     }
 
     /**

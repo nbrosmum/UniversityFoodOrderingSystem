@@ -21,10 +21,9 @@ public class CustomerFoodReview extends javax.swing.JFrame {
     public CustomerFoodReview() {
         initComponents();
     }
-    
-    public CustomerFoodReview(User u) {
-        initComponents();
-
+    public CustomerFoodReview(User id) {
+        initComponents();     
+        u = id;
     }
 
     /**

@@ -9,16 +9,20 @@ package ufos;
  * @author ginger
  */
 public class RunnerHistory extends javax.swing.JFrame {
-
+    User u = new User();
     /**
      * Creates new form RunnerHistory
      */
     public RunnerHistory() {
         initComponents();
     }
-    public RunnerHistory(User u) {
-        initComponents();
+    
+
+    public RunnerHistory(User id) {
+        initComponents();     
+        u = id;
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

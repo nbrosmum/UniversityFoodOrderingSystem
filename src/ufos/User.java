@@ -134,9 +134,6 @@ public class User {
             String[] value = line.split(",");
             if(value[3].equals(Email) && value[2].equals(Password)){
                 this.id = value[0];
-
-                System.out.println(id);
-
                 this.username = value[1];
                 this.email = value[3];
                 return true;
