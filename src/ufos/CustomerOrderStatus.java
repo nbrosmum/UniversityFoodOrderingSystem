@@ -24,12 +24,10 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
      */
     public CustomerOrderStatus() {
         initComponents();
-        load();
     }
     public CustomerOrderStatus(User id) {
         initComponents();     
         this.u = id;
-        u.getId();
         load();
     }
     /**

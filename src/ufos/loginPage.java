@@ -18,6 +18,11 @@ public class loginPage extends javax.swing.JFrame {
      */
     public loginPage() {
         initComponents();
+
+    }
+    public loginPage(User u) {
+        initComponents();
+        this.u = u;
     }
 
     /**
