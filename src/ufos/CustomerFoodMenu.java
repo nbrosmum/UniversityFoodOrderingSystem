@@ -22,6 +22,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
     User u = new User();
     DB db = new DB("Menu");
     DB dbOrder = new DB("Order");
+    NotifDB nt = new NotifDB();
     Customer c = new Customer();
     Order o;
     SpinnerNumberModel spinnerModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
@@ -357,6 +358,7 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_AddCartbtnActionPerformed
 
     private void OrderbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderbtnActionPerformed
+        String Id = u.getId();
         DefaultTableModel Cartmodel = (DefaultTableModel)CartTable.getModel();
         String selectedValue = (String) DelivaryStatus.getSelectedItem();
         String currentDateTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -387,15 +389,14 @@ public class CustomerFoodMenu extends javax.swing.JFrame {
             }
       
         }
-   
+        
+
         if(message == true){
            JOptionPane.showMessageDialog(null, "Order Susscessfull! please wait for Vendor to approve");
            Cartmodel.setRowCount(0);
            items.clear();
            TotalPrice.setText("0.0");
-        }
-        
-        
+        }  
     }//GEN-LAST:event_OrderbtnActionPerformed
 
     private void CancelOrderbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelOrderbtnActionPerformed
