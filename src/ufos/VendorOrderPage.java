@@ -405,7 +405,6 @@ public class VendorOrderPage extends javax.swing.JFrame {
             }            
        }
        db.closeResources(); // close it
-
     }
 
     public static void main(String args[]) {

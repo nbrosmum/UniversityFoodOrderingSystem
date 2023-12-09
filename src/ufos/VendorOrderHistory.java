@@ -282,6 +282,7 @@ public class VendorOrderHistory extends javax.swing.JFrame {
        List<Object[]> rows = od.readData(mapper);
        double totalRevenue = 0.0;
 
+
        model.setRowCount(0);
        Set<String> orderIds = new HashSet<>(); // Set to store orderIds
 

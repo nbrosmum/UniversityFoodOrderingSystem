@@ -58,7 +58,7 @@ public class GUI {
                 page = new VendorFoodMenu(u);
                 break;
             case "AccountRegistration":
-                page = new AccountRegistration();
+                page = new AccountRegistration(u);
                 break;
             case "AdminDashboard":
                 page = new AdminDashboard(u);
@@ -68,6 +68,7 @@ public class GUI {
                 break;
             case "RunnerHistory":
                 page = new RunnerHistory(u);
+
                 break;
             default:
                 throw new IllegalArgumentException("Invalid page: " + pageName);

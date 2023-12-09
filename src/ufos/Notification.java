@@ -4,9 +4,11 @@ package ufos;
 public class Notification extends javax.swing.JFrame {
 
 
+
     public Notification() {
         initComponents();
     }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -18,10 +20,12 @@ public class Notification extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         Read = new javax.swing.JButton();
 
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Notification");
+
 
         Filter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Unread", "Read", "All"}));
         Filter.addActionListener(new java.awt.event.ActionListener() {
@@ -29,6 +33,7 @@ public class Notification extends javax.swing.JFrame {
                 FilterActionPerformed(evt);
             }
         });
+
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -43,7 +48,9 @@ public class Notification extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+
         Read.setText("Read");
+
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -97,6 +104,7 @@ public class Notification extends javax.swing.JFrame {
 
     
 
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -129,7 +137,7 @@ public class Notification extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+
     private javax.swing.JComboBox<String> Filter;
     private javax.swing.JButton Read;
     private javax.swing.JLabel jLabel1;

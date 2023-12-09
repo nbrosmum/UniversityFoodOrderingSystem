@@ -347,6 +347,49 @@ public class DB {
             String comment  = parts[5];
 
             return new Object[]{foodReviewID,orderId,vendorId,dt,rating,comment};
+
+        }
+    }
+    
+    public class MenuRowMapper implements RowMapper {      
+        @Override
+        public Object[] mapRow(String line) {
+            String[] parts = line.split(",");
+            String foodID  = parts[0];
+            String foodName  = parts[1];
+            String price  = parts[2];
+            String description  = parts[3];
+            String vendorId  = parts[4];            
+
+            return new Object[]{foodID,foodName,price,description,vendorId};
+        }
+    }
+    
+    
+    public class CustomerRowMapper implements RowMapper {
+    @Override
+        public Object[] mapRow(String line) {
+            String[] parts = line.split(",");
+
+            // Check if parts array has at least 6 elements
+            if (parts.length >= 6) {
+                String customerId = parts[0];
+                String customerName = parts[1];
+                String customerPassword = parts[2];
+                String customerEmail = parts[3];
+                String customerPhoneNumber = parts[4];
+                String balanceStr = parts[5];
+
+                return new Object[]{customerId, customerName, customerPassword, customerEmail, customerPhoneNumber, balanceStr};
+            } else {
+                
+                return null;
+            }
+        }
+    }
+   
+    
+
         }
     }
     

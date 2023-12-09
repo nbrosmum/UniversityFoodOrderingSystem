@@ -19,7 +19,9 @@ import javax.swing.table.DefaultTableModel;
  * @author User
  */
 public class Customer extends User {
-   private double credit;
+
+   private double balance;
+
 
    DB db = new DB("Order");
     public Customer( ) {
@@ -31,13 +33,14 @@ public class Customer extends User {
     public Customer( String username, String password, String email,String phoneNumber) {
          super( username, password, email,phoneNumber);
      }
-  
-    public double getCredit() {
-        return credit;
+
+    public double getBalance() {
+        return balance;
+
     }
 
-    public void setCredit(double credit) {
-        this.credit = credit;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public void OrderFood(String orderID, String foodID, String foodName, int portion, double price, String status, String date, double totalPrice, String deliveryMethod,String VendorID,String RunnerID ) throws IOException{
