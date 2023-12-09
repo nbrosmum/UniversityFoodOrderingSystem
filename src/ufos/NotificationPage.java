@@ -4,8 +4,11 @@
  */
 package ufos;
 
+import java.awt.CardLayout;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -14,9 +17,8 @@ import javax.swing.table.*;
  * @author leech
  */
 public class NotificationPage extends javax.swing.JFrame {
-
-    User u = new User();
     GUI ui = new GUI();
+    User u = new User();    
     DB nt = new DB("Notification");
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"Notification", "Status"};
@@ -73,6 +75,11 @@ public class NotificationPage extends javax.swing.JFrame {
         jLabel1.setText("Notification");
 
         Back.setText("Back");
+        Back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,69 +156,81 @@ public class NotificationPage extends javax.swing.JFrame {
     }//GEN-LAST:event_FilterActionPerformed
 
     private void ReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReadActionPerformed
-        //
-        //        ArrayList<String> lines = nt.readFile();
-        //        model.setRowCount(0);
-        //
-        //
-        //// Get the orderId of the chosen row in the model
-        //        int row = Notif.getSelectedRow();
-        //        String orderId = String.valueOf(model.getValueAt(row, 0));
-        //
-        //// Read the Order.txt file line by line
-        //        List<String> data = db.readFile();
-        //        List<String> sameIDd = new ArrayList<>();
-        //        for (String line : data) {
-            //            String[] parts = line.split(",");
-            //            String currentOrderId = parts[0];
-            //
-            //// If the currentOrderId is the same as the orderId of the chosen row in the model and the status is pending, add the line to the list
-            //            if (currentOrderId.equals(orderId)) {
-                //                sameIDd.add(line);
-                //            }
-            //        }
-        //
-        //        data.removeIf(line -> {
-            //            String[] parts = line.split(",");
-            //            String currentOrderId = parts[0];
-            //            return currentOrderId.equals(orderId);
-            //         });
-    //
-    //        db.overWriteFile();
-    //        try {
-        //            for (String line : data) {
-            //                db.bw.write(line);
-            //                db.bw.newLine();
-            //            }
-        //        } catch (IOException ex) {
-        //            System.out.println("Something went wrong.");
-        //        }
-        //        db.closeResources();
-        //
-        //
-        //
-        //        db.writeFile();
-        //        for (String line : sameIDd) {
-            //            String[] parts = line.split(",");
-            //            String status = parts[5];
-            //            if (status.equals("Pending")) {
-                //                String[] updatedParts = Arrays.copyOf(parts, parts.length);
-                //                updatedParts[5] = "Cancelled";
-                //                line = String.join(",", updatedParts);
-                //
-                //
-                //            }
-            //            try {
-                //                db.bw.write(line);
-                //                db.bw.newLine();
-                //
-                //            } catch (IOException ex) {
-                //                JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
-                //            }
-            //        db.closeResources();
-            //        load();
-            //        }
+     
+        // Get the orderId of the chosen row in the model
+        int row = Notif.getSelectedRow();
+        if (row != -1){
+            String Context = model.getValueAt(row, 0).toString();
+            String Status = model.getValueAt(row, 1).toString();
+            model.setRowCount(0); 
+
+            ArrayList<String> lines = nt.readFile();
+            List<String> sameIDd = new ArrayList<>();
+            String lineToRemove = "";
+            String id = "";
+
+            for (String line : lines) {
+                String[] parts = line.split(",");
+                if (parts[1].equals(Context) && parts[4].equals(Status)) {
+                    lineToRemove = line;
+                    sameIDd.add(lineToRemove);
+
+                }
+            }
+
+            lines.remove(lineToRemove);
+            nt.overWriteFile();
+            for (String line : lines) {
+                try {
+                    nt.bw.write(line);
+                    nt.bw.newLine();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+                }
+            }         
+            nt.closeResources();
+
+            nt.writeFile();            
+            for (String line : sameIDd) {
+                try {
+                    String[] parts = line.split(",");
+                    String status = parts[4];
+                    if (status.equals("Unread")) {
+                        String[] updatedParts = Arrays.copyOf(parts, parts.length);
+                        updatedParts[4] = "Read";
+                        line = String.join(",", updatedParts);
+                    }             
+                    nt.bw.write(line);
+                    nt.bw.newLine();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            nt.closeResources();
+        } else {
+            JOptionPane.showMessageDialog(null, "There's no data","Fail", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        load();
+
     }//GEN-LAST:event_ReadActionPerformed
+
+    private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
+        String ID = u.getId();
+        char firstCharacter = ID.charAt(0);
+        if (firstCharacter == 'V'){
+            ui.callPage("VendorOrderHistory", u);
+            this.dispose();
+        } else if (firstCharacter == 'C') {
+            ui.callPage("CustomerProfilePage", u);
+            this.dispose();
+        } else if (firstCharacter == 'R') {
+            ui.callPage("RunnerFrame", u);
+            this.dispose();           
+        } else {
+            JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
+        }        
+    }//GEN-LAST:event_BackActionPerformed
 
     public void load(){
         String ID = u.getId();
@@ -227,6 +246,7 @@ public class NotificationPage extends javax.swing.JFrame {
             if (ID.equals(Receive) && Status.equals("Unread")) {
                 model.addRow(new Object[]{Context,Status});
             }
+            
         }
         nt.closeResources();
     }

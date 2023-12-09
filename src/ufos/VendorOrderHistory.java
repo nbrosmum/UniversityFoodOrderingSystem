@@ -195,15 +195,8 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void FoodMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoodMenuActionPerformed
-        VendorFoodMenu wp = new VendorFoodMenu(u);
-        wp.setVisible(true);
-        wp.pack();
-        wp.setLocationRelativeTo(null);
-        wp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ui.callPage("VendorFoodMenu",u);
         this.dispose();
-//        
-//        ui.callPage("VendorFoodMenu",u);
-//        this.dispose();
     }//GEN-LAST:event_FoodMenuActionPerformed
 
     private void OrderPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderPageActionPerformed
@@ -214,22 +207,26 @@ public class VendorOrderHistory extends javax.swing.JFrame {
     private void OrderHistoryMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderHistoryMouseReleased
 // Get the orderId of the chosen row in the model
         int row = OrderHistory.getSelectedRow();
-        String orderId = String.valueOf(model.getValueAt(row, 0));
+        if (row != -1){
+            String orderId = String.valueOf(model.getValueAt(row, 0));
 
 
-        List<Object[]> rows = fr.readData(review);
-// Read the Order.txt file line by line
-        for (Object[] rowData : rows){
-            String currentOrderId = (String) rowData[1];
-            String sameIDdValue = (String) rowData[5];
-            String Rating = (String) rowData[4];
-            if (currentOrderId.equals(orderId)) {
-                ReviewText.setText(sameIDdValue);
-                RatingNo.setText(Rating);
-            }    
+            List<Object[]> rows = fr.readData(review);
+    // Read the Order.txt file line by line
+            for (Object[] rowData : rows){
+                String currentOrderId = (String) rowData[1];
+                String sameIDdValue = (String) rowData[5];
+                String Rating = (String) rowData[4];
+                if (currentOrderId.equals(orderId)) {
+                    ReviewText.setText(sameIDdValue);
+                    RatingNo.setText(Rating);
+                }    
+            }
+
+            fr.closeResources();         
+        } else {
+            JOptionPane.showMessageDialog(null, "There's no data","Fail", JOptionPane.INFORMATION_MESSAGE);
         }
-  
-        fr.closeResources();         
         
     }//GEN-LAST:event_OrderHistoryMouseReleased
 
