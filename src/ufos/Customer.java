@@ -116,8 +116,9 @@ public class Customer extends User {
     }
     
     public void Topup(String UserId,String Name,String TpValue) throws IOException{
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         ndb.writeFile();
-        ndb.bw.write(ndb.id + "," + UserId + "," + Name + "," + TpValue + ",Pending" );
+        ndb.bw.write(ndb.id + "," + UserId + "," + Name + ","+ date + "," + TpValue + ",Pending" );
         ndb.bw.newLine();
         ndb.closeResources();
     }

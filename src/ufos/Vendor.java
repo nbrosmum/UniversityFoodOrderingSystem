@@ -23,6 +23,18 @@ public class Vendor extends User{
     public String getStoreName() {
         return storeName;
     }
+    public String getStoreName(String VendorID) {
+        // Read the food file
+        ArrayList<String> Data = vdb.readFile();
+        // Find the foodID for the given foodName
+        for (String line : Data) {
+            String[] parts = line.split(",");
+            if (parts[0].equals(VendorID)) {
+                return parts[5];     
+            }
+        }
+        return null;  
+    }
 
     public void setStoreName(String storeName) {
         this.storeName = storeName;

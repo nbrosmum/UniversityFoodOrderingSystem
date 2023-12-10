@@ -1,0 +1,16 @@
+N001,There's a new Order!,C002,V002,Unread
+N002,There's a new Order!,C002,V002,Unread
+N003,There's a new Order!,C002,V002,Unread
+N004,There's a new Order!,C002,V002,Unread
+N005,There's a new Order!,C002,V002,Unread
+N006,There's a new Order!,C001,V002,Unread
+N007,There's a new Order!,C001,V002,Unread
+N008,There's a new Order!,C001,V002,Unread
+N009,Your Order is being prepared,V001,C001,Unread
+N010,Your Order is being prepared,V001,C001,Unread
+N011,Your Order is done,V001,null,Unread
+N011,Your Order is done,V001,C001,Unread
+N012,Your Order is done,V001,null,Unread
+N012,Your Order is done,V001,C001,Unread
+N013,Your Order is done,V001,null,Unread
+N013,Your Order is done,V001,C001,Unread

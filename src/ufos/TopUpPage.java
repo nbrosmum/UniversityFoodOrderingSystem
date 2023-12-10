@@ -48,8 +48,6 @@ public class TopUpPage extends javax.swing.JFrame {
         model.setRowCount(0);
 
         for (Object[] rowData : rows) {
-            System.out.println("Row data: " + Arrays.toString(rowData));
-
             if (rowData == null || rowData.length < 5) {
                 continue; // Skip invalid rows
             }
@@ -255,21 +253,17 @@ public class TopUpPage extends javax.swing.JFrame {
             t.updateCustomerBalance(customerID, newBalance);
             t.WriteTransactionFile(customerID, customerName, topUpAmount);
    
-            // Clear the top-up amount field
-           
-
-            // Display the customer ID and Name in text fields
-            tf_cId.setText(customerID);
-            tf_cName.setText(customerName);
+            tf_cId.setText("");
+            tf_cName.setText("");
+            tf_tuAmount.setText("");
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Invalid top-up amount!");
         } catch (IOException ex) {
             Logger.getLogger(TopUpPage.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-
+   
     }//GEN-LAST:event_btn_tUpActionPerformed
-
+ 
     private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
         ui.callPage("AdminDashboard",u);
         this.dispose();

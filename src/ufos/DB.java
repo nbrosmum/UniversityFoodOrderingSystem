@@ -362,13 +362,14 @@ public class DB {
             String[] parts = line.split(",");
 
             // Check if parts array has at least 6 elements
-            if (parts.length >= 5) {
+            if (parts.length >= 6) {
                 String transactionID = parts[0];
                 String customerID = parts[1];
                 String purpose = parts[2];
                 String transaction = parts[3];
-                String balance = parts[4];
-                return new Object[]{transactionID,customerID,purpose,transaction,balance};
+                String date = parts[4];
+                String balance = parts[5];
+                return new Object[]{transactionID,customerID,purpose,transaction,date,balance};
                
             }else{
                 return null;
@@ -380,13 +381,15 @@ public class DB {
         @Override
         public Object[] mapRow(String line) {
             String[] parts = line.split(",");
-            if (parts.length >= 4) {
-                String customerId = parts[0];
-                String customerName = parts[1];
-                String TopUp = parts[2];
-                String status = parts[3];
+            if (parts.length >= 6) {
+                String nId = parts[0];
+                String customerId = parts[1];
+                String customerName = parts[2];
+                String date = parts[3];
+                String TopUp = parts[4];
+                String status = parts[5];
 
-                return new Object[]{customerId,customerName,TopUp,status};
+                return new Object[]{nId,customerId,customerName,date,TopUp,status};
             } else {
                 return null;
            }

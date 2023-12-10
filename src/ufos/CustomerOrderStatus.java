@@ -4,9 +4,11 @@
  */
 package ufos;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,6 +19,8 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
     GUI ui = new GUI();
     User u = new User();
     DB db = new DB("Order");
+    DB fdb = new DB("FoodReview");
+    DB ddb = new DB("FoodReview");
     DB.OrderRowMapper mapper = db.new OrderRowMapper();
 
     /**
@@ -48,28 +52,33 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
 
         OrderStatusTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "OrderID", "Date", "Status"
+                "Order ID", "Vendor ID", "Runner ID", "Date", "Delivery Method", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, true, true, false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        OrderStatusTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                OrderStatusTableMouseReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(OrderStatusTable);
         if (OrderStatusTable.getColumnModel().getColumnCount() > 0) {
             OrderStatusTable.getColumnModel().getColumn(0).setResizable(false);
-            OrderStatusTable.getColumnModel().getColumn(1).setResizable(false);
-            OrderStatusTable.getColumnModel().getColumn(2).setResizable(false);
+            OrderStatusTable.getColumnModel().getColumn(3).setResizable(false);
+            OrderStatusTable.getColumnModel().getColumn(5).setResizable(false);
         }
 
         Backbtn.setText("Back");
@@ -88,23 +97,27 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
+                .addComponent(jLabel1)
+                .addContainerGap(442, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(Backbtn)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(28, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(Backbtn)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+                .addGap(28, 28, 28)
                 .addComponent(Backbtn)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         pack();
@@ -114,7 +127,59 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
         ui.callPage("CustomerFoodMenu",u);
         this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
-     private void load() {
+
+    private void OrderStatusTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrderStatusTableMouseReleased
+        int selectedRow = OrderStatusTable.getSelectedRow();
+        if (selectedRow != -1) {
+            String orderID = (String) OrderStatusTable.getValueAt(selectedRow, 0);
+            String vendorID = (String) OrderStatusTable.getValueAt(selectedRow, 1);
+            String runnerID = (String) OrderStatusTable.getValueAt(selectedRow, 2);
+            String deliveryMethodID = (String) OrderStatusTable.getValueAt(selectedRow, 4);
+            String status = (String) OrderStatusTable.getValueAt(selectedRow, 5);
+            if (status.equals("Delivered")) {
+                if (hasFoodReviewed(orderID) && hasDeliReviewed(orderID)) {   
+                        CustomerReview reviewWindow = new CustomerReview(u, orderID, runnerID, vendorID,deliveryMethodID);
+                        reviewWindow.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "You have already reviewed this order.");
+                }
+            }else if(status.equals("Done")){
+                if (hasFoodReviewed(orderID)) {   
+                       ReviewForFood reviewForFoodWindow = new ReviewForFood(u, orderID, vendorID);
+                       reviewForFoodWindow.setVisible(true); 
+                } else {
+                    JOptionPane.showMessageDialog(this, "You have already reviewed this order.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Cannot review: Order status is not Done or Delivered  .");
+            }
+
+            
+        }
+    
+    }//GEN-LAST:event_OrderStatusTableMouseReleased
+    private boolean hasFoodReviewed(String orderID){
+        ArrayList<String> Data = fdb.readFile();
+        for (String line : Data) {
+            String[] parts = line.split(",");
+            if (parts[1].equals(orderID)) {
+                return false;
+            }   
+        }
+        return true;
+    }
+    private boolean hasDeliReviewed(String orderID){
+        ArrayList<String> Data = ddb.readFile();
+        for (String line : Data) {
+            String[] parts = line.split(",");
+            if (parts[1].equals(orderID)) {
+                return false;
+            }   
+        }
+        return true;
+    }
+    
+    private void load() {
        DefaultTableModel model  = (DefaultTableModel)OrderStatusTable.getModel();
        // Use DB class to read data
        String Id = u.getId();
@@ -125,7 +190,10 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
 
        for (Object[] rowData : rows) {
            String orderId = (String) rowData[0];
+           String VendorId = (String) rowData[9];
+           String RunnerID = (String) rowData[11];
            String dt = (String) rowData[6];
+           String DeliMethod = (String) rowData[8];
            String Status =(String)rowData[5];
            String Userid = (String)rowData[10];
   
@@ -134,7 +202,7 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
                 if (!orderIds.add(orderId)) {
                     continue;
                 }
-                model.addRow(new Object[]{orderId,dt,Status});
+                model.addRow(new Object[]{orderId,VendorId,RunnerID,dt,DeliMethod,Status});
 
             } 
        }

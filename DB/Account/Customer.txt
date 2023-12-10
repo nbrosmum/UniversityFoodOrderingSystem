@@ -1,4 +1,4 @@
-C001,MUM,mum123,mum@gmail.com,0001223423,100.0
-C002,walter,walter,walter@gmail.com,12334553456,105.0
+C001,MUM,mum123,mum@gmail.com,0001223423,287.0
+C002,walter,walter,walter@gmail.com,12334553456,1.0
 C004,ginger,ginger,ginger@gmail.com,12345678,13.0
 C005,walter,walter,email@gmail.com,12345334566,10.0

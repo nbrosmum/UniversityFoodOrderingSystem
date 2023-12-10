@@ -5,6 +5,7 @@
 package ufos;
 
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -13,6 +14,7 @@ import java.util.List;
 public class CustomerFoodReview extends javax.swing.JFrame {
     GUI ui = new GUI();
     DB fdb = new DB("FoodReview");
+    Vendor v = new Vendor();
     User u = new User();
     DB.ReviewRowMapper review = fdb.new ReviewRowMapper();
     /**
@@ -23,7 +25,8 @@ public class CustomerFoodReview extends javax.swing.JFrame {
     }
     public CustomerFoodReview(User id) {
         initComponents();     
-        u = id;
+        this.u = id;
+        load();
     }
 
     /**
@@ -41,9 +44,6 @@ public class CustomerFoodReview extends javax.swing.JFrame {
         FoodReviewTable = new javax.swing.JTable();
         Backbtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -62,17 +62,17 @@ public class CustomerFoodReview extends javax.swing.JFrame {
 
         FoodReviewTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Store Name", "Rating", "Date"
+                "Review ID", "Store Name", "Rating", "Date", "Review"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -84,6 +84,8 @@ public class CustomerFoodReview extends javax.swing.JFrame {
             FoodReviewTable.getColumnModel().getColumn(0).setResizable(false);
             FoodReviewTable.getColumnModel().getColumn(1).setResizable(false);
             FoodReviewTable.getColumnModel().getColumn(2).setResizable(false);
+            FoodReviewTable.getColumnModel().getColumn(3).setResizable(false);
+            FoodReviewTable.getColumnModel().getColumn(4).setResizable(false);
         }
 
         Backbtn.setText("Back");
@@ -96,45 +98,32 @@ public class CustomerFoodReview extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Food Review");
 
-        jLabel2.setText("Review:");
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Review", "User"
-            }
-        ));
-        jScrollPane3.setViewportView(jTable2);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(Backbtn)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1)
-                        .addComponent(jLabel2)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 58, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(Backbtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(309, 309, 309)
+                        .addComponent(jLabel1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addGap(27, 27, 27)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
                 .addComponent(Backbtn)
                 .addContainerGap(26, Short.MAX_VALUE))
         );
@@ -147,8 +136,19 @@ public class CustomerFoodReview extends javax.swing.JFrame {
        this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
     private void load(){
+       DefaultTableModel model  = (DefaultTableModel)FoodReviewTable.getModel();
        List<Object[]> rows = fdb.readData(review);
-       
+       model.setRowCount(0);
+       for(Object[] rowData : rows){
+            String foodReviewID  = (String)rowData[0];
+            String vendorId  = (String)rowData[2];
+            String dt  = (String)rowData[3];
+            String rating  = (String)rowData[4];            
+            String comment  = (String)rowData[5];
+            String storeName = v.getStoreName(vendorId);
+            model.addRow(new Object[]{foodReviewID,storeName,rating,dt,comment}); 
+       }
+       fdb.closeResources();
     }
     /**
      * @param args the command line arguments
@@ -190,11 +190,8 @@ public class CustomerFoodReview extends javax.swing.JFrame {
     private javax.swing.JButton Backbtn;
     private javax.swing.JTable FoodReviewTable;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 }

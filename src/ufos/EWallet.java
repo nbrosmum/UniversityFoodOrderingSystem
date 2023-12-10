@@ -66,7 +66,6 @@ public class EWallet extends javax.swing.JFrame {
 
         jLabel3.setText("Top - Up");
 
-        TpTF.setText("0.00");
         TpTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TpTFActionPerformed(evt);
@@ -198,7 +197,7 @@ public class EWallet extends javax.swing.JFrame {
     }//GEN-LAST:event_TopupbtnActionPerformed
 
     private void NotifBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NotifBtnActionPerformed
-        ui.callPage("BalanceNotification", u);
+        ui.callPage("TopUpNotification", u);
         this.dispose();
     }//GEN-LAST:event_NotifBtnActionPerformed
 

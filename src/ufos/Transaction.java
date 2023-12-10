@@ -7,7 +7,9 @@ package ufos;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -103,8 +105,9 @@ public class Transaction {
     private void logTransaction(String userID, String orderID, String transactionType, double amount, double newBalance) {
         // Assuming tdb is an instance of a transaction database class
         try {
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             tdb.writeFile();
-            tdb.bw.write(tdb.id + "," + userID + "," + orderID + ", " + transactionType + ": -" + amount + "," + newBalance);
+            tdb.bw.write(tdb.id + "," + userID + "," + orderID + ", " + transactionType + ": -" + amount + ","+ date +"," + newBalance);
             tdb.bw.newLine();
             tdb.closeResources();
         } catch (IOException e) {

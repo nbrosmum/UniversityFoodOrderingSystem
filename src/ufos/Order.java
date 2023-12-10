@@ -24,8 +24,7 @@ public class Order {
     public Order(List<String[]> items) {
         this.items = items;
     }
-    
-    
+
     public double calculateTotalPrice() {
       double total = 0;
       for(String[] item : items) {
