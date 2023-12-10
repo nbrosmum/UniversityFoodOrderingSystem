@@ -14,3 +14,7 @@ N010,There's a new Order!,C003,V002,Read
 N009,There's a new Order!,C003,V002,Read
 N008,There's a new Order!,C003,V002,Read
 N015,Your Order is done,V002,C003,Unread
+N016,There's a new Order!,C001,V002,Unread
+N017,There's a new Order!,C001,V002,Unread
+N018,There's a new Order!,C001,V002,Unread
+N019,There's a new Order!,C001,V002,Unread

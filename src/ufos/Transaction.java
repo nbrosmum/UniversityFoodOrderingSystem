@@ -56,8 +56,8 @@ public class Transaction {
         String Amount = String.valueOf(topUpAmount);
         double CusBalance = c.getBalance(CustomerId);
         String balancetp = String.valueOf(CusBalance);
-        String Transaction = tdb.id + "," + CustomerId + "," + CustomerName + ", Top-Up : +" + Amount + "," +balancetp;
-        tdb.bw.write(Transaction);
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        tdb.bw.write(tdb.id + "," + CustomerId + "," + CustomerName + ", Top-Up : +" + Amount + "," + date + "," + balancetp);
         tdb.bw.newLine();
         tdb.closeResources();
     }
@@ -103,7 +103,6 @@ public class Transaction {
     }
     
     private void logTransaction(String userID, String orderID, String transactionType, double amount, double newBalance) {
-        // Assuming tdb is an instance of a transaction database class
         try {
             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             tdb.writeFile();

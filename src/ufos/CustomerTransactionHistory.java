@@ -24,9 +24,9 @@ public class CustomerTransactionHistory extends javax.swing.JFrame {
     public CustomerTransactionHistory(){
         initComponents();  
     }
-    public CustomerTransactionHistory(User id) {
+    public CustomerTransactionHistory(User u) {
         initComponents();     
-        this.u = id; 
+        this.u = u; 
         load();
     }
 
@@ -103,28 +103,20 @@ public class CustomerTransactionHistory extends javax.swing.JFrame {
     }//GEN-LAST:event_BackbtnActionPerformed
     
     private void load() {
-       DefaultTableModel model  = (DefaultTableModel)TransactionTable.getModel();
-       // Use DB class to read data
-       String Id = u.getId();
-       List<Object[]> rows = db.readData(mapper);
-
-       model.setRowCount(0);
- 
-       for (Object[] rowData : rows) {
-           String TransactionID =(String) rowData[0];
-           String UserID =(String) rowData[1];
-           String Transaction =(String) rowData[3];
-           String date=(String) rowData[4];
-           String balance=(String) rowData[5];
-  
-
-            if (UserID.equals(Id)) {
-                model.addRow(new Object[]{TransactionID,Transaction,date,balance});
-
-            } 
-       }
-
-       db.closeResources();
+        DefaultTableModel model  = (DefaultTableModel)TransactionTable.getModel();
+        String Id = u.getId();
+        List<Object[]> rows = db.readData(mapper);
+        model.setRowCount(0);
+        for(Object[] rowdata : rows){
+            String transactionID = (String) rowdata[0];
+            String customerID = (String) rowdata[1];
+            String purpose = (String) rowdata[2];
+            String transaction = (String) rowdata[3];
+            String date = (String) rowdata[4];
+            String balance =(String) rowdata[5];
+            
+            model.addRow(new Object[]{transactionID,transaction,date,balance});
+        }
     }
     /**
      * @param args the command line arguments

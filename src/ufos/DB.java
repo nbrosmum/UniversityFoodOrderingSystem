@@ -361,50 +361,21 @@ public class DB {
     
         public Object[] mapRow(String line) {
             String[] parts = line.split(",");
-
             // Check if parts array has at least 6 elements
             if (parts.length >= 6) {
                 String transactionID = parts[0];
                 String customerID = parts[1];
                 String purpose = parts[2];
                 String transaction = parts[3];
-                String balance = parts[4];
-                return new Object[]{transactionID,customerID,purpose,transaction,balance};
-                
-            } else {
-                
-                return null;
-            }
-        }
-    }
-    
-    public class BalanceNotificationRowMapper implements RowMapper {
-    @Override
-        public Object[] mapRow(String line) {
-            String[] parts = line.split(",");
-            if (parts.length >= 6) {
-                String customerId = parts[0];
-                String customerName = parts[1];
-                String customerPassword = parts[2];
-                String topupStr = parts[3];
-                String status = parts[4];
-                String balanceStr = parts[5];
-                return new Object[]{customerId, customerName, customerPassword, topupStr, status, balanceStr};
-            } else {
-                
                 String date = parts[4];
                 String balance = parts[5];
                 return new Object[]{transactionID,customerID,purpose,transaction,date,balance};
-               
-            }else{
+            } else {
                 return null;
             }
         }
     }
-    
-
-   
-            
+        
     public class BalanceNotificationRowMapper implements RowMapper {
         @Override
         public Object[] mapRow(String line) {
