@@ -168,6 +168,11 @@ public class CustomerProfilePage extends javax.swing.JFrame {
     }//GEN-LAST:event_ProfilebtnActionPerformed
 
     private void LogoutbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutbtnActionPerformed
+        loginPage lg = new loginPage();
+        lg.setVisible(true);
+        lg.pack();
+        lg.setLocationRelativeTo(null);
+        lg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.dispose();
     }//GEN-LAST:event_LogoutbtnActionPerformed
 

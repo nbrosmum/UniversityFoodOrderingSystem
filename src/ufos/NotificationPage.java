@@ -173,6 +173,7 @@ public class NotificationPage extends javax.swing.JFrame {
                 String[] parts = line.split(",");
                 if (parts[1].equals(Context) && parts[4].equals(Status)) {
                     lineToRemove = line;
+                    id = parts[0];
                     sameIDd.add(lineToRemove);
 
                 }
@@ -190,23 +191,25 @@ public class NotificationPage extends javax.swing.JFrame {
             }         
             nt.closeResources();
 
-            nt.writeFile();            
+            nt.writeFile();          
             for (String line : sameIDd) {
-                try {
-                    String[] parts = line.split(",");
-                    String status = parts[4];
-                    if (status.equals("Unread")) {
+                String[] parts = line.split(",");
+                String nid = parts[0];
+                String status = parts[4];
+                    if (status.equals("Unread") && nid.equals(id)) {
+                    try {
                         String[] updatedParts = Arrays.copyOf(parts, parts.length);
                         updatedParts[4] = "Read";
                         line = String.join(",", updatedParts);
-                    }             
-                    nt.bw.write(line);
-                    nt.bw.newLine();
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
-                }
+                        nt.bw.write(line);
+                        nt.bw.newLine();
+                    } catch (IOException ex) {
+                        Logger.getLogger(NotificationPage.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    } 
             }
             nt.closeResources();
+            JOptionPane.showMessageDialog(null, "Marked As Read","Success", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "There's no data","Fail", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -239,9 +242,8 @@ public class NotificationPage extends javax.swing.JFrame {
         for (String line : lines) {
             String[] parts = line.split(",");
             String Context = parts[1];
-            String SendId = parts[2];
             String Receive = parts[3];
-            String Status = parts[4];
+            String Status = parts[4];;
             // If orderId is already in the set, skip this line
             if (ID.equals(Receive) && Status.equals("Unread")) {
                 model.addRow(new Object[]{Context,Status});
