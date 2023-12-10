@@ -43,6 +43,7 @@ public class CustomerProfilePage extends javax.swing.JFrame {
         Profilebtn = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        Notifybtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ProfilePage");
@@ -88,6 +89,13 @@ public class CustomerProfilePage extends javax.swing.JFrame {
 
         jLabel6.setText("Food Order System");
 
+        Notifybtn.setText("Notification");
+        Notifybtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NotifybtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -112,7 +120,7 @@ public class CustomerProfilePage extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(NameLabel))))
                     .addComponent(jLabel5))
-                .addContainerGap(145, Short.MAX_VALUE))
+                .addGap(51, 150, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,7 +128,9 @@ public class CustomerProfilePage extends javax.swing.JFrame {
                         .addComponent(jLabel6)
                         .addGap(182, 182, 182))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(Logoutbtn)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(Notifybtn)
+                            .addComponent(Logoutbtn))
                         .addGap(22, 22, 22))))
         );
         layout.setVerticalGroup(
@@ -133,7 +143,8 @@ public class CustomerProfilePage extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(IDLabel))
+                    .addComponent(IDLabel)
+                    .addComponent(Notifybtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -176,6 +187,10 @@ public class CustomerProfilePage extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_LogoutbtnActionPerformed
 
+    private void NotifybtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NotifybtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NotifybtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -217,6 +232,7 @@ public class CustomerProfilePage extends javax.swing.JFrame {
     private javax.swing.JButton Logoutbtn;
     private javax.swing.JButton Menubtn;
     private javax.swing.JLabel NameLabel;
+    private javax.swing.JButton Notifybtn;
     private javax.swing.JButton Profilebtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
