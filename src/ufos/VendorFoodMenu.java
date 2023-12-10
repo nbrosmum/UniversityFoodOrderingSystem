@@ -73,7 +73,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
             }
         });
 
-        OrderHistory.setText("Order History");
+        OrderHistory.setText("Vendor Dashboard");
         OrderHistory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OrderHistoryActionPerformed(evt);
