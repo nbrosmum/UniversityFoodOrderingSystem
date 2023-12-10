@@ -18,10 +18,9 @@ public class RunnerFrame extends javax.swing.JFrame {
     public RunnerFrame() {
         initComponents();
     }
-    
-     public RunnerFrame(User id) {
-        initComponents();     
-        u = id;   
+    public RunnerFrame(User u) {
+        initComponents();
+        this.u = u;
     }
 
 

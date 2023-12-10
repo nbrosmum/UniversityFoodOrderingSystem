@@ -20,11 +20,11 @@ public class loginPage extends javax.swing.JFrame {
         initComponents();
 
     }
-    
-    public loginPage(User id) {
-        initComponents();     
-        u = id;   
+    public loginPage(User u) {
+        initComponents();
+        this.u = u;
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.

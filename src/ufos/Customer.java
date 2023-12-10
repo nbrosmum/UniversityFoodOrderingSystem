@@ -27,6 +27,12 @@ public class Customer extends User {
 
     DB db = new DB("Order");
     DB cdb = new DB("Customer");
+    DB ndb = new DB("BalanceNotification");
+    Transaction t = new Transaction();
+    String CustomerID;
+    String newOrderId ;
+    String TotalPrice ;
+    String DeliMethod ;
     
     
     public Customer() {
@@ -74,12 +80,14 @@ public class Customer extends User {
     }
     public void reorder(String orderId) throws IOException {
         ArrayList<String> lines = db.readFile();
-        String newOrderId = db.generateId();
+        newOrderId = db.generateId();
         String Date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         for (String line : lines) {
             String[] parts = line.split(",");
             String currentOrderId = parts[0];
-            String CustomerID = parts[10];
+            CustomerID = parts[10];
+            TotalPrice = parts[7];
+            DeliMethod = parts[8];
             if (currentOrderId.equals(orderId)) {
                 String newLine = newOrderId + "," + parts[1] + "," + parts[2] + "," + parts[3] + "," + parts[4] + "," + parts[5] + "," + Date + "," + parts[7] + "," + parts[8] + "," + parts[9] + "," + parts[10] + "," + parts[11];
                 try {
@@ -92,8 +100,10 @@ public class Customer extends User {
                     e.printStackTrace();
                 }
             }
-            nt.Customer(CustomerID);
         }
+            double TotalPriceD = Double.parseDouble(TotalPrice);
+            t.payment(CustomerID, newOrderId,TotalPriceD,DeliMethod);
+            nt.Customer(CustomerID);
         
     }
     
@@ -153,5 +163,12 @@ public class Customer extends User {
         } finally {
             db.closeResources();
         }
+    public void Topup(String UserId,String Name,String TpValue) throws IOException{
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        ndb.writeFile();
+        ndb.bw.write(ndb.id + "," + UserId + "," + Name + ","+ date + "," + TpValue + ",Pending" );
+        ndb.bw.newLine();
+        ndb.closeResources();
     }
+     
 }

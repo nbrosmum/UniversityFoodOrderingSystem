@@ -7,7 +7,9 @@ package ufos;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -71,7 +73,7 @@ public class Transaction {
             int choice = JOptionPane.showConfirmDialog(null, pay, "Confirm Payment", JOptionPane.YES_NO_OPTION);
             if(choice == JOptionPane.YES_OPTION){
                logTransaction(UserID, OrderID, "Payment ", deliveryFee, (balance - deliveryFee)); 
-               //c.updateBalance(UserID, balance - deliveryFee);
+               updateCustomerBalance(UserID, (balance - deliveryFee));
                JOptionPane.showMessageDialog(null, "Payment successful!\n" + pay);
             }else{
                JOptionPane.showMessageDialog(null, "Payment canceled.");
@@ -82,7 +84,7 @@ public class Transaction {
             int choice = JOptionPane.showConfirmDialog(null, pay, "Confirm Payment", JOptionPane.YES_NO_OPTION);
             if(choice == JOptionPane.YES_OPTION){
                logTransaction(UserID, OrderID, "Payment ", contianerfee, (balance - contianerfee)); 
-               //c.updateBalance(UserID, balance - contianerfee);
+               updateCustomerBalance(UserID, (balance - contianerfee));
                JOptionPane.showMessageDialog(null, "Payment successful!\n" + pay);
             }else{
                JOptionPane.showMessageDialog(null, "Payment canceled.");
@@ -92,7 +94,7 @@ public class Transaction {
             int choice = JOptionPane.showConfirmDialog(null, pay, "Confirm Payment", JOptionPane.YES_NO_OPTION);
             if(choice == JOptionPane.YES_OPTION){
                logTransaction(UserID, OrderID, "Payment ", TotalPrice, (balance - TotalPrice )); 
-               //c.updateBalance(UserID, balance - TotalPrice);
+               updateCustomerBalance(UserID, (balance - TotalPrice ));
                JOptionPane.showMessageDialog(null, "Payment successful!\n" + pay);
             }else{
                JOptionPane.showMessageDialog(null, "Payment canceled.");
@@ -103,8 +105,9 @@ public class Transaction {
     private void logTransaction(String userID, String orderID, String transactionType, double amount, double newBalance) {
         // Assuming tdb is an instance of a transaction database class
         try {
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             tdb.writeFile();
-            tdb.bw.write(tdb.id + "," + userID + "," + orderID + ", " + transactionType + ": -" + amount + "," + newBalance);
+            tdb.bw.write(tdb.id + "," + userID + "," + orderID + ", " + transactionType + ": -" + amount + ","+ date +"," + newBalance);
             tdb.bw.newLine();
             tdb.closeResources();
         } catch (IOException e) {
@@ -123,5 +126,31 @@ public class Transaction {
         return balance;
 
     }
+    
+        public void updateCustomerBalance(String customerId, Double newBalance) {
+        // Read all customer data
+        List<String> customerLines = db.readFile();
+        List<String> updatedCustomerData = new ArrayList<>();
+
+        for (String line : customerLines) {
+            String[] parts = line.split(",");
+            if (parts.length >= 6 && parts[0].trim().equals(customerId.trim())) {
+                // Update the balance
+                parts[5] = String.valueOf(newBalance);
+            }
+            updatedCustomerData.add(String.join(",", parts));
+        }
+
+        // Write the updated data back to the customer file
+        try {
+            db.writeFile(updatedCustomerData);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error updating customer balance");
+        } finally {
+            db.closeResources();
+        }
+    }
+    
          
 }

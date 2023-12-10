@@ -70,6 +70,7 @@ public class GUI {
                 break;
             case "NotificationPage":
                 page = new NotificationPage(u);
+                break;
             case "TopUpPage":
                 page = new TopUpPage(u);
                 break;
@@ -81,6 +82,9 @@ public class GUI {
                 break;
             case "BalanceNotifcationPage":
                 page = new BalanceNotifcationPage(u);
+                break;
+            case "TopUpNotification":
+                page = new TopUpNotification(u);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid page: " + pageName);
