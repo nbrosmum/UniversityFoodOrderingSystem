@@ -48,17 +48,17 @@ public class Transaction {
         this.balance = balance;
     }
     
-    public void WriteTransactionFile(String CustomerId, String CustomerName, double topUpAmount) throws IOException {
-        Customer c = new Customer();
-        tdb.writeFile();
-        String Amount = String.valueOf(topUpAmount);
-        double CusBalance = c.getBalance(CustomerId);
-        String balancetp = String.valueOf(CusBalance);
-        String Transaction = tdb.id + "," + CustomerId + "," + CustomerName + ", Top-Up : +" + Amount + "," +balancetp;
-        tdb.bw.write(Transaction);
-        tdb.bw.newLine();
-        tdb.closeResources();
-    }
+//    public void WriteTransactionFile(String CustomerId, String CustomerName, double topUpAmount) throws IOException {
+//        Customer c = new Customer();
+//        tdb.writeFile();
+//        String Amount = String.valueOf(topUpAmount);
+//        double CusBalance = c.getBalance(CustomerId);
+//        String balancetp = String.valueOf(CusBalance);
+//        String Transaction = tdb.id + "," + CustomerId + "," + CustomerName + ", Top-Up : +" + Amount + "," +balancetp;
+//        tdb.bw.write(Transaction);
+//        tdb.bw.newLine();
+//        tdb.closeResources();
+//    }
 
     public void payment(String UserID, String OrderID,double TotalPrice,String DeliMethod ){
         Customer c = new Customer();

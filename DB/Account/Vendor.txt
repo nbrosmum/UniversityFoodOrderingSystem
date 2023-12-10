@@ -1,2 +1,1 @@
-V001,mumcj,mumcj,mumcj@gmail.com,0123456789,mamak
-V002,ct,123,h,64546,Hello
+V002,ct,ct,ct@gmail.com,280745,ctstore

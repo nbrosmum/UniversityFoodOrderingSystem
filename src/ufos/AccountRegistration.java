@@ -27,6 +27,7 @@ public class AccountRegistration extends javax.swing.JFrame {
     DB vendorDB = new DB ("Vendor");
     DB runnerDB = new DB ("Runner");
     DB customerDB = new DB ("Customer");
+    
     private DefaultTableModel adminTableModel;
     private DefaultTableModel vendorTableModel;
     private DefaultTableModel runnerTableModel;
@@ -184,7 +185,7 @@ public class AccountRegistration extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Username", "Password", "Email", "Phone Number"
+                "ID", "Username", "Password", "Email", "Phone Number"
             }
         ));
         t_customer.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -201,11 +202,11 @@ public class AccountRegistration extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Username", "Password", "Email", "Phone Number", "Store Name"
+                "ID", "Username", "Password", "Email", "Phone Number", "Store Name"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                true, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -219,11 +220,11 @@ public class AccountRegistration extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(t_vendor);
         if (t_vendor.getColumnModel().getColumnCount() > 0) {
-            t_vendor.getColumnModel().getColumn(0).setResizable(false);
             t_vendor.getColumnModel().getColumn(1).setResizable(false);
             t_vendor.getColumnModel().getColumn(2).setResizable(false);
             t_vendor.getColumnModel().getColumn(3).setResizable(false);
             t_vendor.getColumnModel().getColumn(4).setResizable(false);
+            t_vendor.getColumnModel().getColumn(5).setResizable(false);
         }
 
         tp_user.addTab("Vendor", jScrollPane3);
@@ -233,7 +234,7 @@ public class AccountRegistration extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Username", "Password", "Email", "Phone Number"
+                "ID", "Username", "Password", "Email", "Phone Number"
             }
         ));
         t_runner.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -250,7 +251,7 @@ public class AccountRegistration extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Username", "Password", "Email", "Phone Number"
+                "ID", "Username", "Password", "Email", "Phone Number"
             }
         ));
         t_admin.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -266,12 +267,6 @@ public class AccountRegistration extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tp_user, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btn_back)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(68, 68, 68)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,11 +301,22 @@ public class AccountRegistration extends javax.swing.JFrame {
                                     .addComponent(btn_add, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btn_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 143, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(234, 234, 234)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 230, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_back))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(234, 234, 234)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addComponent(tp_user, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -349,20 +355,18 @@ public class AccountRegistration extends javax.swing.JFrame {
                         .addComponent(btn_delete)))
                 .addGap(30, 30, 30)
                 .addComponent(btn_clear)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btn_back)
-                        .addGap(12, 12, 12))
-                    .addComponent(tp_user, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(26, 26, 26)
+                .addComponent(tp_user, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_back))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
      private Object[] mapRow(String line) {
-    // Exclude the first column (ID) from the mapping
+    // Include the first column (ID) in the mapping
         String[] columns = line.split(",");
-        return Arrays.copyOfRange(columns, 1, columns.length);
+        return Arrays.copyOf(columns, columns.length);
     }
     private JTable getSelectedTable(String userType) {
         switch (userType) {
@@ -425,10 +429,10 @@ public class AccountRegistration extends javax.swing.JFrame {
 
         if (selectedRow != -1) {
             // Set text fields with values from the selected row
-            tf_usr.setText(getTableModel(userType).getValueAt(selectedRow, 0).toString());
-            tf_paswd.setText(getTableModel(userType).getValueAt(selectedRow, 1).toString());
-            tf_mail.setText(getTableModel(userType).getValueAt(selectedRow, 2).toString());
-            tf_pNumber.setText(getTableModel(userType).getValueAt(selectedRow, 3).toString());
+            tf_usr.setText(getTableModel(userType).getValueAt(selectedRow, 1).toString());
+            tf_paswd.setText(getTableModel(userType).getValueAt(selectedRow, 2).toString());
+            tf_mail.setText(getTableModel(userType).getValueAt(selectedRow, 3).toString());
+            tf_pNumber.setText(getTableModel(userType).getValueAt(selectedRow, 4).toString());
         }
     }
     private void tf_usrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_usrActionPerformed
@@ -440,6 +444,7 @@ public class AccountRegistration extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
+  
         String username = tf_usr.getText();
         String password = tf_paswd.getText();
         String email = tf_mail.getText();
@@ -465,6 +470,10 @@ public class AccountRegistration extends javax.swing.JFrame {
                     r.register();
                 }
                 
+                DefaultTableModel tableModel = getTableModel(role);
+                tableModel.setRowCount(0);
+                getDB(role).loadData(tableModel, this::mapRow);
+                
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error registering user: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -474,31 +483,44 @@ public class AccountRegistration extends javax.swing.JFrame {
 
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
         String role = (String) jComboBox1.getSelectedItem();
-        String username = tf_usr.getText();
-        String password = tf_paswd.getText();
-        String email = tf_mail.getText();
-        String phoneNumber = tf_pNumber.getText();
-        DB db = getDB(role);
-        List<String> data = db.readFile();
-           String id = "";
-           String temp = "";
-           for (String line : data) {
-               String[] parts = line.split(",");
-               if (parts[1].equals(username) && parts[2].equals(password) && parts[3].equals(email)&& parts[4].equals(phoneNumber)) {
-                   temp = line;
-                   id = parts[0];
-               }
-           }
-           // delete the row
-           data.remove(temp);
-           u.update(id,username, password, email, phoneNumber, role);
+        int selectedRow = getSelectedRow(role);
 
+        if (selectedRow != -1) {
+            // Get the updated values from the text fields
+            String updatedId = getTableModel(role).getValueAt(selectedRow, 0).toString();
+            String updatedUsername = tf_usr.getText();
+            String updatedPassword = tf_paswd.getText();
+            String updatedEmail = tf_mail.getText();
+            String updatedPhoneNumber = tf_pNumber.getText();
+
+            // Update the data in the corresponding user class
+            switch (role) {
+                case "Admin":
+                    Admin a = new Admin(); // You may need to modify the constructor
+                    a.update(updatedId, updatedUsername, updatedPassword, updatedEmail, updatedPhoneNumber);
+                    break;
+                case "Customer":
+                    Customer c = new Customer();
+                    c.update(updatedId, updatedUsername, updatedPassword, updatedEmail, updatedPhoneNumber);
+                case "Vendor":
+                    Vendor v = new Vendor();
+                    v.update(updatedId, updatedUsername, updatedPassword, updatedEmail, updatedPhoneNumber);
+                case "Runner":
+                    Runner r = new Runner();
+                    r.update(updatedId, updatedUsername, updatedPassword, updatedEmail, updatedPhoneNumber);                 
+                
+            }
+
+            // Update the data in the table
             DefaultTableModel tableModel = getTableModel(role);
-            tableModel.setRowCount(0);
+            tableModel.setValueAt(updatedUsername, selectedRow, 1);
+            tableModel.setValueAt(updatedPassword, selectedRow, 2);
+            tableModel.setValueAt(updatedEmail, selectedRow, 3);
+            tableModel.setValueAt(updatedPhoneNumber, selectedRow, 4);
 
-            db.loadData(tableModel, this::mapRow);
-
-            tableModel.fireTableDataChanged();
+            // Clear the text fields after updating
+            clearFields();
+        }
 
     }//GEN-LAST:event_btn_updateActionPerformed
 
@@ -519,6 +541,10 @@ public class AccountRegistration extends javax.swing.JFrame {
        String username = tf_usr.getText();
         try {
             deleteUser(role, username);
+            
+            DefaultTableModel tableModel = getTableModel(role);
+            tableModel.setRowCount(0);
+            getDB(role).loadData(tableModel, this::mapRow);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error deleting user: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

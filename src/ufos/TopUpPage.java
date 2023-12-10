@@ -36,12 +36,7 @@ public class TopUpPage extends javax.swing.JFrame {
     public TopUpPage() {
         initComponents();
     }
-    public TopUpPage(User u) {
-        initComponents();
-        this.u = u;
-        loadCustomerData();
-        
-    }
+    
     
     public TopUpPage(User id) {
         initComponents();     
@@ -293,7 +288,7 @@ public class TopUpPage extends javax.swing.JFrame {
 
             // Update the customer balance in the file
             updateCustomerBalance(customerID, newBalance);
-            t.WriteTransactionFile(customerID, customerName, topUpAmount);
+//            t.WriteTransactionFile(customerID, customerName, topUpAmount);
    
             // Clear the top-up amount field
            
@@ -303,8 +298,6 @@ public class TopUpPage extends javax.swing.JFrame {
             tf_cName.setText(customerName);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Invalid top-up amount!");
-        } catch (IOException ex) {
-            Logger.getLogger(TopUpPage.class.getName()).log(Level.SEVERE, null, ex);
         }
         
 
