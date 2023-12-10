@@ -248,6 +248,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
             }
+            JOptionPane.showMessageDialog(null, "Order Declined","Fail", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "Choose a line","Fail", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -311,7 +312,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
                 }           
 
             }
-            JOptionPane.showMessageDialog(null, "Accepted", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Order Accepted", "Success", JOptionPane.INFORMATION_MESSAGE);
             db.closeResources();
             load();
             try {
@@ -392,7 +393,7 @@ public class VendorOrderPage extends javax.swing.JFrame {
                 }           
 
             }
-            JOptionPane.showMessageDialog(null, "Done", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Order Done Preparing", "Success", JOptionPane.INFORMATION_MESSAGE);
 
             db.closeResources();
             load();

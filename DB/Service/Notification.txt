@@ -1,12 +1,16 @@
-N001,Notification,V002,V002,Read
-N002,Your Order is done 1,V002,V002,Read
-N003,Your Order is being prepared 2,V002,V002,Read
-N004,Your Order is being prepared 3,V002,V002,Read
-N005,Your Order is being prepared 4,V002,V002,Read
-N006,Your Order is done 5,V002,C001,Unread
-N007,Your Order is being prepared 6,V002,C001,Unread
-N008,Your Order is being prepared 7,V002,C001,Unread
-N009,Your Order have been cancelled 8,V002,V002,Unread
-N010,Your Order is being prepared 9,V002,V002,Unread
-N011,Your Order is done 10,V002,V002,Unread
-N011,Your Order is done 11,V002,V002,Unread
+N001,There's a new Order!,C003,V002,Unread
+N002,There's a new Order!,C003,V002,Unread
+N003,There's a new Order!,C003,V002,Unread
+N004,There's a new Order!,C003,V002,Unread
+N005,There's a new Order!,C003,V002,Unread
+N006,There's a new Order!,C003,V002,Unread
+N007,There's a new Order!,C003,V002,Unread
+N010,Your Order is being prepared,V002,C003,Unread
+N011,Your Order is being cancelled,V002,C003,Unread
+N012,Your Order is being cancelled,V002,C003,Unread
+N014,There's a new Order!,C003,V002,Read
+N013,There's a new Order!,C003,V002,Read
+N010,There's a new Order!,C003,V002,Read
+N009,There's a new Order!,C003,V002,Read
+N008,There's a new Order!,C003,V002,Read
+N015,Your Order is done,V002,C003,Unread

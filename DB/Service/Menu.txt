@@ -1,7 +1,5 @@
-F001,Ice,1.0,ice,V002
-F002,water,2.0,dadsad,V002
-F003,rice,5.0,dsadasd,V002
-F004,fire,98.0,dsadsa,V002
-F005,earth,78.0,dasdasd,V002
-F006,wind,78.0,dasdasdasd,V002
-F007,mee goreng,10.0,mee and gerong,V001
+M001,nasi lemak,5.0,spicy rice,V002
+M002,water,1.0,ice water,V002
+M003,ice lemon tea,5.0,ice lemon tea,V002
+M004,roti canai,5.0,roti canai,V002
+M005,spegetti,50.0,noodles,V002

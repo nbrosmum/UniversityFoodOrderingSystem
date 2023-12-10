@@ -226,6 +226,8 @@ public class VendorFoodMenu extends javax.swing.JFrame {
                     temp = line;
                     id = parts[0];
 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error","Fail", JOptionPane.ERROR_MESSAGE);
                 }
             } 
             data.remove(temp);
@@ -235,7 +237,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
                     db.bw.write(line);
                     db.bw.newLine();
                 }             
-                JOptionPane.showMessageDialog(null, "Deleted", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Food Deleted", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "This item can't be delete","Fail", JOptionPane.ERROR_MESSAGE);
             }
@@ -271,7 +273,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
         String FoodItem = db.id + "," + foodName + "," +  priceString + "," + Description + "," + vendorIdString;
         try {
             db.bw.write(FoodItem + "\n");
-            JOptionPane.showMessageDialog(null, "Added", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Food Added", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error in Adding","Fail", JOptionPane.ERROR_MESSAGE);
         }
@@ -321,7 +323,7 @@ public class VendorFoodMenu extends javax.swing.JFrame {
                     db.bw.write(line);
                     db.bw.newLine();
                 }
-                JOptionPane.showMessageDialog(null, "Updated", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Food Updated", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Error in updating","Fail", JOptionPane.ERROR_MESSAGE);
 
