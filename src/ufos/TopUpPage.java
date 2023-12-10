@@ -258,6 +258,8 @@ public class TopUpPage extends javax.swing.JFrame {
             tf_tuAmount.setText("");
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Invalid top-up amount!");
+        } catch (IOException ex) {
+            Logger.getLogger(TopUpPage.class.getName()).log(Level.SEVERE, null, ex);
         }
    
     }//GEN-LAST:event_btn_tUpActionPerformed
