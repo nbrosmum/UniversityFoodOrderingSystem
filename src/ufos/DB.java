@@ -219,7 +219,8 @@ public class DB {
     
     public void closeResources() {
        try {
-           if (bw != null) bw.close();
+           if (bw != null)
+               bw.close();
        } catch (IOException e) {
            JOptionPane.showMessageDialog(null,"error!");
            e.printStackTrace();
@@ -357,9 +358,6 @@ public class DB {
         }
     }
     public class TransactionRowMapper implements RowMapper {
-    
-    public class BalanceNotificationRowMapper implements RowMapper {
-    @Override
         public Object[] mapRow(String line) {
             String[] parts = line.split(",");
 
@@ -371,6 +369,18 @@ public class DB {
                 String transaction = parts[3];
                 String balance = parts[4];
                 return new Object[]{transactionID,customerID,purpose,transaction,balance};
+                
+            } else {
+                
+                return null;
+            }
+        }
+    }
+    
+    public class BalanceNotificationRowMapper implements RowMapper {
+    @Override
+        public Object[] mapRow(String line) {
+            String[] parts = line.split(",");
             if (parts.length >= 6) {
                 String customerId = parts[0];
                 String customerName = parts[1];
@@ -378,9 +388,6 @@ public class DB {
                 String topupStr = parts[3];
                 String status = parts[4];
                 String balanceStr = parts[5];
-                
-                
-
                 return new Object[]{customerId, customerName, customerPassword, topupStr, status, balanceStr};
             } else {
                 
@@ -388,6 +395,8 @@ public class DB {
             }
         }
     }
+    
+
    
 }
 

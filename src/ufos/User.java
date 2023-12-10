@@ -94,35 +94,6 @@ public class User {
         return false;
     }
     
-    public void update(String id,String username, String password, String email, String phoneNumber, String role) {
-
-        DB db = new DB(role);
-        ArrayList<String> data = db.readFile();
-        List<String> updatedData = new ArrayList<>();
-
-        for (String line : data) {
-            String[] value = line.split(",");
-            if (value.length >= 6 && value[0].trim().equals(id.trim())) {
-                System.out.println("Updating line: " + line);
-                if (role.equals("Customer") || role.equals("Vendor")) {
-                    updatedData.add(id + "," + username + "," + password + "," + email + "," + phoneNumber + "," + value[5]);
-                } else {
-                    updatedData.add(id + "," + username + "," + password + "," + email + "," + phoneNumber);
-                }
-            } else {
-                System.out.println("Line not updated: " + line);
-                updatedData.add(line);
-            }
-        }
-
-        try {
-            db.writeFile(updatedData);
-            db.closeResources();
-        } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
-            e.printStackTrace();
-        }
-     }
     
     
     public void delete(String id, String role) throws IOException{

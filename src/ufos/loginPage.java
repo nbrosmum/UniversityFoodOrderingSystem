@@ -20,10 +20,7 @@ public class loginPage extends javax.swing.JFrame {
         initComponents();
 
     }
-    public loginPage(User u) {
-        initComponents();
-        this.u = u;
-    }
+    
     public loginPage(User id) {
         initComponents();     
         u = id;   

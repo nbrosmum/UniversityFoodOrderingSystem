@@ -7,6 +7,7 @@ package ufos;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -103,6 +104,33 @@ public class Customer extends User {
         cdb.bw.write(cdb.id + "," + this.getUsername()+ "," + this.getPassword()+ "," + this.getEmail() + "," + this.getPhoneNumber() + "," + balanceStr);
         cdb.bw.newLine();
         cdb.closeResources();
+    }
+    
+   public void update(String userId, String updatedUsername, String updatedPassword, String updatedEmail, String updatedPhoneNumber) {
+     
+        ArrayList<String> cdata = cdb.readFile();
+        List<String> updatedData = new ArrayList<>();
+
+        for (String line : cdata) {
+            String[] value = line.split(",");
+            if (value.length >= 6 && value[0].trim().equals(userId.trim())) {
+                // Update the user's information
+                value[1] = updatedUsername;
+                value[2] = updatedPassword;
+                value[3] = updatedEmail;
+                value[4] = updatedPhoneNumber;
+            }
+            updatedData.add(String.join(",", value));
+            
+        }
+        try {
+            cdb.writeFile(updatedData);  
+        } catch (IOException e) {
+           
+            e.printStackTrace();
+        } finally {
+            cdb.closeResources();
+        }
     }
     
      public void updateBalance(String userId, double newBalance) {

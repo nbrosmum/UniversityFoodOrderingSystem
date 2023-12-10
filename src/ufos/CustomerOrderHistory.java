@@ -4,7 +4,10 @@
  */
 package ufos;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -201,7 +204,11 @@ public class CustomerOrderHistory extends javax.swing.JFrame {
 
     private void ReorderbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReorderbtnActionPerformed
        String selectedOrderId = OrderIDTextField.getText();
-       c.reorder(selectedOrderId);
+        try {
+            c.reorder(selectedOrderId);
+        } catch (IOException ex) {
+            Logger.getLogger(CustomerOrderHistory.class.getName()).log(Level.SEVERE, null, ex);
+        }
        load();
     }//GEN-LAST:event_ReorderbtnActionPerformed
 
