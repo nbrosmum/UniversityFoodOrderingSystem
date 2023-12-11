@@ -19,10 +19,12 @@ public class RunnerReview extends javax.swing.JFrame {
 
     public RunnerReview() {
         initComponents();
+        load();
     }
 
     public RunnerReview(User u) {
         initComponents();
+        load();
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -112,6 +114,7 @@ public class RunnerReview extends javax.swing.JFrame {
        }
        rdb.closeResources();
     }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
