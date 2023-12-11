@@ -66,7 +66,7 @@ public class GenerateReceiptPage extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Generate Receipt");
+        jLabel1.setText("Generated Receipt");
 
         b_pReceipt.setText("Print Receipt");
         b_pReceipt.addActionListener(new java.awt.event.ActionListener() {
