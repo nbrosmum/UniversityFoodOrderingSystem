@@ -86,6 +86,9 @@ public class GUI {
             case "TopUpNotification":
                 page = new TopUpNotification(u);
                 break;
+            case "RunnerReview":
+                page = new RunnerReview(u);
+                break;
             default:
                 throw new IllegalArgumentException("Invalid page: " + pageName);
         }
