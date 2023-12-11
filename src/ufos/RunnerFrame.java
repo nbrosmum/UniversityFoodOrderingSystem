@@ -26,10 +26,12 @@ public class RunnerFrame extends javax.swing.JFrame {
      */
     public RunnerFrame() {
         initComponents();
+        load();
     }
     public RunnerFrame(User u) {
         initComponents();
         this.u = u;
+        load();
     }
 
     private void load(){
@@ -40,7 +42,7 @@ public class RunnerFrame extends javax.swing.JFrame {
         for (Object[] rowData : rows){
             String orderID  = (String)rowData[0];
             String deliveryMethod  = (String)rowData[8];
-            String deliveryStatus  = (String)rowData[12];
+            String deliveryStatus  = (String)rowData[5];
             model.addRow(new Object[]{orderID,deliveryMethod,deliveryStatus});
             
             if (deliveryMethod.contains("Delivery")) {
@@ -57,21 +59,6 @@ public class RunnerFrame extends javax.swing.JFrame {
             String line;
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Modify the specific row
-        if (lines.size() > 12) {
-            lines.set(12, data);
-        }
-
-        // Write the modified content back to the file
-        try (FileWriter writer = new FileWriter("MyFile.txt")) {
-            for (String line : lines) {
-                writer.write(line);
-                writer.write("\r\n"); // write new line
             }
         } catch (IOException e) {
             e.printStackTrace();

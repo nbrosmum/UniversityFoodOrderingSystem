@@ -25,29 +25,29 @@ public class RunnerHistory extends javax.swing.JFrame {
      */
     public RunnerHistory() {
         initComponents();
+        load();
     }
     
 
     public RunnerHistory(User id) {
         initComponents();     
+        load();
         u = id;
     }
     
     private void load(){
         DefaultTableModel model  = (DefaultTableModel)DeliveryHistory.getModel();
-        List<Object[]> rowsOrder = orderDB.readData(mapper);
-        List<Object[]> rowsReview = rdb.readData(review);
+        List<Object[]> rows = orderDB.readData(mapper);
         model.setRowCount(0);
        
-        for (Object[] rowData : rowsOrder){
-            String deliveryStatus  = (String)rowData[12];
-            model.addRow(new Object[]{deliveryStatus});
+        for (Object[] rowData : rows){
+            String deliveryID  = (String)rowData[0];
+            String dt  = (String)rowData[6];
+            String deliveryStatus  = (String)rowData[5];
+            model.addRow(new Object[]{deliveryID,dt,deliveryStatus});
+
         }
-        for (Object[] rowData : rowsReview){
-            String deliveryID = (String)rowData[0];
-            String dt = (String)rowData[3];
-            model.addRow(new Object[]{deliveryID, dt});
-        }
+        orderDB.closeResources();
     }
 
     /**
