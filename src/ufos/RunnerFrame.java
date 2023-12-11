@@ -4,6 +4,12 @@
  */
 package ufos;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -11,7 +17,10 @@ import javax.swing.table.DefaultTableModel;
  * @author ginger
  */
 public class RunnerFrame extends javax.swing.JFrame {
+    GUI ui = new GUI();
     User u = new User();
+    DB orderDB = new DB("Order");
+    DB.OrderRowMapper mapper = orderDB.new OrderRowMapper();
     /**
      * Creates new form Runner
      */
@@ -23,8 +32,51 @@ public class RunnerFrame extends javax.swing.JFrame {
         this.u = u;
     }
 
-
+    private void load(){
+        DefaultTableModel model  = (DefaultTableModel)DeliveryList.getModel();
+        List<Object[]> rows = orderDB.readData(mapper);
+        model.setRowCount(0);
+       
+        for (Object[] rowData : rows){
+            String orderID  = (String)rowData[0];
+            String deliveryMethod  = (String)rowData[8];
+            String deliveryStatus  = (String)rowData[12];
+            model.addRow(new Object[]{orderID,deliveryMethod,deliveryStatus});
+            
+            if (deliveryMethod.contains("Delivery")) {
+                model.addRow(new Object[]{orderID, "Delivery", deliveryStatus});
+            }
+        }
+        orderDB.closeResources();
+    }
     
+    private void writeToFile(String data) {
+   // Read the file
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("Order.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Modify the specific row
+        if (lines.size() > 12) {
+            lines.set(12, data);
+        }
+
+        // Write the modified content back to the file
+        try (FileWriter writer = new FileWriter("MyFile.txt")) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.write("\r\n"); // write new line
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,9 +89,11 @@ public class RunnerFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         DeliveryList = new javax.swing.JTable();
-        AcceptButton = new javax.swing.JButton();
+        DashboardButton = new javax.swing.JButton();
         DeclineButton = new javax.swing.JButton();
         CompleteButton = new javax.swing.JButton();
+        ReviewButton = new javax.swing.JButton();
+        AcceptButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -48,25 +102,34 @@ public class RunnerFrame extends javax.swing.JFrame {
 
         DeliveryList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "OrderID", "DeliveryStatus"
+                "OrderID", "DeliveryMethod", "DeliveryStatus"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(DeliveryList);
         if (DeliveryList.getColumnModel().getColumnCount() > 0) {
-            DeliveryList.getColumnModel().getColumn(0).setHeaderValue("OrderID");
-            DeliveryList.getColumnModel().getColumn(1).setHeaderValue("DeliveryStatus");
+            DeliveryList.getColumnModel().getColumn(0).setResizable(false);
+            DeliveryList.getColumnModel().getColumn(1).setResizable(false);
+            DeliveryList.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        AcceptButton.setText("Accept");
-        AcceptButton.addActionListener(new java.awt.event.ActionListener() {
+        DashboardButton.setText("Dashboard");
+        DashboardButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AcceptButtonActionPerformed(evt);
+                DashboardButtonActionPerformed(evt);
             }
         });
 
@@ -84,23 +147,39 @@ public class RunnerFrame extends javax.swing.JFrame {
             }
         });
 
+        ReviewButton.setText("Reviews");
+        ReviewButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReviewButtonActionPerformed(evt);
+            }
+        });
+
+        AcceptButton1.setText("Accept");
+        AcceptButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AcceptButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
+                        .addComponent(jLabel1)
+                        .addGap(135, 135, 135)
+                        .addComponent(DashboardButton, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(DeclineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(CompleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(AcceptButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(230, 230, 230)
-                        .addComponent(jLabel1)))
+                            .addComponent(ReviewButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(AcceptButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -109,37 +188,39 @@ public class RunnerFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(118, 118, 118)
-                        .addComponent(AcceptButton)
+                        .addComponent(AcceptButton1)
                         .addGap(18, 18, 18)
                         .addComponent(DeclineButton)
                         .addGap(18, 18, 18)
-                        .addComponent(CompleteButton))
+                        .addComponent(CompleteButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(ReviewButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(jLabel1)
-                        .addGap(26, 26, 26)
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(DashboardButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void AcceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptButtonActionPerformed
-        int selectedRow = DeliveryList.getSelectedRow();
-            if (selectedRow != -1) {
-              DefaultTableModel model = (DefaultTableModel) DeliveryList.getModel();
-              model.setValueAt("Accept", selectedRow, 4);
-              model.fireTableDataChanged();
-            }
-    }//GEN-LAST:event_AcceptButtonActionPerformed
+    private void DashboardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DashboardButtonActionPerformed
+        ui.callPage("RunnerHistory",u);
+        this.dispose();
+    }//GEN-LAST:event_DashboardButtonActionPerformed
 
     private void DeclineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeclineButtonActionPerformed
        int selectedRow = DeliveryList.getSelectedRow();
             if (selectedRow != -1) {
               DefaultTableModel model = (DefaultTableModel) DeliveryList.getModel();
-              model.setValueAt("Decline", selectedRow, 4);
+              model.setValueAt("Decline", selectedRow, 2);
               model.fireTableDataChanged();
+              
+              writeToFile("Decline");
             }
     }//GEN-LAST:event_DeclineButtonActionPerformed
 
@@ -147,10 +228,28 @@ public class RunnerFrame extends javax.swing.JFrame {
         int selectedRow = DeliveryList.getSelectedRow();
             if (selectedRow != -1) {
               DefaultTableModel model = (DefaultTableModel) DeliveryList.getModel();
-              model.setValueAt("Complete", selectedRow, 4);
+              model.setValueAt("Completed", selectedRow, 2);
               model.fireTableDataChanged();
+              
+              writeToFile("Completed");
             }
     }//GEN-LAST:event_CompleteButtonActionPerformed
+
+    private void ReviewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReviewButtonActionPerformed
+        ui.callPage("RunnerReview",u);
+        this.dispose();
+    }//GEN-LAST:event_ReviewButtonActionPerformed
+
+    private void AcceptButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AcceptButton1ActionPerformed
+        int selectedRow = DeliveryList.getSelectedRow();
+            if (selectedRow != -1) {
+              DefaultTableModel model = (DefaultTableModel) DeliveryList.getModel();
+              model.setValueAt("Accept", selectedRow, 2);
+              model.fireTableDataChanged();
+              
+              writeToFile("Accept");
+            }
+    }//GEN-LAST:event_AcceptButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -189,10 +288,12 @@ public class RunnerFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton AcceptButton;
+    private javax.swing.JButton AcceptButton1;
     private javax.swing.JButton CompleteButton;
+    private javax.swing.JButton DashboardButton;
     private javax.swing.JButton DeclineButton;
     private javax.swing.JTable DeliveryList;
+    private javax.swing.JButton ReviewButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

@@ -4,12 +4,22 @@
  */
 package ufos;
 
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ginger
  */
 public class RunnerHistory extends javax.swing.JFrame {
+    GUI ui = new GUI();
     User u = new User();
+    DB orderDB = new DB("Order");
+    DB.OrderRowMapper mapper = orderDB.new OrderRowMapper();
+    DB rdb = new DB("DeliveryReview");
+    DB.ReviewRowMapper review = rdb.new ReviewRowMapper();
     /**
      * Creates new form RunnerHistory
      */
@@ -23,6 +33,22 @@ public class RunnerHistory extends javax.swing.JFrame {
         u = id;
     }
     
+    private void load(){
+        DefaultTableModel model  = (DefaultTableModel)DeliveryHistory.getModel();
+        List<Object[]> rowsOrder = orderDB.readData(mapper);
+        List<Object[]> rowsReview = rdb.readData(review);
+        model.setRowCount(0);
+       
+        for (Object[] rowData : rowsOrder){
+            String deliveryStatus  = (String)rowData[12];
+            model.addRow(new Object[]{deliveryStatus});
+        }
+        for (Object[] rowData : rowsReview){
+            String deliveryID = (String)rowData[0];
+            String dt = (String)rowData[3];
+            model.addRow(new Object[]{deliveryID, dt});
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,24 +62,56 @@ public class RunnerHistory extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         DeliveryHistory = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+        Selection = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        TotalPrice = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel1.setText("Delivery History");
+        jLabel1.setText("Runner Dashboard");
 
         DeliveryHistory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "No", "Food Item", "Fee", "Status"
+                "DeliveryID", "Date", "DeliveryStatus"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(DeliveryHistory);
+        if (DeliveryHistory.getColumnModel().getColumnCount() > 0) {
+            DeliveryHistory.getColumnModel().getColumn(0).setResizable(false);
+            DeliveryHistory.getColumnModel().getColumn(1).setResizable(false);
+            DeliveryHistory.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel7.setText("Periods : ");
+
+        Selection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Daily", "Monthly", "Quarterly" }));
+        Selection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelectionActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel6.setText("Revenue:");
+
+        TotalPrice.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,22 +123,47 @@ public class RunnerHistory extends javax.swing.JFrame {
                         .addGap(211, 211, 211)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(102, 102, 102)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(127, Short.MAX_VALUE))
+                        .addGap(73, 73, 73)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(TotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(18, 18, 18)
+                                .addComponent(Selection, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel1)
-                .addGap(29, 29, 29)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(Selection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(TotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void SelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectionActionPerformed
+        
+    }//GEN-LAST:event_SelectionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -119,7 +202,11 @@ public class RunnerHistory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable DeliveryHistory;
+    private javax.swing.JComboBox<String> Selection;
+    private javax.swing.JTextField TotalPrice;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
