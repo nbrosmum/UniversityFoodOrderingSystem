@@ -23,24 +23,20 @@ import javax.swing.table.DefaultTableModel;
 public class Customer extends User {
 
     private double balance;
+    private String CustomerID;
+    private String newOrderId ;
+    private String TotalPrice ;
+    private String DeliMethod ;
     NotifDB nt = new NotifDB();
-
     DB db = new DB("Order");
     DB cdb = new DB("Customer");
     DB ndb = new DB("BalanceNotification");
     Transaction t = new Transaction();
-    String CustomerID;
-    String newOrderId ;
-    String TotalPrice ;
-    String DeliMethod ;
     
     
     public Customer() {
     }
 
-    public Customer( String id,String username, String password, String email,String phoneNumber) {
-         super( id,username, password, email,phoneNumber);
-     }
     public Customer( String username, String password, String email,String phoneNumber) {
          super( username, password, email,phoneNumber);
      }
@@ -49,6 +45,11 @@ public class Customer extends User {
         return balance;
 
     }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
     public double getBalance(String Userid) {
         ArrayList<String> Data = cdb.readFile();
         for (String line : Data) {
@@ -60,17 +61,18 @@ public class Customer extends User {
         return balance;
 
     }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
     public void OrderFood(String orderID, String foodID, String foodName, int portion, double price, String status, String date, double totalPrice, String deliveryMethod,String VendorID,String CustomerID,String RunnerID ) throws IOException{
         db.writeFile();
         String quantity = String.valueOf(portion);
         String priceString = String.valueOf(price);
         String TotalPriceString = String.valueOf(totalPrice);
-        String orderDetails = orderID + "," + foodID+ "," + foodName+ "," + quantity+ "," + priceString + "," + status +"," + date + "," + TotalPriceString+ "," + deliveryMethod+ ","+ VendorID+ "," + CustomerID + "," +RunnerID;//vendorID
+        String orderDetails;
+        if (deliveryMethod.equals("Delivery")){
+            orderDetails = orderID + "," + foodID+ "," + foodName+ "," + quantity+ "," + priceString + "," + status +"," + date + "," + TotalPriceString+ "," + deliveryMethod+ ","+ VendorID+ "," + CustomerID + "," +RunnerID;//vendorID
+        }else{
+            orderDetails = orderID + "," + foodID+ "," + foodName+ "," + quantity+ "," + priceString + "," + status +"," + date + "," + TotalPriceString+ "," + deliveryMethod+ ","+ VendorID+ "," + CustomerID + "," + " - " ;
+        }
+        
         db.bw.write(orderDetails);
         db.bw.newLine();
         db.closeResources();

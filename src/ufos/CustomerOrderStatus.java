@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -138,15 +139,23 @@ public class CustomerOrderStatus extends javax.swing.JFrame {
             String status = (String) OrderStatusTable.getValueAt(selectedRow, 5);
             if (status.equals("Delivered")) {
                 if (hasFoodReviewed(orderID) && hasDeliReviewed(orderID)) {   
-                        CustomerReview reviewWindow = new CustomerReview(u, orderID, runnerID, vendorID,deliveryMethodID);
-                        reviewWindow.setVisible(true);
+                    CustomerReview reviewWindow = new CustomerReview(u, orderID, runnerID, vendorID,deliveryMethodID);
+                    reviewWindow.setVisible(true);
+                    reviewWindow.pack();
+                    reviewWindow.setLocationRelativeTo(null);
+                    reviewWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "You have already reviewed this order.");
                 }
             }else if(status.equals("Done")){
                 if (hasFoodReviewed(orderID)) {   
-                       ReviewForFood reviewForFoodWindow = new ReviewForFood(u, orderID, vendorID);
-                       reviewForFoodWindow.setVisible(true); 
+                    ReviewForFood reviewForFoodWindow = new ReviewForFood(u, orderID, vendorID);
+                    reviewForFoodWindow.setVisible(true); 
+                    reviewForFoodWindow.pack();
+                    reviewForFoodWindow.setLocationRelativeTo(null);
+                    reviewForFoodWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "You have already reviewed this order.");
                 }
