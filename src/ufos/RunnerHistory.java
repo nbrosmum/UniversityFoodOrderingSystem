@@ -7,6 +7,7 @@ package ufos;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -39,13 +40,19 @@ public class RunnerHistory extends javax.swing.JFrame {
         DefaultTableModel model  = (DefaultTableModel)DeliveryHistory.getModel();
         List<Object[]> rows = orderDB.readData(mapper);
         model.setRowCount(0);
+        Set<String> orderIds = new HashSet<>();
        
         for (Object[] rowData : rows){
             String deliveryID  = (String)rowData[0];
             String dt  = (String)rowData[6];
             String deliveryStatus  = (String)rowData[5];
-            model.addRow(new Object[]{deliveryID,dt,deliveryStatus});
+            if(deliveryStatus.equals("Delivered")){
+                if(!orderIds.add(deliveryID)){
+                    continue;
+                }
 
+                 model.addRow(new Object[]{deliveryID,dt,deliveryStatus});
+            }
         }
         orderDB.closeResources();
     }
@@ -66,6 +73,7 @@ public class RunnerHistory extends javax.swing.JFrame {
         Selection = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         TotalPrice = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,6 +121,13 @@ public class RunnerHistory extends javax.swing.JFrame {
 
         TotalPrice.setEditable(false);
 
+        jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -136,6 +151,10 @@ public class RunnerHistory extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(Selection, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(30, 30, 30))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -155,7 +174,9 @@ public class RunnerHistory extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(43, 43, 43))
         );
 
         pack();
@@ -164,6 +185,11 @@ public class RunnerHistory extends javax.swing.JFrame {
     private void SelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectionActionPerformed
         
     }//GEN-LAST:event_SelectionActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        ui.callPage("RunnerFrame", u);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -204,6 +230,7 @@ public class RunnerHistory extends javax.swing.JFrame {
     private javax.swing.JTable DeliveryHistory;
     private javax.swing.JComboBox<String> Selection;
     private javax.swing.JTextField TotalPrice;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

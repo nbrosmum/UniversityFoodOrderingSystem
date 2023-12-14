@@ -9,7 +9,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -38,31 +42,35 @@ public class RunnerFrame extends javax.swing.JFrame {
         DefaultTableModel model  = (DefaultTableModel)DeliveryList.getModel();
         List<Object[]> rows = orderDB.readData(mapper);
         model.setRowCount(0);
+        Set<String> orderIds =new HashSet<>();
        
         for (Object[] rowData : rows){
             String orderID  = (String)rowData[0];
             String deliveryMethod  = (String)rowData[8];
             String deliveryStatus  = (String)rowData[5];
-            model.addRow(new Object[]{orderID,deliveryMethod,deliveryStatus});
-            
-            if (deliveryMethod.contains("Delivery")) {
-                model.addRow(new Object[]{orderID, "Delivery", deliveryStatus});
+            if(deliveryMethod.equals("Delivery")){
+                if(!orderIds.add(orderID)){
+                    continue;
+                }
+                model.addRow(new Object[]{orderID,deliveryMethod,deliveryStatus});
             }
+            orderDB.closeResources();
         }
-        orderDB.closeResources();
     }
     
-    private void writeToFile(String data) {
-   // Read the file
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("Order.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
+    private void writeToFile(String OrderID,String data) throws IOException {
+        List<String> dataRow = orderDB.readFile();
+        List<String> update = new ArrayList<>();
+        
+        for(String line : dataRow){
+            String[] parts = line.split(",");
+            if(parts[0].equals(OrderID)){
+                parts[5] = data;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            update.add(String.join(",", parts));
         }
+        orderDB.writeFile(update);
+        orderDB.closeResources();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -206,8 +214,13 @@ public class RunnerFrame extends javax.swing.JFrame {
               DefaultTableModel model = (DefaultTableModel) DeliveryList.getModel();
               model.setValueAt("Decline", selectedRow, 2);
               model.fireTableDataChanged();
+              String OrderId = (String) model.getValueAt(selectedRow, 0);
               
-              writeToFile("Decline");
+                try {
+                    writeToFile(OrderId,"Decline");
+                } catch (IOException ex) {
+                    Logger.getLogger(RunnerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
     }//GEN-LAST:event_DeclineButtonActionPerformed
 
@@ -217,8 +230,13 @@ public class RunnerFrame extends javax.swing.JFrame {
               DefaultTableModel model = (DefaultTableModel) DeliveryList.getModel();
               model.setValueAt("Completed", selectedRow, 2);
               model.fireTableDataChanged();
+              String OrderId = (String) model.getValueAt(selectedRow, 0);
               
-              writeToFile("Completed");
+                try {
+                    writeToFile(OrderId,"Delivered");
+                } catch (IOException ex) {
+                    Logger.getLogger(RunnerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
     }//GEN-LAST:event_CompleteButtonActionPerformed
 
@@ -233,8 +251,12 @@ public class RunnerFrame extends javax.swing.JFrame {
               DefaultTableModel model = (DefaultTableModel) DeliveryList.getModel();
               model.setValueAt("Accept", selectedRow, 2);
               model.fireTableDataChanged();
-              
-              writeToFile("Accept");
+              String OrderId = (String) model.getValueAt(selectedRow, 0);
+                try {
+                    writeToFile(OrderId,"Accept");
+                } catch (IOException ex) {
+                    Logger.getLogger(RunnerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
     }//GEN-LAST:event_AcceptButton1ActionPerformed
 
